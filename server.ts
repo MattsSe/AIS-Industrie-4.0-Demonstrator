@@ -5,7 +5,6 @@ import * as logger from 'morgan';
 import {ApiRoute} from './api';
 import errorHandler = require('errorhandler');
 import methodOverride = require('method-override');
-
 /**
  * The server.
  *
@@ -14,6 +13,7 @@ import methodOverride = require('method-override');
 export class Server {
 
   public app: express.Application;
+
   /**
    * Bootstrap the application.
    *

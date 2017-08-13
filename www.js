@@ -15,7 +15,10 @@ var http = require("http");
 var httpPort = normalizePort(process.env.PORT || 3000);
 var app = server.Server.create().app;
 app.set("port", httpPort);
+
 var httpServer = http.createServer(app);
+// Socket.io for real time communication
+var io = require('socket.io').listen(httpServer);
 
 //listen on provided ports
 httpServer.listen(httpPort);
@@ -82,3 +85,23 @@ function onListening() {
     : "port " + addr.port;
   debug("Listening on " + bind);
 }
+
+io.sockets.on('dummy', function (socket) {
+  console.log('dummy called on server');
+});
+
+io.sockets.on('connection', function (socket) {
+  console.log('Socket connected');
+  // Socket event for gist created
+  socket.on('gistSaved', function (gistSaved) {
+    io.emit('gistSaved', gistSaved);
+    console.log('gistsave called on server');
+  });
+  io.emit("clientConnected", "msg from server");
+
+  // Socket event for gist updated
+  socket.on('gistUpdated', function(gistUpdated){
+    io.emit('gistUpdated', gistUpdated);
+  });
+
+});
