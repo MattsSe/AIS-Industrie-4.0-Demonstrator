@@ -2,7 +2,6 @@
  * Created by Matthias on 14.08.17.
  */
 import {Application} from 'express';
-import {ServerController} from './ts.controllers/serverController';
 import * as swaggerTools from 'swagger-tools';
 import * as fs from 'fs';
 import * as jsyaml from 'js-yaml';
