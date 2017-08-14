@@ -1,5 +1,3 @@
-"use strict";
-exports.__esModule = true;
 var ServerController = (function () {
     function ServerController() {
     }
@@ -159,4 +157,5 @@ var ServerController = (function () {
     };
     return ServerController;
 }());
-exports.ServerController = ServerController;
+export { ServerController };
+//# sourceMappingURL=serverController.js.map

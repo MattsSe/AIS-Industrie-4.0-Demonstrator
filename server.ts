@@ -53,7 +53,8 @@ export class Server {
    * @method api
    */
   public api() {
-    // empty for now
+    // Register the routes
+    api.RegisterRoutes(this.app);
   }
 
   /**
@@ -103,14 +104,11 @@ export class Server {
    * @return void
    */
   private routes() {
-    let router: express.Router;
-    router = express.Router();
-
-    // Register the routes
-    api.RegisterRoutes(router);
+    // let router: express.Router;
+    // router = express.Router();
 
     // use router middleware
-    this.app.use(router);
+    // this.app.use(router);
   }
 
 }

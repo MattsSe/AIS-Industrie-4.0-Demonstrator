@@ -23,17 +23,17 @@ export class UASocket {
   }
 
   private init() {
-    const io = this.io;
-    io.on('connection', function (socket) {
+    const _io = this.io;
+    _io.on('connection', function (socket) {
       console.log('Socket connected');
       // Socket event for gist created
       socket.on('gistSaved', function (gistSaved) {
-        io.emit('gistSaved', gistSaved);
+        _io.emit('gistSaved', gistSaved);
         console.log('gistsave called on server');
       });
       // Socket event for gist updated
       socket.on('gistUpdated', function (gistUpdated) {
-        io.emit('gistUpdated', gistUpdated);
+        _io.emit('gistUpdated', gistUpdated);
       });
     });
   }
