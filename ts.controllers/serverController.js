@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var ServerController = (function () {
     function ServerController() {
     }
@@ -157,5 +159,4 @@ var ServerController = (function () {
     };
     return ServerController;
 }());
-export { ServerController };
-//# sourceMappingURL=serverController.js.map
+exports.ServerController = ServerController;

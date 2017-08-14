@@ -6,7 +6,7 @@ import {ServerController} from './ts.controllers/serverController';
 import * as swaggerTools from 'swagger-tools';
 import * as fs from 'fs';
 import * as jsyaml from 'js-yaml';
-
+import * as path from 'path';
 /**
  * Registers all the used routes
  * @param app, express Application
@@ -14,15 +14,14 @@ import * as jsyaml from 'js-yaml';
  */
 export function RegisterRoutes(app: Application) {
   // const serverController = new ServerController();
-  console.log('initt');
   const options = {
     swaggerUi: '/swagger.json',
-    controllers: './controllers',
+    controllers: path.resolve(__dirname, './controllers'),
     useStubs: process.env.NODE_ENV === 'development' ? true : false // Conditionally turn on stubs (mock mode)
   };
 
   // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-  const spec = fs.readFileSync('./api/swagger.yaml', 'utf8');
+  const spec = fs.readFileSync(path.resolve(__dirname, './api/swagger.yaml'), 'utf8');
   const swaggerDoc = jsyaml.safeLoad(spec);
 
 // Initialize the Swagger middleware
