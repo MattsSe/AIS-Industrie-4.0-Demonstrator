@@ -1,0 +1,224 @@
+---
+swagger: "2.0"
+info:
+  description: "The API for OPC UA Server"
+  version: "1.0.0"
+  title: "opc ua"
+host: "virtserver.swaggerhub.com"
+basePath: "/MattsSe/opc/1.0.0"
+schemes:
+- "https"
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /server/:
+    get:
+      tags:
+      - "Server"
+      description: "Query status of default server"
+      operationId: "serverGET"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "UAServer"
+  /server/{url}:
+    get:
+      tags:
+      - "Server"
+      description: "Query Status of a specific server"
+      operationId: "serverUrlGET"
+      parameters:
+      - name: "url"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "UAServer"
+    post:
+      tags:
+      - "Server"
+      operationId: "serverUrlPOST"
+      parameters:
+      - name: "url"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "UAServer"
+  /server/monitored/:
+    get:
+      tags:
+      - "Server"
+      description: "returns all monitored items"
+      operationId: "getMonitoredItems"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "max number of items to return"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "All the Monitred items"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "UAServer"
+    delete:
+      tags:
+      - "Server"
+      description: "clears all monitred items"
+      operationId: "clearMonitoredItems"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "max number of items to unsubscribe"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Clear all Subscriptions"
+      x-swagger-router-controller: "UAServer"
+  /server/monitored/{nodeId}:
+    get:
+      tags:
+      - "Server"
+      description: "returns all monitored items"
+      operationId: "getMonitoredItem"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the monitored items"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "All the Monitred items"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "UAServer"
+    delete:
+      tags:
+      - "Server"
+      description: "terminate the monitred item subscription"
+      operationId: "clearMonitoredItem"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the monitored items"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Clear all Subscriptions"
+      x-swagger-router-controller: "UAServer"
+  /server/monitored/{nodeId}/{attributeId}:
+    post:
+      tags:
+      - "Server"
+      description: "sets a dimmer to a specific value on a timer"
+      operationId: "monitorItem"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "attributeId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "UAServer"
+  /server/browse/{qualifiedName}:
+    get:
+      tags:
+      - "Server"
+      operationId: "getBrowseInfo"
+      parameters:
+      - name: "qualifiedName"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/BrowseDescription"
+      x-swagger-router-controller: "UAServer"
+  /server/variables/{nodeId}:
+    get:
+      tags:
+      - "Server"
+      operationId: "readVariableValue"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/VariableValue"
+      x-swagger-router-controller: "UAServer"
+  /server/variables/{nodeId}/{value}:
+    post:
+      tags:
+      - "Server"
+      description: "Writes the Value for the variable with the nodeId"
+      operationId: "writeVariableValue"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "value"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Last Variable Value"
+          schema:
+            $ref: "#/definitions/VariableValue"
+      x-swagger-router-controller: "UAServer"
+definitions:
+  ApiResponse:
+    type: "object"
+  VariableValue:
+    type: "object"
+    properties:
+      nodeId:
+        type: "string"
+      value:
+        type: "string"
+      valid:
+        type: "boolean"
+  BrowseResult:
+    type: "object"
+  BrowseDescription:
+    type: "object"

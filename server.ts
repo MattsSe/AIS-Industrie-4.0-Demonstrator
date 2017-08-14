@@ -2,9 +2,9 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as logger from 'morgan';
-import {ApiRoute} from './api';
 import * as errorHandler from 'errorhandler';
 import * as methodOverride from 'method-override';
+import * as api from './routes';
 /**
  * The server.
  *
@@ -106,8 +106,8 @@ export class Server {
     let router: express.Router;
     router = express.Router();
 
-    // ConveyorRoute
-    ApiRoute.create(router);
+    // Register the routes
+    api.RegisterRoutes(router);
 
     // use router middleware
     this.app.use(router);
