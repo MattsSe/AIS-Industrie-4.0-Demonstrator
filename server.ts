@@ -3,8 +3,8 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as logger from 'morgan';
 import {ApiRoute} from './api';
-import errorHandler = require('errorhandler');
-import methodOverride = require('method-override');
+import * as errorHandler from 'errorhandler';
+import * as methodOverride from 'method-override';
 /**
  * The server.
  *

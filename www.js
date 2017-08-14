@@ -7,18 +7,20 @@
 "use strict";
 
 //module dependencies
-var server = require("./server");
-var debug = require("debug")("plant-ais:serve");
-var http = require("http");
+const server = require("./server");
+const uaIO = require("./ua.socket");
+const debug = require("debug")("plant-ais:serve");
+const http = require("http");
 
 //create http server
-var httpPort = normalizePort(process.env.PORT || 3000);
-var app = server.Server.create().app;
+const httpPort = normalizePort(process.env.PORT || 3000);
+const app = server.Server.create().app;
 app.set("port", httpPort);
 
-var httpServer = http.createServer(app);
+const httpServer = http.createServer(app);
+
 // Socket.io for real time communication
-var io = require('socket.io').listen(httpServer);
+const uaSocket = uaIO.UASocket.create(httpServer);
 
 //listen on provided ports
 httpServer.listen(httpPort);
@@ -86,22 +88,18 @@ function onListening() {
   debug("Listening on " + bind);
 }
 
-io.sockets.on('dummy', function (socket) {
-  console.log('dummy called on server');
-});
-
-io.sockets.on('connection', function (socket) {
-  console.log('Socket connected');
-  // Socket event for gist created
-  socket.on('gistSaved', function (gistSaved) {
-    io.emit('gistSaved', gistSaved);
-    console.log('gistsave called on server');
-  });
-  io.emit("clientConnected", "msg from server");
-
-  // Socket event for gist updated
-  socket.on('gistUpdated', function(gistUpdated){
-    io.emit('gistUpdated', gistUpdated);
-  });
-
-});
+// io.sockets.on('connection', function (socket) {
+//   console.log('Socket connected');
+//   // Socket event for gist created
+//   socket.on('gistSaved', function (gistSaved) {
+//     io.emit('gistSaved', gistSaved);
+//     console.log('gistsave called on server');
+//   });
+//   io.emit("clientConnected", "msg from server");
+//
+//   // Socket event for gist updated
+//   socket.on('gistUpdated', function(gistUpdated){
+//     io.emit('gistUpdated', gistUpdated);
+//   });
+//
+// });
