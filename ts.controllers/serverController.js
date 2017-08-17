@@ -1,11 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Utility Class to keep swagger gen code and write appropriated services externally in typescript
+ */
 var ServerController = (function () {
     function ServerController() {
     }
-    ServerController.prototype.clearMonitoredItem = function (eq, res, next) {
+    ServerController.clearMonitoredItem = function (eq, res, next) {
     };
-    ServerController.prototype.clearMonitoredItems = function (req, res, next) {
+    ServerController.clearMonitoredItems = function (req, res, next) {
         /**
          * parameters expected in the args:
          * limit (Integer)
@@ -13,7 +16,7 @@ var ServerController = (function () {
         // no response value expected for this operation
         res.end();
     };
-    ServerController.prototype.getBrowseInfo = function (req, res, next) {
+    ServerController.getBrowseInfo = function (req, res, next) {
         /**
          * parameters expected in the args:
          * qualifiedName (String)
@@ -28,7 +31,7 @@ var ServerController = (function () {
             res.end();
         }
     };
-    ServerController.prototype.getMonitoredItem = function (req, res, next) {
+    ServerController.getMonitoredItem = function (req, res, next) {
         /**
          * parameters expected in the args:
          * nodeId (String)
@@ -43,7 +46,7 @@ var ServerController = (function () {
             res.end();
         }
     };
-    ServerController.prototype.getMonitoredItems = function (req, res, next) {
+    ServerController.getMonitoredItems = function (req, res, next) {
         /**
          * parameters expected in the args:
          * limit (Integer)
@@ -58,7 +61,7 @@ var ServerController = (function () {
             res.end();
         }
     };
-    ServerController.prototype.monitorItem = function (req, res, next) {
+    ServerController.monitorItem = function (req, res, next) {
         /**
          * parameters expected in the args:
          * nodeId (String)
@@ -74,7 +77,7 @@ var ServerController = (function () {
             res.end();
         }
     };
-    ServerController.prototype.readVariableValue = function (req, res, next) {
+    ServerController.readVariableValue = function (req, res, next) {
         /**
          * parameters expected in the args:
          * nodeId (String)
@@ -93,7 +96,7 @@ var ServerController = (function () {
             res.end();
         }
     };
-    ServerController.prototype.serverGET = function (req, res, next) {
+    ServerController.serverGET = function (req, res, next) {
         /**
          * parameters expected in the args:
          **/
@@ -107,22 +110,7 @@ var ServerController = (function () {
             res.end();
         }
     };
-    ServerController.prototype.serverUrlGET = function (req, res, next) {
-        /**
-         * parameters expected in the args:
-         * url (String)
-         **/
-        var examples = {};
-        examples['application/json'] = {};
-        if (Object.keys(examples).length > 0) {
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-        }
-        else {
-            res.end();
-        }
-    };
-    ServerController.prototype.serverUrlPOST = function (req, res, next) {
+    ServerController.serverUrlGET = function (req, res, next) {
         /**
          * parameters expected in the args:
          * url (String)
@@ -137,7 +125,22 @@ var ServerController = (function () {
             res.end();
         }
     };
-    ServerController.prototype.writeVariableValue = function (req, res, next) {
+    ServerController.serverUrlPOST = function (req, res, next) {
+        /**
+         * parameters expected in the args:
+         * url (String)
+         **/
+        var examples = {};
+        examples['application/json'] = {};
+        if (Object.keys(examples).length > 0) {
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+        }
+        else {
+            res.end();
+        }
+    };
+    ServerController.writeVariableValue = function (req, res, next) {
         /**
          * parameters expected in the args:
          * nodeId (String)

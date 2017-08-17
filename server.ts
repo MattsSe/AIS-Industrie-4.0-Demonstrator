@@ -5,6 +5,7 @@ import * as logger from 'morgan';
 import * as errorHandler from 'errorhandler';
 import * as methodOverride from 'method-override';
 import * as api from './routes';
+import {Server as HttpServer} from 'http';
 /**
  * The server.
  *
@@ -13,6 +14,7 @@ import * as api from './routes';
 export class Server {
 
   public app: express.Application;
+  public http: HttpServer;
 
   /**
    * Bootstrap the application.

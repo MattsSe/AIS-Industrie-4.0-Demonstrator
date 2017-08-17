@@ -3,13 +3,16 @@
  */
 import {NextFunction, Request, Response, Router} from 'express';
 
+/**
+ * Utility Class to keep swagger gen code and write appropriated services externally in typescript
+ */
 export class ServerController {
 
-  public clearMonitoredItem(eq: Request, res: Response, next: NextFunction) {
+  public static clearMonitoredItem(eq: Request, res: Response, next: NextFunction) {
 
   }
 
-  public clearMonitoredItems(req: Request, res: Response, next: NextFunction) {
+  public static clearMonitoredItems(req: Request, res: Response, next: NextFunction) {
     /**
      * parameters expected in the args:
      * limit (Integer)
@@ -18,7 +21,7 @@ export class ServerController {
     res.end();
   }
 
-  public getBrowseInfo(req: Request, res: Response, next: NextFunction) {
+  public static getBrowseInfo(req: Request, res: Response, next: NextFunction) {
     /**
      * parameters expected in the args:
      * qualifiedName (String)
@@ -33,7 +36,7 @@ export class ServerController {
     }
   }
 
-  public getMonitoredItem(req: Request, res: Response, next: NextFunction) {
+  public static getMonitoredItem(req: Request, res: Response, next: NextFunction) {
     /**
      * parameters expected in the args:
      * nodeId (String)
@@ -49,7 +52,7 @@ export class ServerController {
 
   }
 
-  public getMonitoredItems(req: Request, res: Response, next: NextFunction) {
+  public static getMonitoredItems(req: Request, res: Response, next: NextFunction) {
     /**
      * parameters expected in the args:
      * limit (Integer)
@@ -65,7 +68,7 @@ export class ServerController {
 
   }
 
-  public monitorItem(req: Request, res: Response, next: NextFunction) {
+  public static monitorItem(req: Request, res: Response, next: NextFunction) {
     /**
      * parameters expected in the args:
      * nodeId (String)
@@ -82,7 +85,7 @@ export class ServerController {
 
   }
 
-  public readVariableValue(req: Request, res: Response, next: NextFunction) {
+  public static readVariableValue(req: Request, res: Response, next: NextFunction) {
     /**
      * parameters expected in the args:
      * nodeId (String)
@@ -102,7 +105,7 @@ export class ServerController {
 
   }
 
-  public serverGET(req: Request, res: Response, next: NextFunction) {
+  public static serverGET(req: Request, res: Response, next: NextFunction) {
     /**
      * parameters expected in the args:
      **/
@@ -117,23 +120,7 @@ export class ServerController {
 
   }
 
-  public serverUrlGET(req: Request, res: Response, next: NextFunction) {
-    /**
-     * parameters expected in the args:
-     * url (String)
-     **/
-    const examples = {};
-    examples['application/json'] = {};
-    if (Object.keys(examples).length > 0) {
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-    } else {
-      res.end();
-    }
-
-  }
-
-  public serverUrlPOST(req: Request, res: Response, next: NextFunction) {
+  public static serverUrlGET(req: Request, res: Response, next: NextFunction) {
     /**
      * parameters expected in the args:
      * url (String)
@@ -149,7 +136,23 @@ export class ServerController {
 
   }
 
-  public writeVariableValue(req: Request, res: Response, next: NextFunction) {
+  public static serverUrlPOST(req: Request, res: Response, next: NextFunction) {
+    /**
+     * parameters expected in the args:
+     * url (String)
+     **/
+    const examples = {};
+    examples['application/json'] = {};
+    if (Object.keys(examples).length > 0) {
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+    } else {
+      res.end();
+    }
+
+  }
+
+  public static writeVariableValue(req: Request, res: Response, next: NextFunction) {
     /**
      * parameters expected in the args:
      * nodeId (String)

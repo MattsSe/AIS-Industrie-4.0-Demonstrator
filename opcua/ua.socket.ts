@@ -1,5 +1,6 @@
 import * as io from 'socket.io';
 import {Server} from 'http';
+import {DELEGATE_CTOR} from '@angular/core/src/reflection/reflection_capabilities';
 /**
  * Created by Matthias on 13.08.17.
  */
@@ -36,6 +37,16 @@ export class UASocket {
         _io.emit('gistUpdated', gistUpdated);
       });
     });
+  }
+
+  /**
+   * Delegate Method
+   * @param event
+   * @param args
+   * @returns {Namespace}
+   */
+  public emit(event: string, ...args: any[]) {
+    return this.io.emit(event, args);
   }
 
 }

@@ -8,7 +8,7 @@
 
 //module dependencies
 const server = require("./server");
-const uaIO = require("./ua.socket");
+const uaIO = require("./opcua/ua.socket");
 const debug = require("debug")("plant-ais:serve");
 const http = require("http");
 
@@ -17,7 +17,7 @@ const httpPort = normalizePort(process.env.PORT || 3000);
 const app = server.Server.create().app;
 app.set("port", httpPort);
 
-const httpServer = http.createServer(app);
+const httpServer = server.http =  http.createServer(app);
 
 // Socket.io for real time communication
 const uaSocket = uaIO.UASocket.create(httpServer);
