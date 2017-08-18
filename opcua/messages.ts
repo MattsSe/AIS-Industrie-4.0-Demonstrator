@@ -7,6 +7,13 @@ export const Messages = {
     success: 'Connecting to Server was successful.'
   },
   session: {
-    created: 'Created new Session'
+    created: 'Created new Session',
+    creationFailed: 'Creating new Session failed.',
+    closed: 'Closed Session.',
+    missing: 'Requested Session is not available.'
+  },
+  client: {
+    missing: 'Requested Client is not available.',
+    closed: 'Disconnected Session.',
   }
 }
