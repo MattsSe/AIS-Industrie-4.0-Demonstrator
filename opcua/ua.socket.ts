@@ -1,6 +1,6 @@
 import * as io from 'socket.io';
-import {Server} from 'http';
-import {DELEGATE_CTOR} from '@angular/core/src/reflection/reflection_capabilities';
+import {UASocketEmitter} from './ua.emitter';
+import {Server} from '../server';
 /**
  * Created by Matthias on 13.08.17.
  */
@@ -9,17 +9,32 @@ import {DELEGATE_CTOR} from '@angular/core/src/reflection/reflection_capabilitie
 export class UASocket {
 
   private io: SocketIO.Server;
+  private _emitter: UASocketEmitter;
 
   public static create(server: Server) {
     return new UASocket(server);
+  }
+
+
+  get emitter(): UASocketEmitter {
+    return this._emitter;
+  }
+
+  set emitter(value: UASocketEmitter) {
+    this._emitter = value;
   }
 
   public getSocket() {
     return this.io;
   }
 
-  constructor(server: Server) {
-    this.io = io().listen(server);
+  /**
+   *
+   * @param server
+   */
+  constructor(private server: Server) {
+    this.io = io().listen(server.httpServer);
+    this._emitter = new UASocketEmitter(this, this.server.opcuaService())
     this.init();
   }
 
@@ -40,13 +55,14 @@ export class UASocket {
   }
 
   /**
-   * Delegate Method
+   * Delegate Method to the acutal emitterservice (this.emitter.emit...)
    * @param event
    * @param args
    * @returns {Namespace}
    */
   public emit(event: string, ...args: any[]) {
-    return this.io.emit(event, args);
+    return this.emitter.emit(event, args);
   }
+
 
 }

@@ -72,7 +72,7 @@ export class Server implements UAClientProvider {
     this.setHttpServer(http.createServer(this.app));
 
     // create the websocket listening on the server's port
-    this.setUASocket(UASocket.create(this.httpServer));
+    this.setUASocket(UASocket.create(this));
 
     // configure application
     this.config();

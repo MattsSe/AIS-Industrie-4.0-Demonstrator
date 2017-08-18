@@ -6,10 +6,11 @@ import {UAClientService, UAClientProvider} from './ua.service';
 /**
  * class to handle the Requests to the OPC UA Client
  */
-export class UARequestHandler implements UAClientProvider {
+export class UARequestHandler {
 
-  public opcuaService(): UAClientService {
-    return UAClientService.INSTANCE;
+
+  constructor(private uaClientService: UAClientService) {
   }
+
 
 }
