@@ -1,10 +1,12 @@
-import {
-  BrowseResponse, ClientSession, CoercibleToBrowseDescription, OPCUAClient, OPCUAClientOptions,
-  ResponseCallback, ErrorCallback, browse_service, NodeId
-} from 'node-opcua';
+import * as opcua from 'node-opcua';
 import {UASocket} from './ua.socket';
 import {Messages} from './messages';
 import * as async from 'async';
+
+
+export interface UAClientProvider {
+  opcuaService(): UAClientService;
+}
 
 /**
  * Created by Matthias on 16.08.17.
@@ -12,37 +14,47 @@ import * as async from 'async';
 
 export class UAClientService {
 
-  private _client: OPCUAClient;
-  private _clientOptions: OPCUAClientOptions;
-  private _session: ClientSession;
+  protected static _instance: UAClientService = null;
+
+  private _client: opcua.OPCUAClient;
+  private _clientOptions: opcua.OPCUAClientOptions;
+  private _session: opcua.ClientSession;
   private _socket: UASocket;
   private _endPointUrl: string;
+
   private asyncQueue: AsyncQueue<void>;
+
+  public static get INSTANCE(): UAClientService {
+    if (UAClientService._instance == null) {
+      UAClientService._instance = new UAClientService();
+    }
+    return UAClientService._instance;
+  }
 
   constructor() {
   }
 
-  get client(): OPCUAClient {
+  get client(): opcua.OPCUAClient {
     return this._client;
   }
 
-  set client(value: OPCUAClient) {
+  set client(value: opcua.OPCUAClient) {
     this._client = value;
   }
 
-  get clientOptions(): OPCUAClientOptions {
+  get clientOptions(): opcua.OPCUAClientOptions {
     return this._clientOptions;
   }
 
-  set clientOptions(value: OPCUAClientOptions) {
+  set clientOptions(value: opcua.OPCUAClientOptions) {
     this._clientOptions = value;
   }
 
-  get session(): ClientSession {
+  get session(): opcua.ClientSession {
     return this._session;
   }
 
-  set session(value: ClientSession) {
+  set session(value: opcua.ClientSession) {
     this._session = value;
   }
 
@@ -64,11 +76,11 @@ export class UAClientService {
 
   /**
    * creates a new opcua client and sets it as #this.client value
-   * @returns {OPCUAClient} the new created opcua client
+   * @returns {opcua.OPCUAClient} the new created opcua client
    */
-  public createClient(options?: OPCUAClientOptions): OPCUAClient {
+  public createClient(options?: opcua.OPCUAClientOptions): opcua.OPCUAClient {
     const opt = options || this.clientOptions;
-    this.client = new OPCUAClient(opt);
+    this.client = new opcua.OPCUAClient(opt);
     this.emitLogMessage('Created new Client');
     return this.client;
   }
@@ -91,7 +103,7 @@ export class UAClientService {
    *
    * @param url
    */
-  public async connectClient(url: string, callback?: ErrorCallback) {
+  public async connectClient(url: string, callback?: opcua.ErrorCallback) {
     const _client = this.client || this.createClient();
     _client.connect(url, err => {
       if (err) {
@@ -111,9 +123,9 @@ export class UAClientService {
   /**
    *
    */
-  public createSession(callack: ResponseCallback<ClientSession>) {
+  public createSession(callack: opcua.ResponseCallback<opcua.ClientSession>) {
     if (!this.clientAvailable()) {
-      this.emitLogMessage('Can\'t create new Session.');
+      this.emitLogMessage('Can\'t bootstrap new Session.');
       return callack(new Error('No Client available'));
     }
     this.client.createSession((err, session) => {
@@ -169,8 +181,8 @@ export class UAClientService {
    * @param nodeToBrowse
    * @param callback
    */
-  public browseSession(nodeToBrowse: CoercibleToBrowseDescription,
-                       callback: ResponseCallback<BrowseResponse>) {
+  public browseSession(nodeToBrowse: opcua.CoercibleToBrowseDescription,
+                       callback: opcua.ResponseCallback<opcua.BrowseResponse>) {
     if (!this.sessionAvailable()) {
       return;
     }
@@ -201,16 +213,21 @@ export class UAClientService {
   }
 
 
-  public fetchChildren(nodeId: NodeId, callback: ResponseCallback<object[]>) {
-
-    const children = [];
-
-    const b = [
+  /**
+   * returns all directly nested elements in the element with the opcua.NodeId opcua.NodeId
+   * @param opcua.NodeId
+   * @param callback
+   */
+  public browseChildren(nodeId: opcua.NodeId, callback: opcua.ResponseCallback<opcua.BrowseResponse[]>) {
+    if (!this.sessionAvailable()) {
+      return;
+    }
+    const b: opcua.CoercibleToBrowseDescription[] = [
       {
         nodeId: nodeId,
         referenceTypeId: 'Organizes',
         includeSubtypes: true,
-        browseDirection: browse_service.BrowseDirection.Forward,
+        browseDirection: opcua.BrowseDirection.Forward,
         resultMask: 0x3f
 
       },
@@ -218,28 +235,34 @@ export class UAClientService {
         nodeId: nodeId,
         referenceTypeId: 'Aggregates',
         includeSubtypes: true,
-        browseDirection: browse_service.BrowseDirection.Forward,
-        resultMask: 0x3f
+        browseDirection: opcua.BrowseDirection.Forward,
+        resultMask: 0x3f  // indicating which fields in the ReferenceDescription should be returned in the results.
       }
     ];
 
     this.session.browse(b, (err, results) => {
       if (!err) {
-        const result = results[0];
-        for (let i = 0; i < result.references.length; i++) {
-          const ref = result.references[i];
-          children.push({
-            browseName: ref.browseName.toString(),
-            nodeId: ref.nodeId,
-            class: ref.class,
-            children: this.fetchChildren
-          });
-        }
+        callback(err, results);
+      } else {
+        this.emitLogMessage('Could not browse the Session for Item with the node Id: ' + nodeId.value);
       }
-
-      callback(err, children);
     });
-
   }
+
+  public readAllAttributes(nodeId: opcua.NodeId,
+                           callback: (err: Error, nodesToRead: opcua.ReadValueId[],
+                                      results: opcua.DataValue[], diagnostic: opcua.DiagnosticInfo[]) => void) {
+    if (!this.sessionAvailable()) {
+      return;
+    }
+    this.session.readAllAttributes([nodeId], (err, nodesToRead, results, diagnostic) => {
+      if (!err) {
+        callback(err, nodesToRead, results, diagnostic);
+      } else {
+        this.emitLogMessage('Could not read All Attributes for NodeId: ' + nodeId.value);
+      }
+    })
+  }
+
 
 }

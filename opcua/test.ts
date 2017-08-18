@@ -28,7 +28,7 @@ async.series([
     service.createSession(callback);
   },
   callback => {
-    service.fetchChildren(resolveNodeId('RootFolder'), (err, response) => {
+    service.browseChildren(resolveNodeId('RootFolder'), (err, response) => {
       console.log(response);
       callback();
     });
