@@ -119,7 +119,7 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
 
   const urlQuery = params.url;
 
-  const connected = UAClientService.INSTANCE.isConnected();
+  let connected = UAClientService.INSTANCE.isConnected();
   const serverEndpoint = UAClientService.INSTANCE.endPointUrl;
   if (urlQuery.value) {
     connected = connected && (serverEndpoint === urlQuery.value);
@@ -127,7 +127,7 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
   res.setHeader('Content-Type', 'application/json');
   const serverState: uadata.ServerState = {
     connected: connected,
-    endPointUrl: serverEndpointl || ''
+    endPointUrl: serverEndpoint || ''
   };
   res.end(JSON.stringify(serverState));
 }
