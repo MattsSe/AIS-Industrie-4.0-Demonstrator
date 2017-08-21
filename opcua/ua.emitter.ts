@@ -1,6 +1,6 @@
 import {UASocket} from './ua.socket';
 import {UAClientService} from './ua.service';
-import {opcua, EmitterRoutes} from 'ais-shared';
+import {EmitterRoutes} from 'ais-shared';
 
 /**
  * Created by Matthias on 18.08.17.
@@ -9,7 +9,7 @@ import {opcua, EmitterRoutes} from 'ais-shared';
 export class UASocketEmitter {
 
   constructor(private uasocket: UASocket, private uaClientService: UAClientService) {
-    this.initEmitters();
+    this.initEmitterEvents();
   }
 
   /**
@@ -23,10 +23,30 @@ export class UASocketEmitter {
   /**
    * implements all emitter routes
    */
-  protected initEmitters() {
-    this.io.on(EmitterRoutes.referenceChildren, (nodeId) => {
+  public initEmitterEvents() {
+    const self = this;
+    self.io.on('connection', function (socket) {
+      console.log('Socket connected');
 
+      socket.on(EmitterRoutes.referenceChildren, args => self.onReferenceChildren(args));
+
+      // Socket event for gist created
+      socket.on('gistSaved', function (gistSaved) {
+        self.io.emit('gistSaved', gistSaved);
+        console.log('gistsave called on server');
+      });
+      // Socket event for gist updated
+      socket.on('gistUpdated', function (gistUpdated) {
+        self.io.emit('gistUpdated', gistUpdated);
+      });
     });
+    // this.io.on(EmitterRoutes.referenceChildren, (nodeId) => {
+    //
+    // });
+  }
+
+  public onReferenceChildren(nodeId) {
+    console.log('on Reference Children called with nodeID: ' + nodeId);
   }
 
   /**

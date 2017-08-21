@@ -13,7 +13,8 @@
   },
   "exclude": [
     "test.ts",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "../node_modules"
   ],
   "lib": [
     "es2016"

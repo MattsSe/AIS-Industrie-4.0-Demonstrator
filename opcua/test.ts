@@ -10,8 +10,10 @@ import {
   OPCUAClient,
   MessageSecurityMode,
   SecurityPolicy,
-  ClientSession, browse_service, resolveNodeId
+  ClientSession, browse_service, resolveNodeId, DataTypeIds, StatusCodes
 } from 'node-opcua';
+import * as _ from 'underscore';
+import {util} from './ua.util';
 const service = new UAClientService();
 
 // service.endPointUrl = 'opc.tcp://opcua.demo-this.com:51210/UA/SampleServer';
@@ -40,7 +42,25 @@ async.series([
     service.unmonitorItem(service.getLatestMonitoredItemData().nodeId, () => {
       console.log(service.getAllMonitoredItemData());
       callback();
-    })
+    });
+  },
+  callback => {
+    service.readAllAttributes(resolveNodeId('ns=1;s=free_memory'), (err, nodesToRead, dataValues, diagnostic) => {
+
+        for (let i = 0; i < nodesToRead.length; i++) {
+
+          const nodeToRead = nodesToRead[i];
+          const dataValue = dataValues[i];
+
+          if (dataValue.statusCode !== StatusCodes.Good) {
+            continue;
+          }
+          const s = util.toString1(nodeToRead.attributeId, dataValue);
+          console.log(util.attributeIdtoString[nodeToRead.attributeId] + '   ' + s);
+        }
+        callback();
+      }
+    )
   },
   // callback => {
   //   service.browseChildren(resolveNodeId('RootFolder'), (err, response) => {

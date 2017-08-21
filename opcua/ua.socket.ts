@@ -35,7 +35,7 @@ export class UASocket {
   constructor(private server: Server) {
     this.io = io().listen(server.httpServer);
     this._emitter = new UASocketEmitter(this, this.server.opcuaService())
-    this.init();
+    // this.init();
   }
 
   private init() {

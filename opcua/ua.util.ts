@@ -2,12 +2,69 @@
  * Created by Matthias on 18.08.17.
  */
 import * as opcua from 'node-opcua';
+import * as _ from 'underscore';
 
 export namespace util {
+  export const attributeIdtoString = _.invert(opcua.AttributeIds);
+  export const DataTypeIdsToString = _.invert(opcua.DataTypeIds);
 
   export function toString(): string {
     // TODO implement
     return '';
+  }
+
+  // TODO
+  export function toString1(attribute: number, dataValue: opcua.DataValue): string {
+    if (!dataValue || !dataValue.value || !dataValue.value.hasOwnProperty('value')) {
+      return '<null>';
+
+    }
+    switch (attribute) {
+      case opcua.AttributeIds.DataType:
+        return DataTypeIdsToString[dataValue.value.value.value] + ' (' + dataValue.value.value.toString() + ')';
+      case opcua.AttributeIds.NodeClass:
+        return opcua.NodeClass[dataValue.value.value] + ' (' + dataValue.value.value + ')';
+      case opcua.AttributeIds.WriteMask:
+      case opcua.AttributeIds.UserWriteMask:
+        return ' (' + dataValue.value.value + ')';
+      case opcua.AttributeIds.NodeId:
+      case opcua.AttributeIds.BrowseName:
+      case opcua.AttributeIds.DisplayName:
+      case opcua.AttributeIds.Description:
+      case opcua.AttributeIds.EventNotifier:
+      case opcua.AttributeIds.ValueRank:
+      case opcua.AttributeIds.ArrayDimensions:
+      case opcua.AttributeIds.Historizing:
+      case opcua.AttributeIds.Executable:
+      case opcua.AttributeIds.UserExecutable:
+      case opcua.AttributeIds.MinimumSamplingInterval:
+        if (!dataValue.value.value) {
+          return 'null';
+        }
+        return dataValue.value.value.toString();
+      case opcua.AttributeIds.UserAccessLevel:
+      case opcua.AttributeIds.AccessLevel:
+        if (!dataValue.value.value) {
+          return 'null';
+        }
+        return opcua.AccessLevelFlag[dataValue.value.value] + ' (' + dataValue.value.value + ')';
+      default:
+        return dataValueToString(dataValue);
+    }
+  }
+
+  export function dataValueToString(dataValue) {
+    if (!dataValue.value || dataValue.value.value === null) {
+      return '<???> : ' + dataValue.statusCode.toString();
+    }
+    switch (dataValue.value.arrayType) {
+      case opcua.VariantArrayType.Scalar:
+        return dataValue.toString();
+      case opcua.VariantArrayType.Array:
+        return dataValue.toString();
+      default:
+        return '';
+    }
   }
 
   export function isNodeId(id: opcua.NodeId | string): id is opcua.NodeId {

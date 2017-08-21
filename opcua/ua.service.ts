@@ -30,6 +30,7 @@ export class UAClientService {
   private _socket: UASocket;
   private _endPointUrl: string;
   private latestMonitoredItemData = new BehaviorSubject<MonitoredItemData>(null);
+  private clientConnectionState = new BehaviorSubject<boolean>(false);
   private monitoredItemsListData: MonitoredItemData[] = [];
 
   public static get INSTANCE(): UAClientService {
@@ -106,6 +107,14 @@ export class UAClientService {
     return this.monitoredItemsListData;
   }
 
+  public clientConnectionObservable() {
+    return this.clientConnectionState.asObservable();
+  }
+
+  public isConnected() {
+    return (this.client !== undefined) && this.clientConnectionState.getValue();
+  }
+
   /**
    * creates a new opcua client and sets it as #this.client value
    * @returns {opcua.OPCUAClient} the new created opcua client
@@ -142,9 +151,11 @@ export class UAClientService {
         this.emitLogMessage(Messages.connection.refused, err.message);
         if (callback) {
           callback(new Error('Connecting to Client failed.'));
+          this.clientConnectionState.next(false);
         }
       } else {
         this.emitLogMessage(Messages.connection.success);
+        this.clientConnectionState.next(true);
         if (callback) {
           callback();
         }
@@ -243,6 +254,7 @@ export class UAClientService {
     }
     this.client.disconnect(() => {
       this.emitLogMessage(Messages.client.closed);
+      this.clientConnectionState.next(false);
     })
   }
 
