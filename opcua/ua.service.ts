@@ -2,10 +2,17 @@ import * as opcua from 'node-opcua';
 import {UASocket} from './ua.socket';
 import {Messages} from './messages';
 import * as async from 'async';
+import {defaults, util} from './ua.util';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 
 export interface UAClientProvider {
   opcuaService(): UAClientService;
+}
+
+interface MonitoredItemData {
+  nodeId: string,
+  monitoredItem: opcua.ClientMonitoredItem
 }
 
 /**
@@ -18,11 +25,12 @@ export class UAClientService {
 
   private _client: opcua.OPCUAClient;
   private _clientOptions: opcua.OPCUAClientOptions;
+  private _subscription: opcua.ClientSubscription;
   private _session: opcua.ClientSession;
   private _socket: UASocket;
   private _endPointUrl: string;
-
-  private asyncQueue: AsyncQueue<void>;
+  private latestMonitoredItemData = new BehaviorSubject<MonitoredItemData>(null);
+  private monitoredItemsListData: MonitoredItemData[] = [];
 
   public static get INSTANCE(): UAClientService {
     if (UAClientService._instance == null) {
@@ -32,6 +40,10 @@ export class UAClientService {
   }
 
   constructor() {
+    /*store history*/
+    this.latestMonitoredItemData.subscribe(next => this.monitoredItemsListData.push(next));
+    /*need to initialize again preventing null value at first index*/
+    this.monitoredItemsListData = [];
   }
 
   get client(): opcua.OPCUAClient {
@@ -72,6 +84,26 @@ export class UAClientService {
 
   set endPointUrl(value: string) {
     this._endPointUrl = value;
+  }
+
+  get subscription(): opcua.ClientSubscription {
+    return this._subscription;
+  }
+
+  set subscription(value: opcua.ClientSubscription) {
+    this._subscription = value;
+  }
+
+  public getLatestMonitoredItemData(): MonitoredItemData {
+    return this.latestMonitoredItemData.getValue();
+  }
+
+  public latestMonitoredItemDataObservable() {
+    return this.latestMonitoredItemData.asObservable();
+  }
+
+  public getAllMonitoredItemData(): MonitoredItemData[] {
+    return this.monitoredItemsListData;
   }
 
   /**
@@ -168,6 +200,18 @@ export class UAClientService {
    *
    * @returns {boolean}
    */
+  protected subscriptionAvailable(): boolean {
+    if (!this.subscription) {
+      this.emitLogMessage(Messages.subscription.missing);
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   *
+   * @returns {boolean}
+   */
   protected clientAvailable(): boolean {
     if (!this.client) {
       this.emitLogMessage(Messages.client.missing);
@@ -200,16 +244,6 @@ export class UAClientService {
     this.client.disconnect(() => {
       this.emitLogMessage(Messages.client.closed);
     })
-  }
-
-  public getAsyncQueue() {
-    if (!this.asyncQueue) {
-      this.asyncQueue = async.queue((task, callback) => {
-        callback();
-      })
-      this.asyncQueue.drain = () => console.log('All task finished in the asyncQueue');
-    }
-    return this.asyncQueue;
   }
 
 
@@ -249,6 +283,11 @@ export class UAClientService {
     });
   }
 
+  /**
+   *
+   * @param nodeId the nodeid to read all attributes of
+   * @param callback
+   */
   public readAllAttributes(nodeId: opcua.NodeId,
                            callback: (err: Error, nodesToRead: opcua.ReadValueId[],
                                       results: opcua.DataValue[], diagnostic: opcua.DiagnosticInfo[]) => void) {
@@ -264,5 +303,67 @@ export class UAClientService {
     })
   }
 
+  /**
+   *
+   * @param subscriptionOptions
+   */
+  public createSubscription(subscriptionOptions?: opcua.ClientSubscriptionOptions) {
+    if (!this.sessionAvailable()) {
+      return;
+    }
+    const options = subscriptionOptions ? subscriptionOptions : defaults.subscriptionOptions;
+    this.subscription = new opcua.ClientSubscription(this.session, options);
+    this.emitLogMessage('ClientSubscription created.');
+  }
 
+
+  /**
+   *
+   * @param nodeId
+   * @param requestParams
+   */
+  public monitorItem(nodeId: opcua.NodeId, requestParams?: opcua.ItemToMonitorRequestedParameters): opcua.ClientMonitoredItem {
+    if (!this.subscriptionAvailable()) {
+      if (this.session) {
+        /*create a new subscription with default values anyway*/
+        this.createSubscription();
+      } else {
+        this.emitLogMessage(Messages.session.missing, 'Create a session first before creating a subscription.');
+        return null;
+      }
+    }
+    const itemToMonitor: opcua.ItemToMonitor = {
+      nodeId: nodeId,
+      attributeId: opcua.AttributeIds.Value
+    };
+    const params = requestParams ? requestParams : defaults.itemToMonitorRequestedParameters;
+    const monitoredItem = this.subscription.monitor(itemToMonitor, params);
+    this.emitLogMessage('Created new monitored item for nodeId: ' + nodeId);
+    const latestData: MonitoredItemData = {
+      nodeId: nodeId.toString(),
+      monitoredItem: monitoredItem
+    }
+    this.latestMonitoredItemData.next(latestData);
+    return monitoredItem;
+  }
+
+
+  /**
+   *
+   * @param nodeId
+   */
+  public unmonitorItem(nodeId: opcua.NodeId | string, callback?: () => void) {
+    const id = util.isNodeId(nodeId) ? nodeId.toString() : nodeId;
+    this.monitoredItemsListData.forEach((value, index, array) => {
+      if (value.nodeId === id) {
+        value.monitoredItem.terminate(() => {
+          this.monitoredItemsListData.splice(index, 1);
+          this.emitLogMessage('Unmonitored Item with NodeId: ' + id);
+          if (callback) {
+            callback();
+          }
+        });
+      }
+    })
+  }
 }

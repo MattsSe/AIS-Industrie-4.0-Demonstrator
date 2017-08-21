@@ -15,5 +15,8 @@ export const Messages = {
   client: {
     missing: 'Requested Client is not available.',
     closed: 'Disconnected Session.',
+  },
+  subscription: {
+    missing: 'A Clientsubscription is not available.'
   }
 }

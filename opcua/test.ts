@@ -28,11 +28,26 @@ async.series([
     service.createSession(callback);
   },
   callback => {
-    service.browseChildren(resolveNodeId('RootFolder'), (err, response) => {
-      console.log(response);
-      callback();
-    });
+    service.createSubscription();
+    const item = service.monitorItem(resolveNodeId('ns=1;s=free_memory'));
+    // item.on('changed', v => console.log(v.value.value));
+    item.on('initialized', v => callback());
+    item.on('terminated', v => console.log('terminated'));
+
   },
+  callback => {
+    console.log('called');
+    service.unmonitorItem(service.getLatestMonitoredItemData().nodeId, () => {
+      console.log(service.getAllMonitoredItemData());
+      callback();
+    })
+  },
+  // callback => {
+  //   service.browseChildren(resolveNodeId('RootFolder'), (err, response) => {
+  //     console.log(response);
+  //     callback();
+  //   });
+  // },
   // callback => {
   //
   //   service.session.browse('RootFolder', function (err: Error | null, result: BrowseResult) {
@@ -71,7 +86,7 @@ async.series([
 
 
   callback => {
-    client.closeSession(service.session, false, callback);
+    client.closeSession(service.session, true, callback);
   },
   callback => {
     client.disconnect(function (err?: Error | null) {

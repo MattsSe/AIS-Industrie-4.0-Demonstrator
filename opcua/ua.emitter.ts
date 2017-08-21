@@ -1,6 +1,6 @@
 import {UASocket} from './ua.socket';
 import {UAClientService} from './ua.service';
-import {data} from 'ais-shared';
+import {opcua, EmitterRoutes} from 'ais-shared';
 
 /**
  * Created by Matthias on 18.08.17.
@@ -13,10 +13,20 @@ export class UASocketEmitter {
   }
 
   /**
+   * alias
+   * @returns {SocketIO.Server}
+   */
+  protected get io() {
+    return this.uasocket.getSocket();
+  }
+
+  /**
    * implements all emitter routes
    */
   protected initEmitters() {
+    this.io.on(EmitterRoutes.referenceChildren, (nodeId) => {
 
+    });
   }
 
   /**
@@ -26,7 +36,7 @@ export class UASocketEmitter {
    * @returns {Namespace}
    */
   public emit(event: string, ...args: any[]) {
-    return this.uasocket.getSocket().emit(event, args);
+    return this.io.emit(event, args);
   }
 
 }
