@@ -18,6 +18,24 @@ exports.clearMonitoredItems = function(args, res, next) {
   res.end();
 }
 
+exports.connectServer = function(args, res, next) {
+  /**
+   * parameters expected in the args:
+  * url (String)
+  * reconnect (Boolean)
+  **/
+    var examples = {};
+  examples['application/json'] = { };
+  if(Object.keys(examples).length > 0) {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+  }
+  else {
+    res.end();
+  }
+  
+}
+
 exports.getBrowseInfo = function(args, res, next) {
   /**
    * parameters expected in the args:
@@ -69,6 +87,23 @@ exports.getMonitoredItems = function(args, res, next) {
   
 }
 
+exports.getServerConnectionState = function(args, res, next) {
+  /**
+   * parameters expected in the args:
+  * url (String)
+  **/
+    var examples = {};
+  examples['application/json'] = { };
+  if(Object.keys(examples).length > 0) {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+  }
+  else {
+    res.end();
+  }
+  
+}
+
 exports.monitorItem = function(args, res, next) {
   /**
    * parameters expected in the args:
@@ -98,56 +133,6 @@ exports.readVariableValue = function(args, res, next) {
   "nodeId" : "aeiou",
   "value" : "aeiou"
 };
-  if(Object.keys(examples).length > 0) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-  }
-  else {
-    res.end();
-  }
-  
-}
-
-exports.serverGET = function(args, res, next) {
-  /**
-   * parameters expected in the args:
-  **/
-    var examples = {};
-  examples['application/json'] = { };
-  if(Object.keys(examples).length > 0) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-  }
-  else {
-    res.end();
-  }
-  
-}
-
-exports.serverUrlGET = function(args, res, next) {
-  /**
-   * parameters expected in the args:
-  * url (String)
-  **/
-    var examples = {};
-  examples['application/json'] = { };
-  if(Object.keys(examples).length > 0) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
-  }
-  else {
-    res.end();
-  }
-  
-}
-
-exports.serverUrlPOST = function(args, res, next) {
-  /**
-   * parameters expected in the args:
-  * url (String)
-  **/
-    var examples = {};
-  examples['application/json'] = { };
   if(Object.keys(examples).length > 0) {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));

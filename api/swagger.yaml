@@ -14,29 +14,17 @@ consumes:
 produces:
 - "application/json"
 paths:
-  /server/:
-    get:
-      tags:
-      - "Server"
-      description: "Query status of default server"
-      operationId: "serverGET"
-      parameters: []
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-      x-swagger-router-controller: "Server"
-  /server/{url}:
+  /server:
     get:
       tags:
       - "Server"
       description: "Query Status of a specific server"
-      operationId: "serverUrlGET"
+      operationId: "getServerConnectionState"
       parameters:
       - name: "url"
-        in: "path"
-        required: true
+        in: "query"
+        description: "check against a specific url"
+        required: false
         type: "string"
       responses:
         200:
@@ -47,12 +35,18 @@ paths:
     post:
       tags:
       - "Server"
-      operationId: "serverUrlPOST"
+      operationId: "connectServer"
       parameters:
       - name: "url"
-        in: "path"
+        in: "query"
         required: true
         type: "string"
+      - name: "reconnect"
+        in: "query"
+        description: "whether the current connection should be disconnected and reconnected\
+          \ to the new url"
+        required: false
+        type: "boolean"
       responses:
         200:
           description: "response"
