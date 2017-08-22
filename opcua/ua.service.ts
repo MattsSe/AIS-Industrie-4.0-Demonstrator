@@ -161,8 +161,6 @@ export class UAClientService {
       } else {
         this.emitLogMessage(Messages.connection.success);
         this.clientConnectionState.next(true);
-        console.log('connected the client');
-        console.log('state is ' + this.isConnected());
         if (callback) {
           callback();
         }

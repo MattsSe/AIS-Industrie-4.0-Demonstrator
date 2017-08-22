@@ -152,6 +152,31 @@ function doConnect(options: data.ServerConnection, cllback) {
     cllback());
 }
 
+/**
+ *
+ * @param options
+ * @param res
+ */
+function doReconnect(options: ServerConnection, res: e.Response) {
+  if (typeof options.forceReconnect === 'boolean' && options.forceReconnect) {
+      console.log('is force reconnecte');
+      UAClientService.INSTANCE.disconnectClient();
+      doConnect(options, err => {
+        const r: data.opcua.RequestServerConnectionResponse = {
+          success: err ? false : true,
+          msg: err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.'
+        };
+        res.end(JSON.stringify(r));
+      });
+  } else {
+    const r: data.opcua.RequestServerConnectionResponse = {
+      success: false,
+      msg: 'Client is already connected. A Reconnect must be reqeuested'
+    };
+    res.end(JSON.stringify(r));
+  }
+}
+
 export function connectServer(params, res: Response, next: NextFunction) {
   /**
    * parameters expected in the args:
@@ -165,26 +190,28 @@ export function connectServer(params, res: Response, next: NextFunction) {
     if (data.util.isValidServerConnection(params.body.value)) {
       const options = params.body.value as data.ServerConnection;
       if (UAClientService.INSTANCE.isConnected()) {
-        if (typeof options.forceReconnect === 'boolean') {
-          if (options.forceReconnect) {
-            UAClientService.INSTANCE.disconnectClient();
-            doConnect(options, err => {
-              console.log('reconnect done');
-              res.end('reconn worked');
-            });
-          }
-        }
-
-      } else {
+        /*Client is already connected -> try to reconnect*/
+        doReconnect(options, res);
+        return;
+      } else { // not yet connected
         doConnect(options, err => {
-          console.log('connect done');
-          res.end('conn worked');
+          const r: data.opcua.RequestServerConnectionResponse = {
+            success: err ? false : true,
+            msg: err ? 'Could not establish Connection.' : 'Connected Successfully.'
+          };
+          res.end(JSON.stringify(r));
         });
+        return;
       }
-    } else {
-      res.end('not valid');
     }
+  } // body
+
+  /* body is invalid*/
+  const state: data.opcua.RequestServerConnectionResponse = {
+    success: false,
+    msg: 'Connecting to the reqeuested client failed, no valid body content.'
   }
+  res.end(JSON.stringify(state));
 }
 
 export function writeVariableValue(params, res: Response, next: NextFunction) {
