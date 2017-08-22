@@ -3,7 +3,9 @@
  */
 import {NextFunction, Request, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
-import {opcua as uadata} from 'ais-shared';
+import * as data from 'ais-shared';
+import * as async from 'async';
+
 /**
  * Utility Class to keep swagger gen code and write appropriated services externally in typescript
  */
@@ -106,7 +108,7 @@ export function readVariableValue(params, res: Response, next: NextFunction) {
 }
 
 /**
- * Checks if the client is connected to the url
+ * Checks if the client is connected to the url, url is a query param
  * @param params
  * @param res
  * @param next
@@ -116,20 +118,38 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
    * parameters expected in the args:
    * url (String)
    **/
-
   const urlQuery = params.url;
-
   let connected = UAClientService.INSTANCE.isConnected();
   const serverEndpoint = UAClientService.INSTANCE.endPointUrl;
   if (urlQuery.value) {
+    console.log(serverEndpoint);
+    console.log(urlQuery.value);
     connected = connected && (serverEndpoint === urlQuery.value);
   }
   res.setHeader('Content-Type', 'application/json');
-  const serverState: uadata.ServerState = {
+  const serverState: data.opcua.ServerState = {
     connected: connected,
     endPointUrl: serverEndpoint || ''
   };
   res.end(JSON.stringify(serverState));
+}
+
+/**
+ * connects a new opc client to an opc server -> needs valid endpointurl
+ * @param options
+ */
+function doConnect(options: data.ServerConnection, cllback) {
+  const clientOptions = options.clientOptions || {};
+  const client = UAClientService.INSTANCE.createClient(clientOptions);
+  async.series([
+      callback => {
+        UAClientService.INSTANCE.connectClient(options.endpointUrl, callback);
+      },
+      callback => {
+        UAClientService.INSTANCE.createSession(callback);
+      }
+    ],
+    cllback());
 }
 
 export function connectServer(params, res: Response, next: NextFunction) {
@@ -139,30 +159,32 @@ export function connectServer(params, res: Response, next: NextFunction) {
    **/
 
   res.setHeader('Content-Type', 'application/json');
-  console.log(params.reconnect);
-  res.end(JSON.stringify({dummy: 'value'}));
-  // const requestedURL = params.url;
-  // console.log(requestedURL);
-  // if (true) {
-  //   res.end(requestedURL);
-  // }
-  // /*check valid url*/
-  // // TODO
-  //
-  // const connResponse: uadata.RequestServerConnectionResponse = {
-  //   success: false
-  // }
-  // /*already connected*/
-  // if (!UAClientService.INSTANCE.isConnected()) {
-  //   UAClientService.INSTANCE.connectClient(requestedURL, err => {
-  //     if (!err) {
-  //       connResponse.success = true;
-  //     }
-  //     res.end(JSON.stringify(connResponse));
-  //   })
-  // } else {
-  //   res.end(JSON.stringify(connResponse));
-  // }
+
+  if (params.body) {
+    console.log(data.util.isValidServerConnection(params.body.value));
+    if (data.util.isValidServerConnection(params.body.value)) {
+      const options = params.body.value as data.ServerConnection;
+      if (UAClientService.INSTANCE.isConnected()) {
+        if (typeof options.forceReconnect === 'boolean') {
+          if (options.forceReconnect) {
+            UAClientService.INSTANCE.disconnectClient();
+            doConnect(options, err => {
+              console.log('reconnect done');
+              res.end('reconn worked');
+            });
+          }
+        }
+
+      } else {
+        doConnect(options, err => {
+          console.log('connect done');
+          res.end('conn worked');
+        });
+      }
+    } else {
+      res.end('not valid');
+    }
+  }
 }
 
 export function writeVariableValue(params, res: Response, next: NextFunction) {

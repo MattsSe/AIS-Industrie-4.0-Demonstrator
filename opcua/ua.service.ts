@@ -28,7 +28,7 @@ export class UAClientService {
   private _subscription: opcua.ClientSubscription;
   private _session: opcua.ClientSession;
   private _socket: UASocket;
-  private _endPointUrl: string;
+  private _endPointUrl = new BehaviorSubject<string>('');
   private latestMonitoredItemData = new BehaviorSubject<MonitoredItemData>(null);
   private clientConnectionState = new BehaviorSubject<boolean>(false);
   private monitoredItemsListData: MonitoredItemData[] = [];
@@ -80,11 +80,15 @@ export class UAClientService {
   }
 
   get endPointUrl(): string {
-    return this._endPointUrl;
+    return this._endPointUrl.getValue();
   }
 
   set endPointUrl(value: string) {
-    this._endPointUrl = value;
+    this._endPointUrl.next(value);
+  }
+
+  public endPointUrlObservable() {
+    return this._endPointUrl.asObservable();
   }
 
   get subscription(): opcua.ClientSubscription {
@@ -112,7 +116,7 @@ export class UAClientService {
   }
 
   public isConnected() {
-    return (this.client !== undefined) && this.clientConnectionState.getValue();
+    return this.clientConnectionState.getValue();
   }
 
   /**
@@ -146,6 +150,7 @@ export class UAClientService {
    */
   public async connectClient(url: string, callback?: opcua.ErrorCallback) {
     const _client = this.client || this.createClient();
+    this.endPointUrl = url;
     _client.connect(url, err => {
       if (err) {
         this.emitLogMessage(Messages.connection.refused, err.message);
@@ -156,6 +161,8 @@ export class UAClientService {
       } else {
         this.emitLogMessage(Messages.connection.success);
         this.clientConnectionState.next(true);
+        console.log('connected the client');
+        console.log('state is ' + this.isConnected());
         if (callback) {
           callback();
         }
@@ -247,7 +254,11 @@ export class UAClientService {
   }
 
 
-  public disconnectClient() {
+  /**
+   *
+   * @param callback
+   */
+  public disconnectClient(callback?: () => void) {
     if (!this.clientAvailable()) {
       this.emitLogMessage('Can\'t disconnect Client.');
       return;
@@ -255,6 +266,9 @@ export class UAClientService {
     this.client.disconnect(() => {
       this.emitLogMessage(Messages.client.closed);
       this.clientConnectionState.next(false);
+      if (callback) {
+        callback();
+      }
     })
   }
 
