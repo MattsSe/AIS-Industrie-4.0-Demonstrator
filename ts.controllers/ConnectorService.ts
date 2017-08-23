@@ -3,7 +3,7 @@
  */
 import {NextFunction, Request, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
-import * as api from 'ais-shared';
+import * as api from 'ais-api';
 import * as async from 'async';
 
 
