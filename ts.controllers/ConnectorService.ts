@@ -53,7 +53,6 @@ export function connectServer(params, res: Response, next: NextFunction) {
   res.setHeader('Content-Type', 'application/json');
 
   if (params.body) {
-    console.log(api.util.isValidServerConnection(params.body.value));
     if (api.util.isValidServerConnection(params.body.value)) {
       const options = params.body.value as api.ServerConnection;
       if (UAClientService.INSTANCE.isConnected()) {
@@ -61,18 +60,14 @@ export function connectServer(params, res: Response, next: NextFunction) {
         doReconnect(options, res);
         return;
       } else { // not yet connected
-        try {
-          doConnect(options, err => {
-            const r: api.ServerConnectionResponse = {
-              success: err ? false : true,
-              msg: err ? 'Could not establish Connection.' : 'Connected Successfully.',
-              state: UAClientService.INSTANCE.getCurrentConnectionState()
-            };
-            res.end(JSON.stringify(r));
-          });
-        } catch (err) {
-          handleConnectionError(err, res);
-        }
+        doConnect(options, err => {
+          const r: api.ServerConnectionResponse = {
+            success: err ? false : true,
+            msg: err ? 'Could not establish Connection.' + err.message : 'Connected Successfully.',
+            state: UAClientService.INSTANCE.getCurrentConnectionState()
+          };
+          res.end(JSON.stringify(r));
+        });
         return;
       }
     }
@@ -110,8 +105,6 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
   let connected = UAClientService.INSTANCE.isConnected();
   const serverEndpoint = UAClientService.INSTANCE.endPointUrl;
   if (urlQuery.value) {
-    console.log(serverEndpoint);
-    console.log(urlQuery.value);
     connected = connected && (serverEndpoint === urlQuery.value);
   }
   res.setHeader('Content-Type', 'application/json');
@@ -143,8 +136,10 @@ function doConnect(options: api.ServerConnection, cllback) {
         UAClientService.INSTANCE.createSession(callback);
       }
     ],
-    cllback());
+    cllback
+  );
 }
+
 
 /**
  * Closes any present clietn connection to a OPC UA Server
@@ -156,7 +151,7 @@ function doConnect(options: api.ServerConnection, cllback) {
 export function closeServerConnection(params, res: Response, next: NextFunction) {
   const connResp: api.ServerConnectionResponse = {
     success: true
-  }
+  };
   if (UAClientService.INSTANCE.isConnected()) {
     UAClientService.INSTANCE.disconnectClient(() => {
       connResp.msg = 'No Client Connection successfully closed.'

@@ -154,24 +154,25 @@ export class UAClientService {
    *
    * @param url
    */
-  public async connectClient(url: string, callback?: opcua.ErrorCallback) {
+  public connectClient(url: string, callback: opcua.ErrorCallback) {
     const _client = this.client || this.createClient();
     this.endPointUrl = url;
-    _client.connect(url, err => {
-      if (err) {
-        this.emitLogMessage(Messages.connection.refused, err.message);
-        if (callback) {
+    try {
+      _client.connect('', err => {
+        if (err) {
+          this.emitLogMessage(Messages.connection.refused, err.message);
           callback(new Error('Connecting to Client failed.'));
           this.clientConnectionState.next(false);
-        }
-      } else {
-        this.emitLogMessage(Messages.connection.success);
-        this.clientConnectionState.next(true);
-        if (callback) {
+        } else {
+          this.emitLogMessage(Messages.connection.success);
+          this.clientConnectionState.next(true);
           callback();
         }
-      }
-    });
+      });
+    } catch (err) {
+      this.emitLogMessage('Connection exception', err.message)
+      callback(err);
+    }
   }
 
   /**
@@ -182,6 +183,7 @@ export class UAClientService {
       this.emitLogMessage('Can\'t bootstrap new Session.');
       return callack(new Error('No Client available'));
     }
+    console.log('create session called');
     this.client.createSession((err, session) => {
       if (err) {
         this.emitLogMessage(Messages.session.creationFailed, err.message);
