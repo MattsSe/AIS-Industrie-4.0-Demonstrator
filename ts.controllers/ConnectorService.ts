@@ -1,7 +1,7 @@
 /**
  * Created by Matthias on 23.08.17.
  */
-import {NextFunction, Request, Response} from 'express';
+import {NextFunction, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
 import * as api from 'ais-api';
 import * as async from 'async';
@@ -19,7 +19,8 @@ function doReconnect(options: api.ServerConnection, res: Response) {
       doConnect(options, err => {
         const r: api.ServerConnectionResponse = {
           success: err ? false : true,
-          msg: err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.'
+          msg: err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.',
+          state: UAClientService.INSTANCE.getCurrentConnectionState()
         };
         res.end(JSON.stringify(r));
       });
@@ -29,7 +30,8 @@ function doReconnect(options: api.ServerConnection, res: Response) {
   } else {
     const r: api.ServerConnectionResponse = {
       success: false,
-      msg: 'Client is already connected. A Reconnect must be reqeuested'
+      msg: 'Client is already connected. A Reconnect must be reqeuested',
+      state: UAClientService.INSTANCE.getCurrentConnectionState()
     };
     res.end(JSON.stringify(r));
   }
@@ -63,7 +65,8 @@ export function connectServer(params, res: Response, next: NextFunction) {
           doConnect(options, err => {
             const r: api.ServerConnectionResponse = {
               success: err ? false : true,
-              msg: err ? 'Could not establish Connection.' : 'Connected Successfully.'
+              msg: err ? 'Could not establish Connection.' : 'Connected Successfully.',
+              state: UAClientService.INSTANCE.getCurrentConnectionState()
             };
             res.end(JSON.stringify(r));
           });
@@ -78,7 +81,8 @@ export function connectServer(params, res: Response, next: NextFunction) {
   /* body is invalid*/
   const state: api.ServerConnectionResponse = {
     success: false,
-    msg: 'Connecting to the reqeuested client failed, no valid body content.'
+    msg: 'Connecting to the reqeuested client failed, no valid body content.',
+    state: UAClientService.INSTANCE.getCurrentConnectionState()
   }
   res.end(JSON.stringify(state));
 }
@@ -86,7 +90,8 @@ export function connectServer(params, res: Response, next: NextFunction) {
 function handleConnectionError(err: Error, res: Response) {
   res.end(JSON.stringify({
     success: false,
-    msg: err.message || 'Connection failed due Connection Error'
+    msg: err.message || 'Connection failed due Connection Error',
+    state: UAClientService.INSTANCE.getCurrentConnectionState()
   }));
 }
 
@@ -155,10 +160,12 @@ export function closeServerConnection(params, res: Response, next: NextFunction)
   if (UAClientService.INSTANCE.isConnected()) {
     UAClientService.INSTANCE.disconnectClient(() => {
       connResp.msg = 'No Client Connection successfully closed.'
+      connResp.state = UAClientService.INSTANCE.getCurrentConnectionState();
       res.end(JSON.stringify(connResp));
     });
   } else {
     connResp.msg = 'No Client Connection present.'
+    connResp.state = UAClientService.INSTANCE.getCurrentConnectionState();
     res.end(JSON.stringify(connResp));
   }
 }

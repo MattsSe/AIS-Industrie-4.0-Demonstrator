@@ -1,10 +1,9 @@
 import * as opcua from 'node-opcua';
 import {UASocket} from './ua.socket';
 import {Messages} from './messages';
-import * as async from 'async';
 import {defaults, util} from './ua.util';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-
+import * as api from 'ais-api';
 
 export interface UAClientProvider {
   opcuaService(): UAClientService;
@@ -117,6 +116,13 @@ export class UAClientService {
 
   public isConnected() {
     return this.clientConnectionState.getValue();
+  }
+
+  public getCurrentConnectionState(): api.ServerConnectionState {
+    return {
+      connected: this.isConnected(),
+      endPointUrl: this.endPointUrl
+    };
   }
 
   /**
@@ -264,6 +270,7 @@ export class UAClientService {
     this.client.disconnect(() => {
       this.emitLogMessage(Messages.client.closed);
       this.clientConnectionState.next(false);
+      this.endPointUrl = '';
       if (callback) {
         callback();
       }
