@@ -122,9 +122,13 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
  * @param options
  */
 function doConnect(options: api.ServerConnection, cllback) {
+  const clientOps = options.clientOptions || {};
   const client = UAClientService.INSTANCE.createClient({
     keepSessionAlive: options.keepSessionAlive || true,
-    clientOptions: options.clientOptions || {}
+    connectionStrategy: clientOps.connectionStrategy || {},
+    securityMode: clientOps.securityMode,
+    securityPolicy: clientOps.securityPolicy,
+    clientName: clientOps.clientName,
   });
   async.series([
       callback => {
@@ -135,4 +139,26 @@ function doConnect(options: api.ServerConnection, cllback) {
       }
     ],
     cllback());
+}
+
+/**
+ * Closes any present clietn connection to a OPC UA Server
+ * @DELETE
+ * @param params
+ * @param res
+ * @param next
+ */
+export function closeServerConnection(params, res: Response, next: NextFunction) {
+  const connResp: api.ServerConnectionResponse = {
+    success: true
+  }
+  if (UAClientService.INSTANCE.isConnected()) {
+    UAClientService.INSTANCE.disconnectClient(() => {
+      connResp.msg = 'No Client Connection successfully closed.'
+      res.end(JSON.stringify(connResp));
+    });
+  } else {
+    connResp.msg = 'No Client Connection present.'
+    res.end(JSON.stringify(connResp));
+  }
 }
