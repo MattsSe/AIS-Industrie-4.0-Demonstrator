@@ -12,18 +12,22 @@ import * as async from 'async';
  * @param options
  * @param res
  */
-function doReconnect(options: ServerConnection, res: e.Response) {
+function doReconnect(options: api.ServerConnection, res: Response) {
   if (typeof options.forceReconnect === 'boolean' && options.forceReconnect) {
     UAClientService.INSTANCE.disconnectClient();
-    doConnect(options, err => {
-      const r: api.opcua.RequestServerConnectionResponse = {
-        success: err ? false : true,
-        msg: err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.'
-      };
-      res.end(JSON.stringify(r));
-    });
+    try {
+      doConnect(options, err => {
+        const r: api.ServerConnectionResponse = {
+          success: err ? false : true,
+          msg: err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.'
+        };
+        res.end(JSON.stringify(r));
+      });
+    } catch (err) {
+      handleConnectionError(err, res);
+    }
   } else {
-    const r: api.opcua.RequestServerConnectionResponse = {
+    const r: api.ServerConnectionResponse = {
       success: false,
       msg: 'Client is already connected. A Reconnect must be reqeuested'
     };
@@ -55,26 +59,36 @@ export function connectServer(params, res: Response, next: NextFunction) {
         doReconnect(options, res);
         return;
       } else { // not yet connected
-        doConnect(options, err => {
-          const r: api.opcua.RequestServerConnectionResponse = {
-            success: err ? false : true,
-            msg: err ? 'Could not establish Connection.' : 'Connected Successfully.'
-          };
-          res.end(JSON.stringify(r));
-        });
+        try {
+          doConnect(options, err => {
+            const r: api.ServerConnectionResponse = {
+              success: err ? false : true,
+              msg: err ? 'Could not establish Connection.' : 'Connected Successfully.'
+            };
+            res.end(JSON.stringify(r));
+          });
+        } catch (err) {
+          handleConnectionError(err, res);
+        }
         return;
       }
     }
   } // body
 
   /* body is invalid*/
-  const state: api.opcua.RequestServerConnectionResponse = {
+  const state: api.ServerConnectionResponse = {
     success: false,
     msg: 'Connecting to the reqeuested client failed, no valid body content.'
   }
   res.end(JSON.stringify(state));
 }
 
+function handleConnectionError(err: Error, res: Response) {
+  res.end(JSON.stringify({
+    success: false,
+    msg: err.message || 'Connection failed due Connection Error'
+  }));
+}
 
 /**
  * Checks if the client is connected to the url, url is a query param
@@ -96,7 +110,7 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
     connected = connected && (serverEndpoint === urlQuery.value);
   }
   res.setHeader('Content-Type', 'application/json');
-  const serverState: api.opcua.ServerState = {
+  const serverState: api.ServerConnectionState = {
     connected: connected,
     endPointUrl: serverEndpoint || ''
   };
@@ -108,8 +122,10 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
  * @param options
  */
 function doConnect(options: api.ServerConnection, cllback) {
-  const clientOptions = options.clientOptions || {};
-  const client = UAClientService.INSTANCE.createClient(clientOptions);
+  const client = UAClientService.INSTANCE.createClient({
+    keepSessionAlive: options.keepSessionAlive || true,
+    clientOptions: options.clientOptions || {}
+  });
   async.series([
       callback => {
         UAClientService.INSTANCE.connectClient(options.endpointUrl, callback);
