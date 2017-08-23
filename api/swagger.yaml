@@ -1,261 +1,350 @@
-swagger: '2.0'
+---
+swagger: "2.0"
 info:
-  version: 1.0.0
-  title: opc ua 
-  description: The API for OPC UA Server
-
+  description: "The API for OPC UA Server"
+  version: "1.0.0"
+  title: "opc ua"
+host: "virtserver.swaggerhub.com"
+basePath: "/api"
+schemes:
+- "https"
+- "http"
 consumes:
-  - application/json
+- "application/json"
 produces:
-  - application/json
+- "application/json"
 paths:
   /server:
+    get:
+      tags:
+      - "Connector"
+      summary: "current connection state"
+      description: "Query Status of a specific server"
+      operationId: "getServerConnectionState"
+      parameters:
+      - name: "url"
+        in: "query"
+        description: "check connection against a specific url"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "Connector"
     post:
       tags:
-      - "Server"
+      - "Connector"
+      summary: "connect to server"
+      operationId: "connectServer"
       parameters:
-      - name: "body"
-        in: "body"
+      - in: "body"
+        name: "body"
+        description: "describes the Connection Options for the OPC ClientConnection"
         required: true
-        schema: 
+        schema:
           $ref: "#/definitions/ServerConnection"
-        description: describes the Connection Options for the OPC ClientConnection
-      operationId: connectServer
       responses:
         200:
           description: "response"
           schema:
-            type: object
-      x-swagger-router-controller: "Server"
+            type: "object"
+            properties: {}
+      x-swagger-router-controller: "Connector"
+  /server/browse/{nodeId}:
     get:
       tags:
-      - "Server"
-      description: Query Status of a specific server
-      operationId: getServerConnectionState
+      - "Browser"
+      summary: "fetch all attributes for Nodeid"
+      description: "returns all available Attributes for the nodeId"
+      operationId: "getBrowseInfo"
       parameters:
-      - name: "url"
-        in: query
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the desired item"
+        required: true
         type: "string"
-        description: check connection against a specific url
+      - in: "body"
+        name: "body"
+        description: "describes additional info"
+        required: false
+        schema:
+          $ref: "#/definitions/BrowseDescription"
       responses:
         200:
-          description: OK
+          description: "OK"
           schema:
-            $ref: "#/definitions/ApiResponse"
-      x-swagger-router-controller: "Server"
-      
+            $ref: "#/definitions/BrowseResult"
+      x-swagger-router-controller: "Browser"
+  /server/browse/{nodeId}/attributes/:
+    get:
+      tags:
+      - "Browser"
+      summary: "fetch all attributes for Nodeid"
+      description: "returns all available Attributes for the nodeId"
+      operationId: "getAllAttributes"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the desired item"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "describes the Connection Options for the OPC ClientConnection"
+        required: true
+        schema:
+          $ref: "#/definitions/ReadAttributesOptions"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/AttributeDataList"
+      x-swagger-router-controller: "Browser"
+  /server/browse/{nodeId}/children/:
+    get:
+      tags:
+      - "Browser"
+      summary: "fetch direct children for the given nodeId"
+      description: "returns all available Attributes for the nodeId"
+      operationId: "getChildren"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the desired item"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "the options for collecting the child items"
+        required: false
+        schema:
+          $ref: "#/definitions/BrowseDescription"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ReferenceDataList"
+      x-swagger-router-controller: "Browser"
   /server/monitored/:
     get:
       tags:
-      - Server
-      description: returns all monitored items
-      operationId: getMonitoredItems
+      - "Subscription"
+      summary: "fetch all subscriptions"
+      description: "returns all monitored items"
+      operationId: "getMonitoredItems"
       parameters:
-      - in: query
-        name: limit
-        type: integer
-        format: int32
-        description: max number of items to return
+      - name: "limit"
+        in: "query"
+        description: "max number of items to return"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
-          description: All the Monitred items
+          description: "All the Monitred items"
           schema:
-            type: array
-            items: 
-              $ref: '#/definitions/ApiResponse'
-      x-swagger-router-controller: "Server"
-      
+            $ref: "#/definitions/SubscriptionDataList"
+      x-swagger-router-controller: "Subscription"
     delete:
-      tags: 
-        - Server
-      description: clears all monitred items
-      operationId: clearMonitoredItems
+      tags:
+      - "Subscription"
+      summary: "clear all subscriptions"
+      description: "clears all monitred items"
+      operationId: "clearMonitoredItems"
       parameters:
-      - in: query
-        name: limit
-        type: integer
-        format: int32
-        description: max number of items to unsubscribe
+      - name: "limit"
+        in: "query"
+        description: "max number of items to unsubscribe"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
-          description: Clear all Subscriptions
-      x-swagger-router-controller: "Server"
-  
+          description: "Clear all Subscriptions"
+      x-swagger-router-controller: "Subscription"
   /server/monitored/{nodeId}:
     get:
       tags:
-      - Server
-      description: returns all monitored items
-      operationId: getMonitoredItem
+      - "Subscription"
+      summary: "fetch subscription for the nodeId"
+      description: "returns all monitored items"
+      operationId: "getMonitoredItem"
       parameters:
-      - in: path
-        name: nodeId
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the monitored items"
         required: true
-        type: string
-        description: nodeId of the monitored items
+        type: "string"
       responses:
         200:
-          description: All the Monitred items
+          description: "All the Monitred items"
           schema:
-            type: array
-            items: 
-              $ref: '#/definitions/ApiResponse'
-      x-swagger-router-controller: "Server"
-      
+            $ref: "#/definitions/SubscriptionData"
+      x-swagger-router-controller: "Subscription"
     delete:
-      tags: 
-        - Server
-      description: terminate the monitred item subscription
-      operationId: clearMonitoredItem
+      tags:
+      - "Subscription"
+      summary: "clear subscription for item"
+      description: "terminate the monitred item subscription"
+      operationId: "clearMonitoredItem"
       parameters:
-      - in: path
-        name: nodeId
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the monitored items"
         required: true
-        type: string
-        description: nodeId of the monitored items
+        type: "string"
       responses:
         200:
-          description: Clear all Subscriptions
-      x-swagger-router-controller: "Server"  
-  
+          description: "Clear all Subscriptions"
+      x-swagger-router-controller: "Subscription"
   /server/monitored/{nodeId}/{attributeId}:
     post:
       tags:
-      - Server
-      description: sets a dimmer to a specific value on a timer
-      operationId: monitorItem
+      - "Subscription"
+      summary: "create new subscription for item"
+      description: "adds a new subscription for the item"
+      operationId: "monitorItem"
       parameters:
-      - name: nodeId
-        in: path
+      - name: "nodeId"
+        in: "path"
         required: true
-        type: string
-      - name: attributeId
-        in: path
+        type: "string"
+      - name: "attributeId"
+        in: "path"
         required: true
-        type: integer
-        format: int32
+        type: "integer"
+        format: "int32"
       responses:
         200:
-          description: response
+          description: "response"
           schema:
-            $ref: '#/definitions/ApiResponse'
-      x-swagger-router-controller: "Server"
-      
-  /server/browse/{qualifiedName}:
-    get:
-      tags:
-      - Server
-      operationId: getBrowseInfo
-      parameters:
-      - name: qualifiedName
-        in: path
-        required: true
-        type: string
-      responses:
-        200:
-          description: response
-          schema:
-            $ref: '#/definitions/BrowseDescription'
-      x-swagger-router-controller: "Server"
-  
+            $ref: "#/definitions/ApiResponse"
+      x-swagger-router-controller: "Subscription"
   /server/variables/{nodeId}:
     get:
       tags:
-      - Server
-      operationId: readVariableValue
+      - "Variables"
+      operationId: "readVariableValue"
       parameters:
-      - name: nodeId
-        in: path
+      - name: "nodeId"
+        in: "path"
         required: true
-        type: string
+        type: "string"
       responses:
         200:
-          description: response
+          description: "response"
           schema:
-            $ref: '#/definitions/VariableValue'
-      x-swagger-router-controller: "Server"
-      
+            $ref: "#/definitions/VariableValue"
+      x-swagger-router-controller: "Variables"
   /server/variables/{nodeId}/{value}:
     post:
       tags:
-      - Server
-      description: Writes the Value for the variable with the nodeId
-      operationId: writeVariableValue
+      - "Variables"
+      description: "Writes the Value for the variable with the nodeId"
+      operationId: "writeVariableValue"
       parameters:
-      - name: nodeId
-        in: path
+      - name: "nodeId"
+        in: "path"
         required: true
-        type: string
-      - name: value
-        in: path
+        type: "string"
+      - name: "value"
+        in: "path"
         required: true
-        type: string
+        type: "string"
       responses:
         200:
-          description: Last Variable Value
+          description: "Last Variable Value"
           schema:
-            $ref: '#/definitions/VariableValue'
-      x-swagger-router-controller: "Server"
-  
+            $ref: "#/definitions/VariableValue"
+      x-swagger-router-controller: "Variables"
 definitions:
+  SubscriptionDataList:
+    type: "array"
+    items:
+      $ref: "#/definitions/SubscriptionData"
+  SubscriptionData:
+    type: "object"
+  ReferenceDataList:
+    type: "array"
+    items:
+      $ref: "#/definitions/ReferenceData"
+  ReferenceData:
+    type: "object"
+    required:
+    - "browseName"
+    - "nodeClass"
+    - "nodeId"
+    properties:
+      nodeId:
+        type: "string"
+      nodeClass:
+        type: "string"
+      browseName:
+        type: "string"
+      children:
+        $ref: "#/definitions/ReferenceDataList"
+  ReadAttributesOptions:
+    type: "object"
+  AttributeDataList:
+    type: "array"
+    items:
+      $ref: "#/definitions/AttributeData"
+  AttributeData:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      value:
+        type: "string"
+      datatype:
+        type: "string"
   ConnectionStrategy:
-    type: object
+    type: "object"
     properties:
       maxRetry:
-        type: number
+        type: "number"
       initialDelay:
-        type: number
+        type: "number"
       maxDelay:
-        type: number
+        type: "number"
       randomisationFactor:
-        type: number
+        type: "number"
   ClientOptions:
-    type: object
+    type: "object"
     properties:
       securityMode:
-        type: string
+        type: "string"
       securityPolicy:
-        type: string
+        type: "string"
       clientName:
-        type: string
+        type: "string"
       connectionStrategy:
-        $ref:  "#/definitions/ConnectionStrategy"
+        $ref: "#/definitions/ConnectionStrategy"
   ServerConnection:
-    type: object
+    type: "object"
+    required:
+    - "endpointUrl"
     properties:
       endpointUrl:
-        type: string
+        type: "string"
       forceReconnect:
-        type: boolean
+        type: "boolean"
       clientOptions:
         $ref: "#/definitions/ClientOptions"
   ApiResponse:
-    type: object
-    
+    type: "object"
   VariableValue:
-    type: object
+    type: "object"
     properties:
       nodeId:
-        type: string
+        type: "string"
       value:
-        type: string
+        type: "string"
       valid:
-        type: boolean
+        type: "boolean"
   BrowseResult:
-    type: object
-      
+    type: "object"
   BrowseDescription:
-    type: object
-    
-# Added by API Auto Mocking Plugin
-host: virtserver.swaggerhub.com
-# basePath: /api/opcua
-# schemes:
-#  - http
-# Added by API Auto Mocking Plugin
-# basePath: /api
-schemes:
- - https
- - http
-# Added by API Auto Mocking Plugin
-basePath: /api
+    type: "object"
