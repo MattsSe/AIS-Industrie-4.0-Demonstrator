@@ -62,26 +62,22 @@ export class UaClient extends opcua.OPCUAClient {
     });
 
     this.on('start_reconnection', function () {
-      socket.logMessage(' !!!!!!!!!!!!!!!!!!!!!!!!  Starting reconnection !!!!!!!!!!!!!!!!!!! ' );
+      socket.logMessage(' !!!!!!!!!!!!!!!!!!!!!!!!  Starting reconnection !!!!!!!!!!!!!!!!!!! ');
     });
 
     this.on('connection_reestablished', function () {
-      socket.logMessage(' !!!!!!!!!!!!!!!!!!!!!!!!  CONNECTION RE-ESTABLISHED !!!!!!!!!!!!!!!!!!! ' );
+      socket.logMessage(' !!!!!!!!!!!!!!!!!!!!!!!!  CONNECTION RE-ESTABLISHED !!!!!!!!!!!!!!!!!!! ');
       _data.reconnectionCount++;
     });
 
 // monitoring des lifetimes
     this.on('lifetime_75', function (token) {
-      if (argv.verbose) {
-        socket.logMessage('received lifetime_75 on ' )
-      }
+      socket.logMessage('received lifetime_75 on ')
     });
 
     this.on('security_token_renewed', function () {
       _data.tokenRenewalCount += 1;
-      if (argv.verbose) {
-        socket.logMessage(' security_token_renewed on ' );
-      }
+      socket.logMessage(' security_token_renewed on ');
     });
   }
 }

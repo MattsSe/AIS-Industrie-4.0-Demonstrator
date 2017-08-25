@@ -50,39 +50,35 @@ export function getChildren(params, res: Response, next: NextFunction) {
   res.setHeader('Content-Type', 'application/json');
   const nodeId = params.nodeId;
 
-  // TODO remove
-  connector.doConnect({
-    endpointUrl: 'opc.tcp://:4334/UA/MyLittleServer'
-  }, (err) => {
-    console.log('is connected' + UAClientService.INSTANCE.isConnected());
+  let valid = false;
 
-    UAClientService.INSTANCE.browseChildren(nodeId.value, (err1, browse_result) => {
-      //       console.log(err);
-      if (!err1) {
-        browse_result[0].references.forEach(reference => {
-          data.push({
-            nodeId: reference.referenceTypeId.toString(),
-            browseName: reference.browseName.toString(),
-            nodeClass: util.nodeClassMaskIdToString(reference.nodeClass.value)
-          });
+  if (nodeId) {
+    if (nodeId.value) {
+      if (UAClientService.INSTANCE.isConnected()) {
+        valid = true;
+        UAClientService.INSTANCE.browseChildren(nodeId.value, (err, browse_result) => {
+          if (!err) {
+            [0, 1].forEach(index => {
+              browse_result[index].references.forEach(reference => {
+                data.push({
+                  nodeId: reference.nodeId.toString(),
+                  browseName: reference.browseName.toString(),
+                  nodeClass: util.nodeClassMaskIdToString(reference.nodeClass.value),
+                  typeIdEnum: index === 0 ?
+                    api.ReferenceData.TypeIdEnumEnum.Organizes : api.ReferenceData.TypeIdEnumEnum.Aggregates
+                });
+              });
+            });
+          }
+
+          res.end(JSON.stringify(data));
         });
       }
+    }
+  }
 
-      res.end(JSON.stringify(data));
-    });
-  });
-  return;
-
-  // if (nodeId) {
-  //   if (nodeId.value) {
-  //     // if (UAClientService.INSTANCE.isConnected()) {
-  //     UAClientService.INSTANCE.browseChildren(nodeId.value, (err, response) => {
-  //       console.log(err);
-  //       console.log(response);
-  //     });
-  //     // }
-  //   }
-  // }
-
+  if (!valid) {
+    res.end(JSON.stringify(data));
+  }
 }
 

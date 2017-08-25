@@ -289,7 +289,7 @@ export class UAClientService {
    * @param opcua.NodeId
    * @param callback
    */
-  public browseChildren(nodeId: opcua.NodeId, callback: opcua.ResponseCallback<opcua.BrowseResponse[]>) {
+  public browseChildren(nodeId: opcua.NodeId, callback: opcua.ResponseCallback<opcua.BrowseResult[]>) {
     if (!this.sessionAvailable()) {
       callback(new Error('session not vailable'));
       return;
