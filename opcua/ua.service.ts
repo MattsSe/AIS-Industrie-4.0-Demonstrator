@@ -337,7 +337,7 @@ export class UAClientService {
       if (!err) {
         callback(err, nodesToRead, results, diagnostic);
       } else {
-        this.emitLogMessage('Could not read All Attributes for NodeId: ' + nodeId.value);
+        this.emitLogMessage('Could not read All Attributes for NodeId: ' + nodeId);
       }
     })
   }

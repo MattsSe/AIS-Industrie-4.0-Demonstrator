@@ -22,13 +22,12 @@ export namespace util {
   export function toString1(attribute: number, dataValue: opcua.DataValue): string {
     if (!dataValue || !dataValue.value || !dataValue.value.hasOwnProperty('value')) {
       return '<null>';
-
     }
     switch (attribute) {
       case opcua.AttributeIds.DataType:
         return DataTypeIdsToString[dataValue.value.value.value] + ' (' + dataValue.value.value.toString() + ')';
       case opcua.AttributeIds.NodeClass:
-        return opcua.NodeClass[dataValue.value.value] + ' (' + dataValue.value.value + ')';
+        return nodeClassMaskIdToString(dataValue.value.value) + ' (' + dataValue.value.value + ')';
       case opcua.AttributeIds.WriteMask:
       case opcua.AttributeIds.UserWriteMask:
         return ' (' + dataValue.value.value + ')';
@@ -64,12 +63,22 @@ export namespace util {
     }
     switch (dataValue.value.arrayType) {
       case opcua.VariantArrayType.Scalar:
-        return dataValue.toString();
+        return dataValue.value.value;
       case opcua.VariantArrayType.Array:
         return dataValue.toString();
       default:
         return '';
     }
+  }
+
+  /**
+   *
+   * @param datavalue an node-opcua Datavalue
+   * @returns the Type of the Datavalue as string
+   */
+  export function getDatatValueType(datavalue: opcua.DataValue) {
+    return datavalue.value.dataType['key'];
+
   }
 
   export function isNodeId(id: opcua.NodeId | string): id is opcua.NodeId {

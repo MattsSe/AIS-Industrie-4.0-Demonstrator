@@ -5,7 +5,7 @@ import {NextFunction, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
 import * as api from 'ais-api';
 import * as connector from './ConnectorService';
-import * as opc from 'node-opcua';
+import * as opcua from 'node-opcua';
 import {util} from '../opcua/ua.util';
 
 
@@ -25,6 +25,10 @@ export function getBrowseInfo(params, res: Response, next: NextFunction) {
 }
 
 
+function canExecute(nodeIde) {
+  return
+}
+
 /**
  * @GET returns all Available Attributes for the given nodeID
  * @param params Attributes options
@@ -32,7 +36,38 @@ export function getBrowseInfo(params, res: Response, next: NextFunction) {
  * @param next
  */
 export function getAllAttributes(params, res: Response, next: NextFunction) {
+  const data: api.AttributeDataList = [];
+  res.setHeader('Content-Type', 'application/json');
+  const nodeId = params.nodeId;
+  let valid = false;
 
+  if (nodeId) {
+    if (nodeId.value && UAClientService.INSTANCE.isConnected()) {
+      valid = true;
+      UAClientService.INSTANCE.readAllAttributes(nodeId.value, (err, nodesToRead, dataValues, diagnostic) => {
+        if (!err) {
+          for (let i = 0; i < nodesToRead.length; i++) {
+            const nodeToRead = nodesToRead[i];
+            const dataValue = dataValues[i] as opcua.DataValue;
+
+            if (dataValue.statusCode !== opcua.StatusCodes.Good) {
+              continue;
+            }
+            data.push({
+              name: util.attributeIdtoString[nodeToRead.attributeId],
+              datatype: dataValue.value.dataType.key || 'Unknown',
+              value: util.toString1(nodeToRead.attributeId, dataValue),
+              ownerNodeId: nodeId.value
+            });
+          }
+        }
+        res.end(JSON.stringify(data));
+      });
+    }
+  }
+  if (!valid) {
+    res.end(JSON.stringify(data));
+  }
 }
 
 
@@ -53,27 +88,25 @@ export function getChildren(params, res: Response, next: NextFunction) {
   let valid = false;
 
   if (nodeId) {
-    if (nodeId.value) {
-      if (UAClientService.INSTANCE.isConnected()) {
-        valid = true;
-        UAClientService.INSTANCE.browseChildren(nodeId.value, (err, browse_result) => {
-          if (!err) {
-            [0, 1].forEach(index => {
-              browse_result[index].references.forEach(reference => {
-                data.push({
-                  nodeId: reference.nodeId.toString(),
-                  browseName: reference.browseName.toString(),
-                  nodeClass: util.nodeClassMaskIdToString(reference.nodeClass.value),
-                  typeIdEnum: index === 0 ?
-                    api.ReferenceData.TypeIdEnumEnum.Organizes : api.ReferenceData.TypeIdEnumEnum.Aggregates
-                });
+    if (nodeId.value && UAClientService.INSTANCE.isConnected()) {
+      valid = true;
+      UAClientService.INSTANCE.browseChildren(nodeId.value, (err, browse_result) => {
+        if (!err) {
+          [0, 1].forEach(index => {
+            browse_result[index].references.forEach(reference => {
+              data.push({
+                nodeId: reference.nodeId.toString(),
+                browseName: reference.browseName.toString(),
+                nodeClass: util.nodeClassMaskIdToString(reference.nodeClass.value),
+                typeIdEnum: index === 0 ?
+                  api.ReferenceData.TypeIdEnumEnum.Organizes : api.ReferenceData.TypeIdEnumEnum.Aggregates
               });
             });
-          }
+          });
+        }
 
-          res.end(JSON.stringify(data));
-        });
-      }
+        res.end(JSON.stringify(data));
+      });
     }
   }
 
