@@ -8,6 +8,11 @@ import {EmitterRoutes} from 'ais-api';
 
 export class UASocketEmitter {
 
+  /**
+   *
+   * @param uasocket
+   * @param uaClientService
+   */
   constructor(private uasocket: UASocket, private uaClientService: UAClientService) {
     this.initEmitterEvents();
   }
@@ -26,14 +31,14 @@ export class UASocketEmitter {
   public initEmitterEvents() {
     const self = this;
     self.io.on('connection', function (socket) {
-      console.log('Socket connected');
+      console.log('Socket connected on server');
 
-      socket.on(EmitterRoutes.referenceChildren, args => self.onReferenceChildren(args));
+      // socket.on(EmitterRoutes.referenceChildren, args => self.onReferenceChildren(args));
 
       // Socket event for gist created
-      socket.on('gistSaved', function (gistSaved) {
-        self.io.emit('gistSaved', gistSaved);
-        console.log('gistsave called on server');
+      socket.on('uaLogging', function (gistSaved) {
+        // self.io.emit('gistSaved', gistSaved);
+        console.log('uaLogging called on server');
       });
       // Socket event for gist updated
       socket.on('gistUpdated', function (gistUpdated) {
@@ -43,10 +48,6 @@ export class UASocketEmitter {
     // this.io.on(EmitterRoutes.referenceChildren, (nodeId) => {
     //
     // });
-  }
-
-  public onReferenceChildren(nodeId) {
-    console.log('on Reference Children called with nodeID: ' + nodeId);
   }
 
   /**

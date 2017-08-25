@@ -119,7 +119,7 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
  * connects a new opc client to an opc server -> needs valid endpointurl
  * @param options
  */
-function doConnect(options: api.ServerConnection, cllback) {
+export function doConnect(options: api.ServerConnection, cllback) {
   const clientOps = options.clientOptions || {};
   const client = UAClientService.INSTANCE.createClient({
     keepSessionAlive: options.keepSessionAlive || true,

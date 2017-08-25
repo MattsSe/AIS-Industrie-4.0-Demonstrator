@@ -1,6 +1,7 @@
 import * as io from 'socket.io';
 import {UASocketEmitter} from './ua.emitter';
 import {Server} from '../server';
+import {EmitterRoutes} from 'ais-api';
 /**
  * Created by Matthias on 13.08.17.
  */
@@ -64,5 +65,13 @@ export class UASocket {
     return this.emitter.emit(event, args);
   }
 
+
+  /**
+   * Loggs any occuring message through the socket
+   * @param args
+   */
+  public logMessage(...args: string[]) {
+    this.io.emit('ualogging', args);
+  }
 
 }

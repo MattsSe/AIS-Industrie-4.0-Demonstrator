@@ -44,6 +44,8 @@ export class Server implements UAClientProvider {
 
   protected setUASocket(socket: UASocket) {
     this._uaSocket = socket;
+    // TODO smells a bit
+    this.opcuaService().socket = this._uaSocket;
   }
 
   get httpServer(): http.Server {

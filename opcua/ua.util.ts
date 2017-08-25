@@ -7,6 +7,11 @@ import * as _ from 'underscore';
 export namespace util {
   export const attributeIdtoString = _.invert(opcua.AttributeIds);
   export const DataTypeIdsToString = _.invert(opcua.DataTypeIds);
+  const _nodeMaskKeys = Object.keys(opcua.browse_service.NodeClassMask);
+  export const NodeClassMaskIdToName = {
+    names: _nodeMaskKeys.slice((_nodeMaskKeys.length / 2) - 1),
+    ids: _nodeMaskKeys.slice(0, (_nodeMaskKeys.length / 2) - 1)
+  };
 
   export function toString(): string {
     // TODO implement
@@ -69,6 +74,10 @@ export namespace util {
 
   export function isNodeId(id: opcua.NodeId | string): id is opcua.NodeId {
     return (<opcua.NodeId>id).identifierType !== undefined;
+  }
+
+  export function nodeClassMaskIdToString(value: number) {
+    return NodeClassMaskIdToName.names[value];
   }
 
 }

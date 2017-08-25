@@ -4,6 +4,7 @@ import {Messages} from './messages';
 import {defaults, util} from './ua.util';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import * as api from 'ais-api';
+import {UaClient} from './ua.client';
 
 export interface UAClientProvider {
   opcuaService(): UAClientService;
@@ -14,6 +15,7 @@ interface MonitoredItemData {
   monitoredItem: opcua.ClientMonitoredItem
 }
 
+
 /**
  * Created by Matthias on 16.08.17.
  */
@@ -22,7 +24,7 @@ export class UAClientService {
 
   protected static _instance: UAClientService = null;
 
-  private _client: opcua.OPCUAClient;
+  private _client: UaClient;
   private _clientOptions: opcua.OPCUAClientOptions;
   private _subscription: opcua.ClientSubscription;
   private _session: opcua.ClientSession;
@@ -31,6 +33,7 @@ export class UAClientService {
   private latestMonitoredItemData = new BehaviorSubject<MonitoredItemData>(null);
   private clientConnectionState = new BehaviorSubject<boolean>(false);
   private monitoredItemsListData: MonitoredItemData[] = [];
+
 
   public static get INSTANCE(): UAClientService {
     if (UAClientService._instance == null) {
@@ -46,11 +49,11 @@ export class UAClientService {
     this.monitoredItemsListData = [];
   }
 
-  get client(): opcua.OPCUAClient {
+  get client(): UaClient {
     return this._client;
   }
 
-  set client(value: opcua.OPCUAClient) {
+  set client(value: UaClient) {
     this._client = value;
   }
 
@@ -129,9 +132,10 @@ export class UAClientService {
    * creates a new opcua client and sets it as #this.client value
    * @returns {opcua.OPCUAClient} the new created opcua client
    */
-  public createClient(options?: opcua.OPCUAClientOptions): opcua.OPCUAClient {
+  public createClient(options?: opcua.OPCUAClientOptions): UaClient {
     const opt = options || this.clientOptions;
-    this.client = new opcua.OPCUAClient(opt);
+    this.client = new UaClient(opt);
+    this.client.initListeners(this.socket);
     this.emitLogMessage('Created new Client');
     return this.client;
   }
@@ -143,10 +147,10 @@ export class UAClientService {
   public emitLogMessage(...msg: string[]) {
     // TODO socket only available in production
     if (this.socket) {
-      this.socket.emit('ualogger', msg);
-    } else {
-      console.log('socket not available, msg was: ' + msg);
+      this.socket.logMessage(msg.join(' '));
     }
+    // TODO remove when not dev
+    console.log(msg);
   }
 
 
@@ -158,7 +162,7 @@ export class UAClientService {
     const _client = this.client || this.createClient();
     this.endPointUrl = url;
     try {
-      _client.connect('', err => {
+      _client.connect(url, err => {
         if (err) {
           this.emitLogMessage(Messages.connection.refused, err.message);
           callback(new Error('Connecting to Client failed.'));
@@ -287,6 +291,7 @@ export class UAClientService {
    */
   public browseChildren(nodeId: opcua.NodeId, callback: opcua.ResponseCallback<opcua.BrowseResponse[]>) {
     if (!this.sessionAvailable()) {
+      callback(new Error('session not vailable'));
       return;
     }
     const b: opcua.CoercibleToBrowseDescription[] = [
@@ -308,10 +313,11 @@ export class UAClientService {
     ];
 
     this.session.browse(b, (err, results) => {
-      if (!err) {
-        callback(err, results);
+      if (err) {
+        callback(new Error('Could not browse children for nodeId: ' + nodeId + err.message));
+        this.emitLogMessage('Could not browse the Session for Item with the node Id: ' + nodeId.value, err.message);
       } else {
-        this.emitLogMessage('Could not browse the Session for Item with the node Id: ' + nodeId.value);
+        callback(err, results);
       }
     });
   }
