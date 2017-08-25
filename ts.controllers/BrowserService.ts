@@ -1,11 +1,10 @@
 /**
  * Created by Matthias on 23.08.17.
  */
-import {NextFunction, Request, Response} from 'express';
+import {NextFunction, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
 import * as api from 'ais-api';
 import * as connector from './ConnectorService';
-import * as async from 'async';
 import * as opc from 'node-opcua';
 import {util} from '../opcua/ua.util';
 
