@@ -134,6 +134,9 @@ export class UAClientService {
    */
   public createClient(options?: opcua.OPCUAClientOptions): UaClient {
     const opt = options || this.clientOptions;
+    if (opt.keepSessionAlive == null) {
+      opt.keepSessionAlive = true;
+    }
     this.client = new UaClient(opt);
     this.client.initListeners(this.socket);
     this.emitLogMessage('Created new Client');
