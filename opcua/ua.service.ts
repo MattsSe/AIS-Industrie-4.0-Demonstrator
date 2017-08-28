@@ -190,7 +190,6 @@ export class UAClientService {
       this.emitLogMessage('Can\'t bootstrap new Session.');
       return callack(new Error('No Client available'));
     }
-    console.log('create session called');
     this.client.createSession((err, session) => {
       if (err) {
         this.emitLogMessage(Messages.session.creationFailed, err.message);
@@ -364,7 +363,9 @@ export class UAClientService {
    * @param nodeId
    * @param requestParams
    */
-  public monitorItem(nodeId: opcua.NodeId, requestParams?: opcua.ItemToMonitorRequestedParameters): opcua.ClientMonitoredItem {
+  public monitorItem(nodeId: opcua.NodeId, attributeId?: number,
+                     requestParams?: opcua.ItemToMonitorRequestedParameters
+    , onChanged?: (value) => void): opcua.ClientMonitoredItem {
     if (!this.subscriptionAvailable()) {
       if (this.session) {
         /*create a new subscription with default values anyway*/
@@ -376,10 +377,15 @@ export class UAClientService {
     }
     const itemToMonitor: opcua.ItemToMonitor = {
       nodeId: nodeId,
-      attributeId: opcua.AttributeIds.Value
+      attributeId: attributeId || opcua.AttributeIds.Value
     };
     const params = requestParams ? requestParams : defaults.itemToMonitorRequestedParameters;
     const monitoredItem = this.subscription.monitor(itemToMonitor, params);
+
+    if (onChanged) {
+      monitoredItem.on('changed', v => onChanged(v));
+    }
+
     this.emitLogMessage('Created new monitored item for nodeId: ' + nodeId);
     const latestData: MonitoredItemData = {
       nodeId: nodeId.toString(),
@@ -406,6 +412,33 @@ export class UAClientService {
           }
         });
       }
-    })
+    });
+  }
+
+  /**
+   * Removes all available MonitoredItems
+   * @param limit
+   */
+  public unmonitorAll(limit?: number) {
+    if (!this.subscriptionAvailable()) {
+      return;
+    }
+    let max = limit || this.monitoredItemsListData.length;
+    if (max > this.monitoredItemsListData.length) {
+      max = this.monitoredItemsListData.length;
+    }
+    if (this.subscriptionAvailable()) {
+      for (let index = 0; index < this.monitoredItemsListData.length; index++) {
+        if (max === index) {
+          break;
+        }
+        const item = this.monitoredItemsListData[index];
+        item.monitoredItem.terminate(() => {
+          this.emitLogMessage('Unmonitored Item: ' + item.nodeId);
+        });
+      }
+      // remove alle local stored items
+      this.monitoredItemsListData = this.monitoredItemsListData.slice(max);
+    }
   }
 }

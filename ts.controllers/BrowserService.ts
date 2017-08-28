@@ -4,7 +4,6 @@
 import {NextFunction, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
 import * as api from 'ais-api';
-import * as connector from './ConnectorService';
 import * as opcua from 'node-opcua';
 import {util} from '../opcua/ua.util';
 
@@ -57,7 +56,8 @@ export function getAllAttributes(params, res: Response, next: NextFunction) {
               name: util.attributeIdtoString[nodeToRead.attributeId],
               datatype: dataValue.value.dataType.key || 'Unknown',
               value: util.toString1(nodeToRead.attributeId, dataValue),
-              ownerNodeId: nodeId.value
+              ownerNodeId: nodeId.value,
+              attributeId: nodeToRead.attributeId
             });
           }
         }

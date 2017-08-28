@@ -1,16 +1,17 @@
 import * as io from 'socket.io';
 import {UASocketEmitter} from './ua.emitter';
 import {Server} from '../server';
-import {EmitterRoutes} from 'ais-api';
+import Namespace = SocketIO.Namespace;
+import * as api from 'ais-api';
 /**
  * Created by Matthias on 13.08.17.
  */
 
 
 export class UASocket {
-
   private io: SocketIO.Server;
   private _emitter: UASocketEmitter;
+  private subscriptions: Namespace;
 
   public static create(server: Server) {
     return new UASocket(server);
@@ -36,9 +37,7 @@ export class UASocket {
   constructor(private server: Server) {
     this.io = io().listen(server.httpServer);
     this._emitter = new UASocketEmitter(this, this.server.opcuaService())
-    // this.init();
   }
-
   private init() {
     const _io = this.io;
     _io.on('connection', function (socket) {
@@ -72,6 +71,10 @@ export class UASocket {
    */
   public logMessage(...args: string[]) {
     this.io.emit('ualogging', args);
+  }
+
+  public emitSubscriptionChange(changeData: api.ItemChangeData) {
+    this.io.emit('monitored', changeData);
   }
 
 }
