@@ -73,8 +73,8 @@ export class UASocket {
     this.io.emit('ualogging', args);
   }
 
-  public emitSubscriptionChange(changeData: api.ItemChangeData) {
-    this.io.emit('monitored', changeData);
+  public emitSubscriptionChange(item: api.MonitoredItemData) {
+    this.io.emit('monitored', item);
   }
 
 }
