@@ -20,49 +20,45 @@ export function monitorItem(params, res: Response, next: NextFunction) {
    * nodeId (String)
    * attributeId (Integer)
    **/
-  const result: api.MonitoredItemData;
+  let result: api.MonitoredItemData;
   const nodeId = params.nodeId;
   const attribute = params.attributeId || {};
   const body = params.body; // MonitorItemOptions
 
   let valid = false;
   if (nodeId) {
-    valid = true;
-    connector.doConnect({
-      endpointUrl: 'opc.tcp://localhost:4334/UA/MyLittleServer'
-    }, (err) => {
-      if (nodeId.value && UAClientService.INSTANCE.isConnected()) {
-        const resolvedId = opcua.resolveNodeId(nodeId.value);
-        try {
-          const attributeId = attribute.value || opcua.AttributeIds.Value;
-          const options = body.value || {} as api.MonitorItemOptions;
-          const item = UAClientService.INSTANCE.monitorItem(resolvedId, attributeId, options);
-          item.on('initialized', v => {
-            result = {
-              browseName: item.itemToMonitor.nodeId.value,
-              nodeId: item.itemToMonitor.nodeId.toString(),
-              attributeId: item.itemToMonitor.attributeId,
-              subscriptionId: item.subscription.subscriptionId,
-              value: '',
-              datatype: ''
-            };
-            if (v) {
-              result.value = util.toString1(item.itemToMonitor.attributeId, v);
-              result.datatype = v.dataType.toString();
-            }
-            res.end(JSON.stringify(result));
-          })
-
-          // publish change through socket
-          if (options.publishChangeOnSocket) {
-            publishChangeOnSocket(item);
+    if (nodeId.value && UAClientService.INSTANCE.isConnected()) {
+      valid = true;
+      const resolvedId = opcua.resolveNodeId(nodeId.value);
+      try {
+        const attributeId = attribute.value || opcua.AttributeIds.Value;
+        const options = body.value || {} as api.MonitorItemOptions;
+        const item = UAClientService.INSTANCE.monitorItem(resolvedId, attributeId, options);
+        item.on('initialized', v => {
+          result = {
+            browseName: item.itemToMonitor.nodeId.value,
+            nodeId: item.itemToMonitor.nodeId.toString(),
+            attributeId: item.itemToMonitor.attributeId,
+            subscriptionId: item.subscription.subscriptionId,
+            value: '',
+            datatype: ''
+          };
+          if (v) {
+            result.value = util.toString1(item.itemToMonitor.attributeId, v);
+            result.datatype = v.dataType.toString();
           }
-        } catch (err) {
-          res.end(JSON.stringify(null));
+          res.end(JSON.stringify(result));
+        })
+
+        // publish change through socket
+        if (options.publishChangeOnSocket) {
+          publishChangeOnSocket(item);
         }
-        return
+      } catch (err) {
+        res.end(JSON.stringify(null));
       }
-    });
+      return
+    }
   }
 
 

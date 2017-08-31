@@ -270,11 +270,19 @@ export class UAClientService {
    *
    * @param callback
    */
-  public disconnectClient(callback?: () => void) {
+  public disconnectAll(callback?: () => void) {
     if (!this.clientAvailable()) {
       this.emitLogMessage('Can\'t disconnect Client.');
       return;
     }
+    if (!this.sessionAvailable()) {
+      this.disconnectSessionAndClient(callback);
+    } else {
+      this.disconnectClient(callback);
+    }
+  }
+
+  public disconnectClient(callback?: () => void) {
     this.client.disconnect(() => {
       this.emitLogMessage(Messages.client.closed);
       this.clientConnectionState.next(false);
@@ -282,7 +290,13 @@ export class UAClientService {
       if (callback) {
         callback();
       }
-    })
+    });
+  }
+
+  public disconnectSessionAndClient(callback?: () => void) {
+    this.session.close(true, () => {
+      this.disconnectClient(callback);
+    });
   }
 
 

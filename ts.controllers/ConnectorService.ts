@@ -14,7 +14,7 @@ import * as async from 'async';
  */
 function doReconnect(options: api.ServerConnection, res: Response) {
   if (typeof options.forceReconnect === 'boolean' && options.forceReconnect) {
-    UAClientService.INSTANCE.disconnectClient();
+    UAClientService.INSTANCE.disconnectAll();
     try {
       doConnect(options, err => {
         const r: api.ServerConnectionResponse = {
@@ -153,7 +153,7 @@ export function closeServerConnection(params, res: Response, next: NextFunction)
     success: true
   };
   if (UAClientService.INSTANCE.isConnected()) {
-    UAClientService.INSTANCE.disconnectClient(() => {
+    UAClientService.INSTANCE.disconnectAll(() => {
       connResp.msg = 'No Client Connection successfully closed.'
       connResp.state = UAClientService.INSTANCE.getCurrentConnectionState();
       res.end(JSON.stringify(connResp));
