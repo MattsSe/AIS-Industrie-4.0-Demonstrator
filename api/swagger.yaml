@@ -210,6 +210,10 @@ paths:
       responses:
         200:
           description: "Clear all Subscriptions"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UnmonitorItemResult"
       x-swagger-router-controller: "Subscription"
   /server/monitor/{nodeId}/{attributeId}:
     get:
@@ -261,6 +265,28 @@ paths:
           schema:
             $ref: "#/definitions/MonitoredItemDataList"
       x-swagger-router-controller: "Subscription"
+    delete:
+      tags:
+      - "Subscription"
+      summary: "delete specific subscription"
+      description: "deletes any present subscription for the attribute for the nodeId"
+      operationId: "unmonitorItem"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "attributeId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/UnmonitorItemResult"
+      x-swagger-router-controller: "Subscription"
   /server/variables/{nodeId}:
     get:
       tags:
@@ -277,7 +303,26 @@ paths:
           schema:
             $ref: "#/definitions/VariableValue"
       x-swagger-router-controller: "Variables"
-  /server/variables/{nodeId}/{value}:
+  /server/variables/{nodeId}/{attributeId}:
+    get:
+      tags:
+      - "Variables"
+      operationId: "readVariableValueForAttributeId"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "attributeId"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/VariableValue"
+      x-swagger-router-controller: "Variables"
     post:
       tags:
       - "Variables"
@@ -288,10 +333,10 @@ paths:
         in: "path"
         required: true
         type: "string"
-      - name: "value"
+      - name: "attributeId"
         in: "path"
         required: true
-        type: "string"
+        type: "integer"
       responses:
         200:
           description: "Last Variable Value"
@@ -341,9 +386,14 @@ definitions:
       subscriptionId:
         type: "integer"
         description: "The subscription ID in which this monitored item is monitored"
-      monitoredItemId:
+      value:
         type: "string"
-        description: "The ID of the actual monitored object"
+      datatype:
+        type: "string"
+      browseName:
+        type: "string"
+      statusCode:
+        type: "string"
     description: "The Information of the current monitored item on an OPC UA Server"
   ServerConnectionState:
     type: "object"
@@ -474,3 +524,27 @@ definitions:
     type: "object"
   BrowseDescription:
     type: "object"
+  UnmonitorItemResult:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      wasMonitored:
+        type: "boolean"
+      nodeId:
+        type: "string"
+      attributeId:
+        type: "number"
+  ItemChangeData:
+    type: "object"
+    properties:
+      attributeId:
+        type: "integer"
+      value:
+        type: "string"
+      statusCode:
+        type: "string"
+      itemName:
+        type: "string"
+      datatype:
+        type: "string"

@@ -275,7 +275,7 @@ export class UAClientService {
       this.emitLogMessage('Can\'t disconnect Client.');
       return;
     }
-    if (!this.sessionAvailable()) {
+    if (this.sessionAvailable()) {
       this.disconnectSessionAndClient(callback);
     } else {
       this.disconnectClient(callback);
@@ -287,6 +287,7 @@ export class UAClientService {
       this.emitLogMessage(Messages.client.closed);
       this.clientConnectionState.next(false);
       this.endPointUrl = '';
+      this.client = null;
       if (callback) {
         callback();
       }
@@ -296,6 +297,9 @@ export class UAClientService {
   public disconnectSessionAndClient(callback?: () => void) {
     this.session.close(true, () => {
       this.disconnectClient(callback);
+      this.session = null;
+      this.subscription = null;
+      this.monitoredItemsListData = [];
     });
   }
 
@@ -411,22 +415,33 @@ export class UAClientService {
 
 
   /**
-   *
+   * removes any matching subscription for an item macthing the nodeId and if demanded
+   * its attributeId
    * @param nodeId
    */
-  public unmonitorItem(nodeId: opcua.NodeId | string, callback?: () => void) {
+  public unmonitorItem(nodeId: opcua.NodeId | string, attributeId?: number, callback?: () => void): number {
+    let counter = 0;
     const id = util.isNodeId(nodeId) ? nodeId.toString() : nodeId;
     this.monitoredItemsListData.forEach((value, index, array) => {
       if (value.nodeId === id) {
-        value.monitoredItem.terminate(() => {
-          this.monitoredItemsListData.splice(index, 1);
-          this.emitLogMessage('Unmonitored Item with NodeId: ' + id);
-          if (callback) {
-            callback();
-          }
-        });
+        let remove = true;
+        if (attributeId) {
+          // skip if attributeId is demanded
+          remove = (attributeId === value.monitoredItem.itemToMonitor.attributeId);
+        }
+        if (remove) {
+          counter++;
+          value.monitoredItem.terminate(() => {
+            this.monitoredItemsListData.splice(index, 1);
+            this.emitLogMessage('Unmonitored Item with NodeId: ' + id);
+            if (callback) {
+              callback();
+            }
+          });
+        }
       }
     });
+    return counter;
   }
 
   /**

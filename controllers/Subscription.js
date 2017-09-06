@@ -29,3 +29,7 @@ module.exports.getMonitoredItemsForNodeId = function getMonitoredItemsForNodeId 
 module.exports.monitorItem = function monitorItem (req, res, next) {
   Subscription.monitorItem(req.swagger.params, res, next);
 };
+
+module.exports.unmonitorItem = function unmonitorItem (req, res, next) {
+  Subscription.unmonitorItem(req.swagger.params, res, next);
+};

@@ -8,6 +8,31 @@ import * as connector from './ConnectorService';
 import * as opcua from 'node-opcua';
 import {util} from '../opcua/ua.util';
 
+
+/**
+ * removes a specific subscription if any present
+ * @param params
+ * @param res
+ * @param next
+ */
+export function unmonitorItem(params, res: Response, next: NextFunction) {
+  res.setHeader('Content-Type', 'application/json');
+  const nodeId = params.nodeId || {};
+  const attribute = params.attributeId || {};
+  const result: api.UnmonitorItemResult = {
+    success: false,
+    wasMonitored: false,
+    nodeId: nodeId.value,
+    attributeId: attribute.value,
+  };
+  if (nodeId.value && UAClientService.INSTANCE.isConnected()) {
+    const counter = UAClientService.INSTANCE.unmonitorItem(result.nodeId, result.attributeId);
+    result.success = counter > 0;
+    result.wasMonitored = counter > 0
+  }
+  res.end(JSON.stringify(result));
+}
+
 /**
  * @POST monitor changes for the desired item
  * @param params
@@ -20,6 +45,7 @@ export function monitorItem(params, res: Response, next: NextFunction) {
    * nodeId (String)
    * attributeId (Integer)
    **/
+  res.setHeader('Content-Type', 'application/json');
   let result: api.MonitoredItemData;
   const nodeId = params.nodeId;
   const attribute = params.attributeId || {};
@@ -128,6 +154,7 @@ export function getAllMonitoredItems(params, res: Response, next: NextFunction) 
    * parameters expected in the args:
    * limit (Integer)
    **/
+  res.setHeader('Content-Type', 'application/json');
   const items: api.MonitoredItemDataList = [];
   UAClientService.INSTANCE.getAllMonitoredItemData().forEach((value, index, array) => {
     const item: api.MonitoredItemData = {
@@ -157,5 +184,4 @@ export function getMonitoredItem(params, res: Response, next: NextFunction) {
   } else {
     res.end();
   }
-
 }
