@@ -337,6 +337,11 @@ paths:
         in: "path"
         required: true
         type: "integer"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/WriteValueOptions"
       responses:
         200:
           description: "Last Variable Value"
@@ -344,6 +349,14 @@ paths:
             $ref: "#/definitions/VariableValue"
       x-swagger-router-controller: "Variables"
 definitions:
+  WriteValueOptions:
+    type: "object"
+    properties:
+      value:
+        type: "string"
+      datatype:
+        type: "string"
+    description: "used to write a value to node"
   SubscriptionOptions:
     type: "object"
     properties:

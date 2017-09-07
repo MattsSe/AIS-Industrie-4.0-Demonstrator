@@ -15,13 +15,14 @@ import * as async from 'async';
 function doReconnect(options: api.ServerConnection, res: Response) {
   if (typeof options.forceReconnect === 'boolean' && options.forceReconnect) {
     UAClientService.INSTANCE.disconnectAll();
+    const r: api.ServerConnectionResponse = {
+      success: false
+    };
     try {
       doConnect(options, err => {
-        const r: api.ServerConnectionResponse = {
-          success: err ? false : true,
-          msg: err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.',
-          state: UAClientService.INSTANCE.getCurrentConnectionState()
-        };
+        r.success = err ? false : true;
+        r.msg = err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.';
+        r.state = UAClientService.INSTANCE.getCurrentConnectionState();
       });
     } catch (err) {
       handleConnectionError(err, res);

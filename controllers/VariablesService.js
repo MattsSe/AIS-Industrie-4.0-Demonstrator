@@ -48,6 +48,7 @@ exports.writeVariableValue = function(args, res, next) {
    * parameters expected in the args:
   * nodeId (String)
   * attributeId (Integer)
+  * body (WriteValueOptions)
   **/
     var examples = {};
   examples['application/json'] = {
