@@ -22,10 +22,11 @@ function doReconnect(options: api.ServerConnection, res: Response) {
           msg: err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.',
           state: UAClientService.INSTANCE.getCurrentConnectionState()
         };
-        res.end(JSON.stringify(r));
       });
     } catch (err) {
       handleConnectionError(err, res);
+    } finally {
+      res.end(JSON.stringify(r));
     }
   } else {
     const r: api.ServerConnectionResponse = {

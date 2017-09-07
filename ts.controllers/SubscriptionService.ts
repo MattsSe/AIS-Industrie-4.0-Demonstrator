@@ -60,7 +60,7 @@ export function monitorItem(params, res: Response, next: NextFunction) {
         const attributeId = attribute.value || opcua.AttributeIds.Value;
         const options = body.value || {} as api.MonitorItemOptions;
         const item = UAClientService.INSTANCE.monitorItem(resolvedId, attributeId, options);
-        item.on('initialized', v => {
+        item.on('initialized', val => {
           result = {
             browseName: item.itemToMonitor.nodeId.value,
             nodeId: item.itemToMonitor.nodeId.toString(),
@@ -69,9 +69,10 @@ export function monitorItem(params, res: Response, next: NextFunction) {
             value: '',
             datatype: ''
           };
-          if (v) {
+          if (val) {
+            const v = val as opcua.DataValue;
             result.value = util.toString1(item.itemToMonitor.attributeId, v);
-            result.datatype = v.dataType.toString();
+            result.datatype = v.value.dataType.toString();
           }
           res.end(JSON.stringify(result));
         })
@@ -100,7 +101,8 @@ export function monitorItem(params, res: Response, next: NextFunction) {
  * @param result
  */
 function publishChangeOnSocket(item: opcua.ClientMonitoredItem) {
-  item.on('changed', v => {
+  item.on('changed', val => {
+    const v = val as opcua.DataValue;
     const data: api.MonitoredItemData = {
       browseName: item.itemToMonitor.nodeId.value,
       nodeId: item.itemToMonitor.nodeId.toString(),
