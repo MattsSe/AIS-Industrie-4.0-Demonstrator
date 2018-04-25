@@ -79,6 +79,12 @@ async.series([
     },
     
     // step 5: install a subscription and install a monitored item for 10 seconds
+	
+	/*
+	Dieser Block ist besonders für das Beobachten der Maschinendaten interessant.
+	Das Frontend kann die Maschinendaten subscriben und bekommt dann nur Änderungen der Daten über ein gewisses Intervall hinaus mit.
+	Vielleicht bekomme ich es hin, dass der AA-Client direkt beim COdesys Server auf die dortige Variable subscribed ist.
+	*/
     function(callback) {
        
        the_subscription=new opcua.ClientSubscription(the_session,{
@@ -100,24 +106,24 @@ async.series([
        
        setTimeout(function(){
            the_subscription.terminate(callback);
-       },10000);
+       },15000); /*Nach Ablauf dieses Timers (in ms) wird die Subscription beendet.*/
        
        // install monitored item
        var monitoredItem  = the_subscription.monitor({
-           nodeId: opcua.resolveNodeId("ns=1;b=1020FAFA"), /*ToDo: die Daten der Variable kommen nicht an. NodeID fixen!*/
+           nodeId: opcua.resolveNodeId("ns=1;b=1020FAFA"), /*Die NodeID habe ich einfach "erfunden", ich habe die NodeID von "MyVariable2" im Sample_Server.js in Testserver kopiert und leicht verändert!*/
            attributeId: opcua.AttributeIds.Value
        },
        {
-           samplingInterval: 100,
+           samplingInterval: 50, /* "Abtastrate" in ms mit der der Wert des subscribed Attribute gelesen wird.*/
            discardOldest: true,
-           queueSize: 10
+           queueSize: 5 /*Bestimmt, wie groß die Queue (die Liste mit "gemerkten" Werten) ist.*/
        },
        opcua.read_service.TimestampsToReturn.Both
        );
        console.log("-------------------------------------");
        
        monitoredItem.on("changed",function(dataValue){
-          console.log(" % free mem = ",dataValue.value.value);
+          console.log(" Der Wert von MyVariable1 auf dem Server ist: ",dataValue.value.value);
        });
     },
 

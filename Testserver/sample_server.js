@@ -33,7 +33,7 @@ function post_initialize() {
         setInterval(function(){
 			variable1+=1;
 			console.log("Aktueller Wert von MyVariable1: ", variable1);
-			}, 2000);
+			}, 100);
         
         addressSpace.addVariable({
             componentOf: device,
