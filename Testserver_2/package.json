@@ -1,0 +1,14 @@
+{
+  "name": "methodserver",
+  "version": "1.0.0",
+  "description": "An OPC UA server with a method, for Testing purposes.\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[3~t",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "JakLa",
+  "license": "ISC",
+  "dependencies": {
+    "node-opcua": "^0.3.0"
+  }
+}

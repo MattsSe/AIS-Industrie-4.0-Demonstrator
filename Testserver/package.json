@@ -1,0 +1,14 @@
+{
+  "name": "testserver",
+  "version": "1.0.0",
+  "description": "test jakob opc ua server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-opcua": "^0.3.0"
+  }
+}
