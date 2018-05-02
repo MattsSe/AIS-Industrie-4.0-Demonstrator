@@ -1,5 +1,8 @@
 /* Copy from https://github.com/node-opcua/node-opcua/blob/master/documentation/server_with_method.js */
 
+
+/* Zweiter selbst konfigurierter Testserver */
+
 /* global console, require */
 var opcua = require("node-opcua");
 

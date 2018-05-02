@@ -25,7 +25,7 @@ async.series([
 
     // step 2 : createSession
     function(callback) {
-        client.createSession( function(err,session) {
+        client.createSession( function(err,session) { // creates a new Session with the "anonymous" Role
             if(!err) {
                 the_session = session;
 				console.log("success of step 2");
