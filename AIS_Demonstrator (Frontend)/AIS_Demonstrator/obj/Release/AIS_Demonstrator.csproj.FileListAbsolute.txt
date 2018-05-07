@@ -1,0 +1,242 @@
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.AIS_Demonstrator.apk
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.AIS_Demonstrator-Signed.apk
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\NineOldAndroids.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLite-net.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.batteries_green.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.batteries_v2.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.core.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.lib.e_sqlite3.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.provider.e_sqlite3.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Animated.Vector.Drawable.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Annotations.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Compat.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Core.UI.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Core.Utils.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Design.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Fragment.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Media.Compat.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Transition.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.v4.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.v7.AppCompat.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.v7.RecyclerView.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Vector.Drawable.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLite-net.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLite-net.dll.mdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Annotations.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Compat.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Core.UI.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Core.Utils.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Media.Compat.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Fragment.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Vector.Drawable.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Animated.Vector.Drawable.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.v7.AppCompat.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.v4.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Transition.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.v7.RecyclerView.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\XbdMerge\Xamarin.Android.Support.Design.dll.stamp
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.csproj.CoreCompileInputs.cache
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.csproj.CopyComplete
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.dll
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\bin\AIS_Demonstrator.AIS_Demonstrator.apk
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\toolbar.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\profile.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\overview.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\tab_layout.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\costoverview.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\machinesetting.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\costsetting.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\coffeetype.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\coffee_tab_layout.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\dialogcoffeevalue.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\dialogchangeuserdata.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\login.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\signup.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\customarrayadapterlayout.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\main.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\values\strings.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\icon.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\values\styles.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\coffee.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\anim\enter_from_left.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\anim\exit_to_left.xml
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-hdpi\ic_mode_edit_black_18dp.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-mdpi\ic_mode_edit_black_18dp.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xhdpi\ic_mode_edit_black_18dp.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xxhdpi\ic_mode_edit_black_18dp.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xxxhdpi\ic_mode_edit_black_18dp.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\largecoffee.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\lattemacchiato.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\smallcoffee.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\cappuccino.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xxxhdpi\icon.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xxhdpi\icon.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xhdpi\icon.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-mdpi\icon.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-hdpi\icon.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\profilepic.jpg
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\profileborder.png
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\R.cs.flag
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\uploadflags.txt
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Microsoft.CSharp.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Mono.Android.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\mscorlib.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Core.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.IO.Compression.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Net.Http.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Xml.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Xml.Linq.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Runtime.Serialization.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.ServiceModel.Internals.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Mono.Security.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.ComponentModel.Composition.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\Microsoft.CSharp.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\Mono.Android.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\mscorlib.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Core.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.IO.Compression.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Net.Http.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Xml.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Xml.Linq.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Runtime.Serialization.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.ServiceModel.Internals.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\Mono.Security.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.ComponentModel.Composition.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\AIS_Demonstrator.dll.mdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\SQLite-net.dll.mdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.csprojResolveAssemblyReference.cache
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.dll.mdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\AIS_Demonstrator.dll.mdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\Microsoft.CSharp.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\Mono.Android.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\Mono.Security.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\mscorlib.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.Core.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.Runtime.Serialization.pdb
+D:\Google Drive\Uni\_BA\FRONTEND Semesterarbeit - Florian Hänel\6_Applikation\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.Xml.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.AIS_Demonstrator.apk
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.AIS_Demonstrator-Signed.apk
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\NineOldAndroids.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLite-net.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.batteries_green.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.batteries_v2.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.core.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.lib.e_sqlite3.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLitePCLRaw.provider.e_sqlite3.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Animated.Vector.Drawable.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Annotations.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Compat.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Core.UI.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Core.Utils.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Design.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Fragment.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Media.Compat.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Transition.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.v4.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.v7.AppCompat.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.v7.RecyclerView.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Support.Vector.Drawable.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLite-net.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.csproj.CoreCompileInputs.cache
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.csproj.CopyComplete
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\bin\AIS_Demonstrator.AIS_Demonstrator.apk
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\toolbar.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\profile.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\overview.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\tab_layout.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\costoverview.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\machinesetting.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\costsetting.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\coffeetype.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\coffee_tab_layout.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\dialogcoffeevalue.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\dialogchangeuserdata.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\login.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\signup.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\customarrayadapterlayout.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\main.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\values\strings.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\icon.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\values\styles.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\layout\coffee.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\anim\enter_from_left.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\anim\exit_to_left.xml
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-hdpi\ic_mode_edit_black_18dp.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-mdpi\ic_mode_edit_black_18dp.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xhdpi\ic_mode_edit_black_18dp.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xxhdpi\ic_mode_edit_black_18dp.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xxxhdpi\ic_mode_edit_black_18dp.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\largecoffee.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\lattemacchiato.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\smallcoffee.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\cappuccino.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xxxhdpi\icon.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xxhdpi\icon.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-xhdpi\icon.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-mdpi\icon.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable-hdpi\icon.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\profilepic.jpg
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\res\drawable\profileborder.png
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\R.cs.flag
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\uploadflags.txt
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Arch.Core.Common.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Arch.Lifecycle.Common.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Xamarin.Android.Arch.Lifecycle.Runtime.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\SQLite-net.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Microsoft.CSharp.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Mono.Android.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\mscorlib.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Core.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.IO.Compression.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Net.Http.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Xml.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Xml.Linq.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.Runtime.Serialization.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.ServiceModel.Internals.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\Mono.Security.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\System.ComponentModel.Composition.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\Microsoft.CSharp.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\Mono.Android.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\mscorlib.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\SQLite-net.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Core.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.IO.Compression.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Net.Http.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Xml.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Xml.Linq.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.Runtime.Serialization.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.ServiceModel.Internals.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\Mono.Security.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\System.ComponentModel.Composition.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\AIS_Demonstrator.dll.mdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.dll.mdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\AIS_Demonstrator.dll.mdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\Microsoft.CSharp.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\Mono.Android.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\Mono.Security.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\mscorlib.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\SQLite-net.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.ComponentModel.Composition.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.Core.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.IO.Compression.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.Net.Http.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.Runtime.Serialization.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.ServiceModel.Internals.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.Xml.Linq.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\android\assets\System.Xml.pdb
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\AIS_Demonstrator.csprojResolveAssemblyReference.cache
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\bin\Release\AIS_Demonstrator.dll
+D:\FE App Kaffeemaschine\AIS_Demonstrator\AIS_Demonstrator\obj\Release\linksrc\AIS_Demonstrator.dll.mdb

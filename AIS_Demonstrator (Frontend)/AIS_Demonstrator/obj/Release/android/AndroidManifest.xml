@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="AIS_Demonstrator.AIS_Demonstrator" android:versionCode="1" android:versionName="1.0" android:installLocation="auto">
+  <!--suppress UsesMinSdkAttributes-->
+  <uses-sdk android:minSdkVersion="16" />
+  <application android:label="AIS_Demonstrator" android:theme="@style/Theme" android:name="android.app.Application" android:allowBackup="true" android:icon="@drawable/icon">
+    <activity android:icon="@drawable/icon" android:label="AIS Industrie 4.0 Demonstrator" android:name="md58aa9c97bf2dd1a9148812f34c2356be6.LoginActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity android:icon="@drawable/icon" android:label="AIS_Demonstrator" android:name="md58aa9c97bf2dd1a9148812f34c2356be6.MainActivity" />
+    <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="AIS_Demonstrator.AIS_Demonstrator.mono.MonoRuntimeProvider.__mono_init__" />
+  </application>
+</manifest>

@@ -1,0 +1,2 @@
+android.app.Application
+AIS_Demonstrator.AIS_Demonstrator
