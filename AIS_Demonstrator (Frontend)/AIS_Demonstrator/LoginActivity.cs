@@ -8,6 +8,11 @@ using Android.OS;
 using Android.Support.V7.App;
 using Java.Lang;
 
+// Added for OPC UA Support
+using Opc.Ua;
+using Opc.Ua.Client;
+using Opc.Ua.Configuration;
+
 namespace AIS_Demonstrator
 {
     //If Login isn't required: MainLauncher = false and in MainActivity MainLauncher = true
@@ -21,6 +26,7 @@ namespace AIS_Demonstrator
         private UserDataBase _userDataBase;
         private EditText _editUserName;
         private EditText _editUserPassword;
+        private EditText _editServerEndpoint;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -36,8 +42,11 @@ namespace AIS_Demonstrator
             //Find Views
             _editUserName = FindViewById<EditText>(Resource.Id.editUserName);
             _editUserPassword = FindViewById<EditText>(Resource.Id.editUserPassword);
+            // save user input: OPC UA Server Endpoint URL
+            _editServerEndpoint = FindViewById<EditText>(Resource.Id.editServerEndpoint);
 
             //Create Account Button Clicked
+            #region CreateAccount
             _buttonSignup = FindViewById<Button>(Resource.Id.buttonCreateAccount);
             _progressBar = FindViewById<ProgressBar>(Resource.Id.progressBarLogin);
             _buttonSignup.Click += (sender, args) =>
@@ -48,6 +57,7 @@ namespace AIS_Demonstrator
                 signUpDialog.Show(transaction, "signUpDialog Fragment");
                 signUpDialog.OnSignupComplete += SignUpDialog_OnSignupComplete;
             };
+            #endregion
 
             //Login Button Clicked
             _buttonLogin = FindViewById<Button>(Resource.Id.buttonLogin);
@@ -55,7 +65,7 @@ namespace AIS_Demonstrator
             _buttonLogin.Click += (sender, args) =>
             {
                 _progressBar.Visibility = ViewStates.Visible;
-
+                
                 //Simulated Server
                 Thread thread = new Thread(RequestSim);
                 thread.Start();
@@ -84,12 +94,24 @@ namespace AIS_Demonstrator
                 }
 
                 //UserName and UserPassword correct
+
+                #region OPCUA
+                //Check if Server Endpoint has been entered
+                if (_editServerEndpoint.Text == "")
+                {
+                    Toast.MakeText(this, GetString(Resource.String.WrongEndpoint), ToastLength.Short).Show();
+                    return;
+                }
+                #endregion
+
                 //Start MainActivity
                 Intent intent = new Intent(this, typeof(MainActivity));
                 intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
                 //intent.AddFlags(ActivityFlags.NoHistory);
                 intent.PutExtra("USERNAME", _editUserName.Text);
                 intent.PutExtra("USERID", _userDataBase.GetUserId(_editUserName.Text));
+                //pass server Endpoint to MainActivity
+                intent.PutExtra("ENDPOINT", _editServerEndpoint.Text);
                 StartActivity(intent);
                 Finish();
             };

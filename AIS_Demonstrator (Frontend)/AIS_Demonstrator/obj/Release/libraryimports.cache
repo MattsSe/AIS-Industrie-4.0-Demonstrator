@@ -21,6 +21,11 @@
     <ManifestDocument>obj\Release\lp\22\jl\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\22\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\23\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\66\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\66\jl\manifest\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\67\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\68\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\68\jl\manifest\AndroidManifest.xml</ManifestDocument>
   </ManifestDocuments>
   <NativeLibraries />
   <Jars>
@@ -39,6 +44,10 @@
     <Jar>obj\Release\lp\21\jl\bin\classes.jar</Jar>
     <Jar>obj\Release\lp\22\jl\bin\classes.jar</Jar>
     <Jar>obj\Release\lp\23\jl\bin\classes.jar</Jar>
+    <Jar>obj\Release\lp\66\jl\bin\classes.jar</Jar>
+    <Jar>obj\Release\lp\67\jl\bin\classes.jar</Jar>
+    <Jar>obj\Release\lp\68\jl\bin\classes.jar</Jar>
+    <Jar>obj\Release\lp\69\jl\formsviewgroup.jar</Jar>
     <Jar>obj\Release\lp\8\jl\arch-core-common.jar</Jar>
     <Jar>obj\Release\lp\9\jl\arch-lifecycle-common.jar</Jar>
   </Jars>

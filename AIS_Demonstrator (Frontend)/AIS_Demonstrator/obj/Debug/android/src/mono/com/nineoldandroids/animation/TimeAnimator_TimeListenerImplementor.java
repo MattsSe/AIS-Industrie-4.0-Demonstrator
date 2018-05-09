@@ -13,7 +13,7 @@ public class TimeAnimator_TimeListenerImplementor
 		__md_methods = 
 			"n_onTimeUpdate:(Lcom/nineoldandroids/animation/TimeAnimator;JJ)V:GetOnTimeUpdate_Lcom_nineoldandroids_animation_TimeAnimator_JJHandler:NineOldAndroids.Animation.TimeAnimator/ITimeListenerInvoker, NineOldAndroids\n" +
 			"";
-		mono.android.Runtime.register ("NineOldAndroids.Animation.TimeAnimator+ITimeListenerImplementor, NineOldAndroids, Version=2.4.0.0, Culture=neutral, PublicKeyToken=null", TimeAnimator_TimeListenerImplementor.class, __md_methods);
+		mono.android.Runtime.register ("NineOldAndroids.Animation.TimeAnimator+ITimeListenerImplementor, NineOldAndroids", TimeAnimator_TimeListenerImplementor.class, __md_methods);
 	}
 
 
@@ -21,7 +21,7 @@ public class TimeAnimator_TimeListenerImplementor
 	{
 		super ();
 		if (getClass () == TimeAnimator_TimeListenerImplementor.class)
-			mono.android.TypeManager.Activate ("NineOldAndroids.Animation.TimeAnimator+ITimeListenerImplementor, NineOldAndroids, Version=2.4.0.0, Culture=neutral, PublicKeyToken=null", "", this, new java.lang.Object[] {  });
+			mono.android.TypeManager.Activate ("NineOldAndroids.Animation.TimeAnimator+ITimeListenerImplementor, NineOldAndroids", "", this, new java.lang.Object[] {  });
 	}
 
 

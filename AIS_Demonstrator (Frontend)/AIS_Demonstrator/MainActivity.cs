@@ -13,6 +13,13 @@ using Android.Views;
 using Android.Widget;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
+// Added for OPC UA Support
+using Opc.Ua;
+using Opc.Ua.Client;
+using Opc.Ua.Configuration;
+using System.Threading.Tasks;
+using Xamarin.Forms;
+
 namespace AIS_Demonstrator
 {
     [Activity(Label = "AIS_Demonstrator", MainLauncher = false, Icon = "@drawable/icon")]
@@ -21,6 +28,74 @@ namespace AIS_Demonstrator
     {
         public static string UserName { get; set; }
         public static int UserId { get; private set; }
+        #region OPC UA Declarations
+        // Declare and initialise variable for OPC UA Server Endpoint
+        public string endpointUrl = "init";
+        static LabelViewModel textInfo = new LabelViewModel();
+        SampleClient OpcClient = new SampleClient(textInfo);
+        
+        async void Connect() //copied and modified Function "OnConnect" from UA Xamarin Client.MainPage.xaml.cs"
+        {
+            // Retrieve ServerEndpoint from LoginActivity
+            endpointUrl = Intent.GetStringExtra("ENDPOINT");
+            bool connectToServer = true;
+
+            // not needed: ConnectIndicator is a spinning animation
+            // ConnectIndicator.IsRunning = true;
+
+            OpcClient.CreateCertificate(); //ToDo debug: delete this line
+
+            /*
+            await Task.Run(() => OpcClient.CreateCertificate()); //ToDo: Diese Zeile zickt rum (System.NullReferenceException)
+            
+            if (OpcClient.haveAppCertificate == false)
+            {
+                Toast.MakeText(this, GetString(Resource.String.NoAppCertificate), ToastLength.Short).Show();
+                connectToServer = true; // ToDo: instead of directly setting this to true, it would be better to show an alert with ok/cancel button and only set to true if the user tapped "ok"
+            }
+            
+            if (connectToServer == true)
+            {
+                var connectionStatus = await Task.Run(() => OpcClient.OpcClient(endpointUrl));
+                
+                if (connectionStatus == SampleClient.ConnectionStatus.Connected)
+                {
+                    Toast.MakeText(this, GetString(Resource.String.ConnectionSuccess), ToastLength.Short).Show();
+                    
+                    //Tree tree;
+
+                    // not needed: ConnectIndicator is a spinning animation
+                    // ConnectButton.Text = "Disconnect";
+
+                    // tree = OpcClient.GetRootNode(textInfo);
+                    // if (tree.currentView[0].children == true)
+                    // {
+                    //    tree = OpcClient.GetChildren(tree.currentView[0].id);
+                    // }
+
+                    // not needed: ConnectIndicator is a spinning animation
+                    // ConnectIndicator.IsRunning = false;
+                    // Page treeViewRoot = new TreeView(tree, OpcClient);
+                    // treeViewRoot.Title = "/Root";
+                    // await Navigation.PushAsync(treeViewRoot);
+                    
+                }
+                else
+                {
+                    // not needed: ConnectIndicator is a spinning animation
+                    // ConnectIndicator.IsRunning = false;
+                    Toast.MakeText(this, GetString(Resource.String.ConnectionFailed), ToastLength.Short).Show();
+                }
+            }
+            else
+            {
+                // not needed: ConnectIndicator is a spinning animation
+                // ConnectIndicator.IsRunning = false;
+            } */
+
+        }
+        #endregion
+
         private ViewPager _pager;
         private Toolbar _toolbar;
         private TabLayout _tabLayout;
@@ -28,6 +103,7 @@ namespace AIS_Demonstrator
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            Forms.Init(this, bundle);
 
             UserName = Intent.GetStringExtra("USERNAME");
             UserId = Intent.GetIntExtra("USERID", -1);
@@ -58,6 +134,22 @@ namespace AIS_Demonstrator
                 TabLayout.Tab tab = _tabLayout.GetTabAt(i);
                 tab.SetCustomView(adapter.GetTabView(i));
             }
+
+            #region Connect to OPC UA Serverv
+            // when View is created: connect the client to the specified Endpoint
+            Connect();     
+
+            endpointUrl = Intent.GetStringExtra("ENDPOINT"); //ToDo debug: delete this line
+            Toast.MakeText(this, endpointUrl, ToastLength.Short).Show(); //ToDo debug: delete this line
+
+            #endregion
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            // Disconnect OPC UA Client when Activity is destroyed
+            OpcClient.Disconnect(OpcClient.session);
         }
 
         //Catch Toolbar Button Clicks

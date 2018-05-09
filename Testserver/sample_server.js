@@ -27,13 +27,13 @@ function post_initialize() {
         
         // add some variables 
         // add a variable named MyVariable1 to the newly created folder "MeinTestDevice"
-        var variable1 = 1;
+        var variable1 = 249;
 		
-        // emulate variable1 changing every 500 ms
+        // emulate variable1 changing every x ms (see below)
         setInterval(function(){
-			variable1+=1;
+			variable1-=1;
 			console.log("Aktueller Wert von MyVariable1: ", variable1);
-			}, 100);
+			}, 2000); // <- changing every x ms
         
         addressSpace.addVariable({
             componentOf: device,
