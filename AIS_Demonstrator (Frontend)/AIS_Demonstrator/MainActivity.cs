@@ -11,6 +11,7 @@ using Android.Support.V4.View;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using Android.Content.Res;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 // Added for OPC UA Support
@@ -33,7 +34,7 @@ namespace AIS_Demonstrator
         public string endpointUrl = "init";
         static LabelViewModel textInfo = new LabelViewModel();
         SampleClient OpcClient = new SampleClient(textInfo);
-        
+
         async void Connect() //copied and modified Function "OnConnect" from UA Xamarin Client.MainPage.xaml.cs"
         {
             // Retrieve ServerEndpoint from LoginActivity
@@ -43,17 +44,16 @@ namespace AIS_Demonstrator
             // not needed: ConnectIndicator is a spinning animation
             // ConnectIndicator.IsRunning = true;
 
-            OpcClient.CreateCertificate(); //ToDo debug: delete this line
-
-            /*
-            await Task.Run(() => OpcClient.CreateCertificate()); //ToDo: Diese Zeile zickt rum (System.NullReferenceException)
+            AssetManager assets = this.Assets; //AssetManager to be given to CreateCertificate function in order to be able to access the Config.xml file from the Assets
             
+            await Task.Run(() => OpcClient.CreateCertificate(assets));
+
             if (OpcClient.haveAppCertificate == false)
             {
                 Toast.MakeText(this, GetString(Resource.String.NoAppCertificate), ToastLength.Short).Show();
                 connectToServer = true; // ToDo: instead of directly setting this to true, it would be better to show an alert with ok/cancel button and only set to true if the user tapped "ok"
             }
-            
+
             if (connectToServer == true)
             {
                 var connectionStatus = await Task.Run(() => OpcClient.OpcClient(endpointUrl));
@@ -91,7 +91,7 @@ namespace AIS_Demonstrator
             {
                 // not needed: ConnectIndicator is a spinning animation
                 // ConnectIndicator.IsRunning = false;
-            } */
+            } 
 
         }
         #endregion

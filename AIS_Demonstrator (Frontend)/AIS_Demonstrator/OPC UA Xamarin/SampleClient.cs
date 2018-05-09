@@ -38,6 +38,7 @@ using Xamarin.Forms;
 using System.Net;
 using Opc.Ua.Configuration;
 using System.IO;
+using Android.Content.Res;
 
 namespace AIS_Demonstrator
 {
@@ -71,27 +72,43 @@ namespace AIS_Demonstrator
             debug = "constructor debug string";
         }
 
-        public async void CreateCertificate() //ToDo: this method causes a System.NullReferenceException when called in MainActivity.cs . Fix plz!
+        public async void CreateCertificate(AssetManager assets) //ToDo: this method causes a System.NullReferenceException when called in MainActivity.cs . Fix plz!
         {
             ApplicationInstance application = new ApplicationInstance
             {
                 ApplicationType = ApplicationType.Client,
-                ConfigSectionName = "Opc.Ua.SampleClient"
+                ConfigSectionName = "Opc.Ua.AIS_Demonstrator"   /// [...] sets the name of the config section containing the path to the application configuration file.
             };
 
-            // Device is always android; removed if condition
+            /*
+            // Old code to find location of config.xml file + load its content into "context" variable.
+            // Instead, the CreateCertificate Variable is now called with the content string as a parameter since the AssetManager needs to be instantiated in an Activity
             string currentFolder = DependencyService.Get<IPathService>().PublicExternalFolder.ToString();
-            string filename = application.ConfigSectionName + ".Config.xml";
+            string filename = application.ConfigSectionName + ".Config.xml";    
             string content = DependencyService.Get<IAssetService>().LoadFile(filename);
-
             File.WriteAllText(currentFolder + filename, content);
+            */
+
+            // new code to find location of config.xml file + load its content into "context" variable
+            // the CreateCertificate Variable is now called with the content string as a parameter since the AssetManager needs to be instantiated in an Activity
+            string filename = application.ConfigSectionName + ".Config.xml";
+            string currentFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal); // gets the path of the Internal Storage as a string
+
+            // in case the config file doesn't exist: create new config file in internal storage as a copy of the Asset config
+            if (!File.Exists(currentFolder + filename))
+            {
+                string content;
+                using (StreamReader sr = new StreamReader(assets.Open(filename)))
+                {
+                    content = sr.ReadToEnd();
+                }
+                File.WriteAllText(currentFolder + filename, content);
+            }
             // load the application configuration.
             config = await application.LoadApplicationConfiguration(currentFolder + filename, false);
 
             // check the application certificate.
             haveAppCertificate = await application.CheckApplicationInstanceCertificate(false, 0);
-
-            config.ApplicationName = "OPC UA Xamarin Sample Client Android"; //ToDo debug: delete this line
 
             if (haveAppCertificate)
             {
