@@ -1,16 +1,27 @@
-/* Copy from https://github.com/node-opcua/node-opcua/blob/master/documentation/server_with_method.js */
 
+// CoffeeOrder Service by Jakob Lammel
+// Based on https://github.com/node-opcua/node-opcua/blob/master/documentation/server_with_method.js
+// Node-opcua API documentation can be found here: http://node-opcua.github.io/api_doc/0.2.0/
 
-/* Zweiter selbst konfigurierter Testserver */
+/*CoffeeOrder Service is supposed to be an OPC UA Server that serves as a backend for the AIS Industrie 4.0 Demostrator.
+Frontend Applications (e.g. the AIS_Demonstrator Android App by Florian Hänel) can establish a connection to the Service via the OPC UA endpoint URL.
+The CoffeeOrder Service offers the following Services:
+* ToDo
+
+*/
+
 
 /* global console, require */
 var opcua = require("node-opcua");
 
 
-
+// instantiate Server
 var server = new opcua.OPCUAServer({
     port: 34197, // the port of the listening socket of the server
-    resourcePath: "UA/Testserver2", // this path will be added to the endpoint resource name
+    resourcePath: "CoffeeOrder", // this path will be added to the endpoint resource name
+	// defaultSecureTokenLifetime: 60000, // the default secure token life time in ms. /* Breaks the server for some reason. Error "Could not connect to server: BadInvalidArgument" */
+	// securityPolicies= [SecurityPolicy.None, SecurityPolicy.Basic128Rsa15, SecurityPolicy.Basic256] // ToDo: Security Implementierung
+	// securityModes= [MessageSecurityMode.NONE, MessageSecurityMode.SIGN, MessageSecurityMode.SIGNANDENCRYPT] // ToDo: Security Implementierung
 	buildInfo : {
         productName: "MeinTestServer2",
         buildNumber: "12345",
@@ -21,17 +32,67 @@ var server = new opcua.OPCUAServer({
 function post_initialize() {
     console.log("initialized");
     var addressSpace = server.engine.addressSpace;
-
-    var myDevice = addressSpace.addObject({
-        organizedBy: addressSpace.rootFolder.objects,
-        browseName: "MeineKaffeemaschine"
-    });
-	// add some variables 
-    // add a variable named MyVariable1 to the newly created folder "MeineKaffeemaschine"
-    var variable1 = 69;
 	
-    var method = addressSpace.addMethod(myDevice, {
+	// ToDo: add Enum Datatype for Control Panel Buttons in Codesys
 
+	
+	// Add CoffeeOrder Object to the namespace
+    var CoffeeOrderObject = addressSpace.addObject({
+        organizedBy: addressSpace.rootFolder.objects,
+        browseName: "CoffeeOrder",
+		displayName: "CoffeeOrder Object",
+		description: "Das Objekt für eine Kaffeebestellung. Enthält Variablen für die Kaffee- und Milchmenge sowie für die Kaffeestärke. Außerdem stellt es Methoden bereit, mit der man die Kaffeebestellung an die Steuerung weitergeben kann.",
+		nodeId: "ns=1;s=CoffeeOrder"	// die NodeID des CoffeeOrder Objects
+    });
+	
+	// Add CoffeeQuantity Variable to CoffeeOrder Object
+	CoffeeQuantity = addressSpace.addVariable({
+		componentOf: CoffeeOrderObject,
+		browseName: "CoffeeQuantity",
+		dataType: opcua.DataType.UInt16
+	});
+	
+	// Add MilkQuantity Variable to CoffeeOrder Object
+	CoffeeQuantity = addressSpace.addVariable({
+		componentOf: CoffeeOrderObject,
+		browseName: "MilkQuantity",
+		dataType: opcua.DataType.UInt16
+	});
+	
+	// Add CoffeeStrength Variable to CoffeeOrder Object
+	CoffeeQuantity = addressSpace.addVariable({
+		componentOf: CoffeeOrderObject,
+		browseName: "CoffeeStrength",
+		dataType: opcua.DataType.Byte
+	});
+	
+    var toButtonMethod = addressSpace.addMethod(CoffeeOrderObject, {		// ToDo: Here we add the method shell (without the actual functional logic) to the OPC UA Server Address Space
+		
+		browseName: "toButton",
+		
+		// These are the Input Arguments that must be passed to the method upon calling it
+		inputArguments: [
+			{
+				name: "CoffeeQuantity",
+				description: {text: "Die Menge an Kaffee in der Bestellung, in ml"},
+				dataType: opcua.DataType.UInt32
+			},
+			{
+				name: "MilkQuantity",
+				description: {text: "Die Menge an Milch in der Bestellung, in ml"},
+				dataType: opcua.DataType.UInt32
+			}
+		],
+		
+		// These are the output arguments that the method returns when called
+		outputArguments: [
+			{
+				name: "buttonToPress",
+				description: {text: "Virtueller Knopf auf dem Bedienpanel, der in CODESYS die Kaffeemaschine bedient"},
+				dataType: opcua.DataType.UInt32 // ToDo: change to my enum datatype CPbutton
+			}
+		]
+	/*
         browseName: "Bell",
 
         inputArguments: [
@@ -52,16 +113,20 @@ function post_initialize() {
             dataType: opcua.DataType.String,
             valueRank: 1
         }]
+		*/
     });
 
     // optionally, we can adjust userAccessLevel attribute
-    //method.outputArguments.userAccessLevel = opcua.makeAccessLevel("CurrentRead");
-    //method.inputArguments.userAccessLevel = opcua.makeAccessLevel("CurrentRead");
+    //toButtonMethod.outputArguments.userAccessLevel = opcua.makeAccessLevel("CurrentRead");
+    //toButtonMethod.inputArguments.userAccessLevel = opcua.makeAccessLevel("CurrentRead");
     
 
-    method.bindMethod(function (inputArguments, context, callback) {
-
-        var nbBarks = inputArguments[0].value;
+    /* toButtonMethod.bindMethod(function (inputArguments, context, callback) {	// ToDo: Here we add functional logic to the created method shell.
+		
+		// actual method logic code
+		
+        // local variables for internal use within the function
+		var nbBarks = inputArguments[0].value;
         var volume = inputArguments[1].value;
 
         console.log("Hallo Nachbar, ich werde ", nbBarks, " mal Bellen!");
@@ -82,7 +147,8 @@ function post_initialize() {
             }]
         };
         callback(null, callMethodResult);
-    });
+		
+    });*/
 
 }
 
