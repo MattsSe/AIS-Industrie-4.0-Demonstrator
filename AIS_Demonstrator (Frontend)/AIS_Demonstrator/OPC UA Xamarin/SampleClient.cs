@@ -60,7 +60,7 @@ namespace AIS_Demonstrator
         public string debug { get; set; }
         public int valueCoffeeLevel;
         public int valueWaterLevel;
-        public int valueClenalinessLevel;
+        public int valueCleanlinessLevel;
 
         private LabelViewModel info;
         private ApplicationConfiguration config;
@@ -73,9 +73,9 @@ namespace AIS_Demonstrator
             haveAppCertificate = false;
             config = null;
             debug = "constructor debug string";
-            valueCoffeeLevel = 10;
+            valueCoffeeLevel = 0;
             valueWaterLevel = 0;
-            valueClenalinessLevel = 0;
+            valueCleanlinessLevel = 0;
         }
 
         public async void CreateCertificate(AssetManager assets) //ToDo: this method causes a System.NullReferenceException when called in MainActivity.cs . Fix plz!
@@ -181,11 +181,40 @@ namespace AIS_Demonstrator
                         DiscardOldest = true    // we only need the most recent value for CoffeeLevel
                     };
                     CoffeeLevel.Notification += (sender, e) => OnNotification(sender, e, ref valueCoffeeLevel);
-                    subscription.AddItem(CoffeeLevel);
-                    //ToDo: more MonitoredItems
 
-                    // ToDo: add remaining MonitoredItems
-                    session.AddSubscription(subscription); // System.NullReferenceException: Object reference not set to an instance of an object.
+                    // WaterLevel
+                    MonitoredItem WaterLevel = new MonitoredItem(subscription.DefaultItem)
+                    {
+                        StartNodeId = "ns=1;s=WaterLevel",
+                        DisplayName = "MonitoredWaterLevel",
+                        AttributeId = Attributes.Value,
+                        MonitoringMode = MonitoringMode.Reporting,
+                        SamplingInterval = 1000,    // check the CoffeeLevel every second
+                        QueueSize = 1,  // only the most recent value for the CoffeeLevel is needed, thus we only need a queuesize of one
+                        DiscardOldest = true    // we only need the most recent value for CoffeeLevel
+                    };
+                    WaterLevel.Notification += (sender, e) => OnNotification(sender, e, ref valueWaterLevel);
+
+                    // CleanlinessLevel
+                    MonitoredItem CleanlinessLevel = new MonitoredItem(subscription.DefaultItem)
+                    {
+                        StartNodeId = "ns=1;s=CleanlinessLevel",
+                        DisplayName = "MonitoredCleanlinessLevel",
+                        AttributeId = Attributes.Value,
+                        MonitoringMode = MonitoringMode.Reporting,
+                        SamplingInterval = 1000,    // check the CoffeeLevel every second
+                        QueueSize = 1,  // only the most recent value for the CoffeeLevel is needed, thus we only need a queuesize of one
+                        DiscardOldest = true    // we only need the most recent value for CoffeeLevel
+                    };
+                    CleanlinessLevel.Notification += (sender, e) => OnNotification(sender, e, ref valueCleanlinessLevel);
+
+                    // add MonitoredItems to Subscription
+                    subscription.AddItem(CoffeeLevel);
+                    subscription.AddItem(WaterLevel);
+                    subscription.AddItem(CleanlinessLevel);
+                    
+                    // add Subscription to Session
+                    session.AddSubscription(subscription);
                     subscription.Create();
 
                     #endregion
@@ -217,7 +246,7 @@ namespace AIS_Demonstrator
             }
         }
 
-        // Method to write a value from OPC UA notifications to a local variable
+        // Notification Event Handler (Method to write a value from OPC UA notifications to a local variable)
         private static void OnNotification(MonitoredItem item, MonitoredItemNotificationEventArgs e, ref int variable)
         {
             foreach (var value in item.DequeueValues())
@@ -226,6 +255,7 @@ namespace AIS_Demonstrator
             }
         }
 
+        // KeepAlive Event Handler
         private void Client_KeepAlive(Session sender, KeepAliveEventArgs e)
         {
             if (e.Status != null && ServiceResult.IsNotGood(e.Status))
