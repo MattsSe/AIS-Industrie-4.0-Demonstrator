@@ -62,6 +62,9 @@ function post_initialize() {
 			dataType: opcua.DataType.UInt16,	// ToDo: Vielleicht eignet sich ein anderer Datentyp besser, noch mal evaluieren sobald ich die Daten im Frontend verwende.
 			description: "Die Variable für den Kaffeestand in der Kaffeemaschine. Gibt an, wie voll der Kaffeebohnen- oder -pulverbehälter prozentual ist. Der Wert sollte also zwischen 0 (leer) und 100 (voll) liegen.",
 			browseName: "CoffeeLevel",
+			currentRead: 0,
+			currentWrite: 1,
+			nodeId: "ns=1;s=CoffeeLevel",	// The NodeID of the CoffeeLevel Object: NamespaceIndex = 1, IdentifierType = string, Identifier = CoffeeLevel
 			value: {	// implements get and set functions for the value
                 get: function () {
                     return new opcua.Variant({dataType: opcua.DataType.UInt16, value: valueCoffeeLevel });
@@ -79,6 +82,7 @@ function post_initialize() {
 			dataType: opcua.DataType.UInt16,	// ToDo: Vielleicht eignet sich ein anderer Datentyp besser, noch mal evaluieren sobald ich die Daten im Frontend verwende.
 			description: "Die Variable für den Wasserstand in der Kaffeemaschine. Gibt an, wie voll der Wasserbehälter prozentual ist. Der Wert sollte also zwischen 0 (leer) und 100 (voll) liegen.",
 			browseName: "WaterLevel",
+			nodeId: "ns=1;s=WaterLevel",
 			value: {	// implements get and set functions for the value
                 get: function () {
                     return new opcua.Variant({dataType: opcua.DataType.UInt16, value: valueWaterLevel });
@@ -96,6 +100,7 @@ function post_initialize() {
 			dataType: opcua.DataType.UInt16,	// ToDo: Vielleicht eignet sich ein anderer Datentyp besser, noch mal evaluieren sobald ich die Daten im Frontend verwende.
 			description: "Die Variable für die Sauberkeit der Kaffeemaschine. Gibt einen ungefähren Richtwert an, wie Sauber die Maschine ist. Der Wert sollte zwischen 100 (frisch gereinigt) und 0 (Reinigung steht an) liegen.",
 			browseName: "Cleanliness",
+			nodeId: "ns=1;s=Cleanliness",
 			value: {	// implements get and set functions for the value
                 get: function () {
                     return new opcua.Variant({dataType: opcua.DataType.UInt16, value: valueCleanlinessLevel });
@@ -268,4 +273,7 @@ server.start(function () {
 	console.log("port ", server.endpoints[0].port);
     var endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
     console.log(" the primary server endpoint url is ", endpointUrl );
+	setInterval(function(){
+			console.log("Aktuelle Anzahl an Subscriptions: ", server.currentSubscriptionCount);
+			}, 15000)
 });

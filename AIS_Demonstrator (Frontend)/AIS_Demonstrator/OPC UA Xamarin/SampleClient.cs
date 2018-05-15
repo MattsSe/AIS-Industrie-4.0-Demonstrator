@@ -51,13 +51,16 @@ namespace AIS_Demonstrator
             Connected,
             Error
         }
-
+        
         public ConnectionStatus connectionStatus;
         public bool haveAppCertificate;
         public Session session;
         SessionReconnectHandler reconnectHandler;
         const int ReconnectPeriod = 10;
         public string debug { get; set; }
+        public int valueCoffeeLevel;
+        public int valueWaterLevel;
+        public int valueClenalinessLevel;
 
         private LabelViewModel info;
         private ApplicationConfiguration config;
@@ -70,6 +73,9 @@ namespace AIS_Demonstrator
             haveAppCertificate = false;
             config = null;
             debug = "constructor debug string";
+            valueCoffeeLevel = 10;
+            valueWaterLevel = 0;
+            valueClenalinessLevel = 0;
         }
 
         public async void CreateCertificate(AssetManager assets) //ToDo: this method causes a System.NullReferenceException when called in MainActivity.cs . Fix plz!
@@ -133,7 +139,7 @@ namespace AIS_Demonstrator
 
                 var platform = Device.RuntimePlatform;
                 var sessionName = "";
-
+                
                 switch (Device.RuntimePlatform)
                 {
                     case "Android":
@@ -152,6 +158,37 @@ namespace AIS_Demonstrator
                 if (session != null)
                 {
                     connectionStatus = ConnectionStatus.Connected;
+
+                    #region Subscription + monitoredItems
+                    // Code for Monitored Items based on http://opcfoundation.github.io/UA-.NETStandard/help/index.htm#client_development.htm
+
+                    // Create Monitored Item for the CoffeeLevel
+                    Subscription subscription = new Subscription() // new Subscription(OpcClient.session.DefaultSubscription)
+                    {
+                        PublishingInterval = 1000,
+                        PublishingEnabled = true
+                    };
+
+                    // CoffeeLevel
+                    MonitoredItem CoffeeLevel = new MonitoredItem(subscription.DefaultItem)
+                    {
+                        StartNodeId = "ns=1;s=CoffeeLevel",
+                        DisplayName = "MonitoredCoffeeLevel",
+                        AttributeId = Attributes.Value,
+                        MonitoringMode = MonitoringMode.Reporting,
+                        SamplingInterval = 1000,    // check the CoffeeLevel every second
+                        QueueSize = 1,  // only the most recent value for the CoffeeLevel is needed, thus we only need a queuesize of one
+                        DiscardOldest = true    // we only need the most recent value for CoffeeLevel
+                    };
+                    CoffeeLevel.Notification += (sender, e) => OnNotification(sender, e, ref valueCoffeeLevel);
+                    subscription.AddItem(CoffeeLevel);
+                    //ToDo: more MonitoredItems
+
+                    // ToDo: add remaining MonitoredItems
+                    session.AddSubscription(subscription); // System.NullReferenceException: Object reference not set to an instance of an object.
+                    subscription.Create();
+
+                    #endregion
                 }
                 else
                 {
@@ -177,6 +214,15 @@ namespace AIS_Demonstrator
                 }
                 
                 session.Close();
+            }
+        }
+
+        // Method to write a value from OPC UA notifications to a local variable
+        private static void OnNotification(MonitoredItem item, MonitoredItemNotificationEventArgs e, ref int variable)
+        {
+            foreach (var value in item.DequeueValues())
+            {
+                variable = value.GetValue<UInt16>(69);  // should assign 'variable' (e.g. valueCoffeeLevel) the value of the Monitored Item.
             }
         }
 
@@ -395,8 +441,7 @@ namespace AIS_Demonstrator
                 Disconnect(session);
                 return null;
             }
-        }
-        */
+        } */
         #endregion
 
         public string VariableRead(string node)

@@ -13,6 +13,7 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.Res;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
+using System.Collections.Generic;
 
 // Added for OPC UA Support
 using Opc.Ua;
@@ -34,6 +35,7 @@ namespace AIS_Demonstrator
         public string endpointUrl = "init";
         static LabelViewModel textInfo = new LabelViewModel();
         SampleClient OpcClient = new SampleClient(textInfo);
+        #endregion
 
         async void Connect() //copied and modified Function "OnConnect" from UA Xamarin Client.MainPage.xaml.cs"
         {
@@ -60,8 +62,8 @@ namespace AIS_Demonstrator
                 
                 if (connectionStatus == SampleClient.ConnectionStatus.Connected)
                 {
-                    Toast.MakeText(this, GetString(Resource.String.ConnectionSuccess), ToastLength.Short).Show();
-                    
+                    Toast.MakeText(this, GetString(Resource.String.ConnectionSuccess)+ " Endpoint: " + endpointUrl, ToastLength.Short).Show();   // display a success message if the connection could be established
+
                     //Tree tree;
 
                     // not needed: ConnectIndicator is a spinning animation
@@ -78,12 +80,10 @@ namespace AIS_Demonstrator
                     // Page treeViewRoot = new TreeView(tree, OpcClient);
                     // treeViewRoot.Title = "/Root";
                     // await Navigation.PushAsync(treeViewRoot);
-                    
+                    // Toast.MakeText(this, OpcClient.valueCoffeeLevel.ToString(), ToastLength.Short).Show();
                 }
                 else
                 {
-                    // not needed: ConnectIndicator is a spinning animation
-                    // ConnectIndicator.IsRunning = false;
                     Toast.MakeText(this, GetString(Resource.String.ConnectionFailed), ToastLength.Short).Show();
                 }
             }
@@ -94,11 +94,12 @@ namespace AIS_Demonstrator
             } 
 
         }
-        #endregion
 
         private ViewPager _pager;
         private Toolbar _toolbar;
         private TabLayout _tabLayout;
+        // OPC UA Notification Event Handler
+        private NotificationEventHandler NotificationEventHandler;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -135,13 +136,12 @@ namespace AIS_Demonstrator
                 tab.SetCustomView(adapter.GetTabView(i));
             }
 
-            #region Connect to OPC UA Serverv
+            #region Connect to OPC UA Server
             // when View is created: connect the client to the specified Endpoint
-            Connect();     
-
+            Connect();
+            
             endpointUrl = Intent.GetStringExtra("ENDPOINT"); //ToDo debug: delete this line
-            Toast.MakeText(this, endpointUrl, ToastLength.Short).Show(); //ToDo debug: delete this line
-
+            Toast.MakeText(this, OpcClient.valueCoffeeLevel.ToString(), ToastLength.Short).Show();  //ToDo debug: delete this line
             #endregion
         }
 
@@ -204,6 +204,8 @@ namespace AIS_Demonstrator
 
         public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
         {
+
+            Toast.MakeText(this, OpcClient.valueCoffeeLevel.ToString(), ToastLength.Short).Show();  // ToDo debug: delete this line
         }
 
         public void OnPageSelected(int position)

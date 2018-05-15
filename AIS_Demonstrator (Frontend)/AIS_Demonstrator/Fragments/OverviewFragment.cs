@@ -51,7 +51,6 @@ namespace AIS_Demonstrator.Fragments
             //_textOptionCostSetting.SetBackgroundColor(Color.Gray);
 
             SetupContainerMachineState();
-
             return _view;
         }
 
