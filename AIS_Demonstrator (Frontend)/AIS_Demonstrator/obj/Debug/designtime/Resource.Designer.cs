@@ -3180,6 +3180,12 @@ namespace AIS_Demonstrator
 			// aapt resource value: 2131492900
 			public static int customPanel = 2131492900;
 			
+			// aapt resource value: 0
+			public static int decorativeline1 = 0;
+			
+			// aapt resource value: 0
+			public static int decorativeline2 = 0;
+			
 			// aapt resource value: 2131492901
 			public static int decor_content_parent = 2131492901;
 			

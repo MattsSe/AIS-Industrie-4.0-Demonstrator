@@ -46,7 +46,8 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="5dp"
-        android:background="#2263a7" />
+        android:background="#2263a7"
+        android:id="@+id/decorativeline1" />
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -86,7 +87,8 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="5dp"
-        android:background="#2263a7" />
+        android:background="#2263a7"
+        android:id="@+id/decorativeline2" />
     <TextView
         android:id="@+id/refreshMachineState"
         android:layout_width="fill_parent"

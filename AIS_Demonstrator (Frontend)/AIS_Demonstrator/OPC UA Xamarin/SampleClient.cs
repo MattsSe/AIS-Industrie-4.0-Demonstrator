@@ -250,7 +250,7 @@ namespace AIS_Demonstrator
         {
             foreach (var value in item.DequeueValues())
             {
-                variable = value.GetValue<UInt16>(69);  // should assign 'variable' (e.g. valueCoffeeLevel) the value of the Monitored Item.
+                variable = value.GetValue<UInt16>(0);  // assigns the referenced 'variable' (e.g. valueCoffeeLevel) the value of the Monitored Item.
             }
         }
 

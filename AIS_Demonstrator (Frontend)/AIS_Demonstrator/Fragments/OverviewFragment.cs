@@ -79,9 +79,19 @@ namespace AIS_Demonstrator.Fragments
             Activity.SupportFragmentManager.ExecutePendingTransactions();
         }
 
-        // Refresh Button Logic
+        // Refresh OverviewFragment in order to re-render the MachineData bars
         private void OptionRefresh_Click(object sender, EventArgs e)
         {
+            /*
+            FragmentTransaction transaction = this.FragmentManager.BeginTransaction();
+            OverviewFragment newFragment = new OverviewFragment();
+            transaction.Replace(Resource.Id.overview, newFragment);
+            View line1 = View.FindViewById<View>(Resource.Id.decorativeline1);
+            line1.Visibility = ViewStates.Gone;
+            View line2 = View.FindViewById<View>(Resource.Id.decorativeline2);
+            line2.Visibility = ViewStates.Gone;
+            transaction.Commit();
+            */ //ToDo: Debug this so that the Button gets destroyed as well as the lines
             SetupContainerMachineState(ref MainActivity.OpcClient.valueCoffeeLevel, ref MainActivity.OpcClient.valueWaterLevel, ref MainActivity.OpcClient.valueCleanlinessLevel);
         }
 
