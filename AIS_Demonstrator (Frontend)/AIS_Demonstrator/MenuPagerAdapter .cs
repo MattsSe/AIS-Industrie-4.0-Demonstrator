@@ -6,6 +6,7 @@ using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using Android.OS;
 using Java.Lang;
 
 namespace AIS_Demonstrator
@@ -21,7 +22,7 @@ namespace AIS_Demonstrator
         public MenuPagerAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
         }
-
+        
         public MenuPagerAdapter(Context context, FragmentManager fm) : base(fm)
         {
             _context = context;

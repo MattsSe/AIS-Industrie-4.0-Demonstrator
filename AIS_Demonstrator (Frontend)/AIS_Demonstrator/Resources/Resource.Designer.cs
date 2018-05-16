@@ -3051,23 +3051,23 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f080032
 			public const int ALT = 2131230770;
 			
-			// aapt resource value: 0x7f0800fd
-			public const int BeanLevel1 = 2131230973;
+			// aapt resource value: 0x7f0800ff
+			public const int BeanLevel1 = 2131230975;
 			
-			// aapt resource value: 0x7f0800fe
-			public const int BeanLevel2 = 2131230974;
+			// aapt resource value: 0x7f080100
+			public const int BeanLevel2 = 2131230976;
 			
 			// aapt resource value: 0x7f080033
 			public const int CTRL = 2131230771;
 			
-			// aapt resource value: 0x7f0800ff
-			public const int CleanLevel1 = 2131230975;
+			// aapt resource value: 0x7f080101
+			public const int CleanLevel1 = 2131230977;
 			
-			// aapt resource value: 0x7f080100
-			public const int CleanLevel2 = 2131230976;
+			// aapt resource value: 0x7f080102
+			public const int CleanLevel2 = 2131230978;
 			
-			// aapt resource value: 0x7f0800f9
-			public const int ContainerMachineState = 2131230969;
+			// aapt resource value: 0x7f0800fb
+			public const int ContainerMachineState = 2131230971;
 			
 			// aapt resource value: 0x7f080034
 			public const int FUNCTION = 2131230772;
@@ -3093,11 +3093,11 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f0800a1
 			public const int TextViewR = 2131230881;
 			
-			// aapt resource value: 0x7f0800fa
-			public const int WaterLevel1 = 2131230970;
+			// aapt resource value: 0x7f0800fc
+			public const int WaterLevel1 = 2131230972;
 			
-			// aapt resource value: 0x7f0800fb
-			public const int WaterLevel2 = 2131230971;
+			// aapt resource value: 0x7f0800fd
+			public const int WaterLevel2 = 2131230973;
 			
 			// aapt resource value: 0x7f0800e5
 			public const int action0 = 2131230949;
@@ -3204,8 +3204,8 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f08008e
 			public const int buttonPrepare = 2131230862;
 			
-			// aapt resource value: 0x7f080106
-			public const int buttonSignup = 2131230982;
+			// aapt resource value: 0x7f080108
+			public const int buttonSignup = 2131230984;
 			
 			// aapt resource value: 0x7f0800e6
 			public const int cancel_action = 2131230950;
@@ -3345,8 +3345,8 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f08005f
 			public const int image = 2131230815;
 			
-			// aapt resource value: 0x7f080101
-			public const int imageView1 = 2131230977;
+			// aapt resource value: 0x7f080103
+			public const int imageView1 = 2131230979;
 			
 			// aapt resource value: 0x7f0800ef
 			public const int info = 2131230959;
@@ -3387,14 +3387,14 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f0800c2
 			public const int main_content2 = 2131230914;
 			
-			// aapt resource value: 0x7f080109
-			public const int masked = 2131230985;
+			// aapt resource value: 0x7f08010b
+			public const int masked = 2131230987;
 			
 			// aapt resource value: 0x7f0800e8
 			public const int media_actions = 2131230952;
 			
-			// aapt resource value: 0x7f080107
-			public const int message = 2131230983;
+			// aapt resource value: 0x7f080109
+			public const int message = 2131230985;
 			
 			// aapt resource value: 0x7f080031
 			public const int middle = 2131230769;
@@ -3504,6 +3504,9 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f0800c0
 			public const int optionWaterHardness = 2131230912;
 			
+			// aapt resource value: 0x7f0800f5
+			public const int overview = 2131230965;
+			
 			// aapt resource value: 0x7f0800c7
 			public const int pager = 2131230919;
 			
@@ -3536,6 +3539,9 @@ namespace AIS_Demonstrator
 			
 			// aapt resource value: 0x7f080075
 			public const int radio = 2131230837;
+			
+			// aapt resource value: 0x7f0800fa
+			public const int refreshMachineState = 2131230970;
 			
 			// aapt resource value: 0x7f0800bc
 			public const int relativeLayout2 = 2131230908;
@@ -3690,26 +3696,26 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f08009a
 			public const int textCurrentSum = 2131230874;
 			
-			// aapt resource value: 0x7f0800f6
-			public const int textOptionCostOverview = 2131230966;
+			// aapt resource value: 0x7f0800f7
+			public const int textOptionCostOverview = 2131230967;
+			
+			// aapt resource value: 0x7f0800f9
+			public const int textOptionCostSetting = 2131230969;
 			
 			// aapt resource value: 0x7f0800f8
-			public const int textOptionCostSetting = 2131230968;
+			public const int textOptionMachine = 2131230968;
 			
-			// aapt resource value: 0x7f0800f7
-			public const int textOptionMachine = 2131230967;
+			// aapt resource value: 0x7f080104
+			public const int textOptionName = 2131230980;
 			
-			// aapt resource value: 0x7f080102
-			public const int textOptionName = 2131230978;
-			
-			// aapt resource value: 0x7f080103
-			public const int textOptionPassword = 2131230979;
+			// aapt resource value: 0x7f080105
+			public const int textOptionPassword = 2131230981;
 			
 			// aapt resource value: 0x7f08009b
 			public const int textOptionPay = 2131230875;
 			
-			// aapt resource value: 0x7f0800f5
-			public const int textOptionProfile = 2131230965;
+			// aapt resource value: 0x7f0800f6
+			public const int textOptionProfile = 2131230966;
 			
 			// aapt resource value: 0x7f08006a
 			public const int textSpacerNoButtons = 2131230826;
@@ -3744,8 +3750,8 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f0800b8
 			public const int textView1 = 2131230904;
 			
-			// aapt resource value: 0x7f0800fc
-			public const int textWaterLevel = 2131230972;
+			// aapt resource value: 0x7f0800fe
+			public const int textWaterLevel = 2131230974;
 			
 			// aapt resource value: 0x7f0800af
 			public const int text_input_password_toggle = 2131230895;
@@ -3810,11 +3816,11 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f0800b1
 			public const int txtOldPassword = 2131230897;
 			
-			// aapt resource value: 0x7f080104
-			public const int txtPassword1 = 2131230980;
+			// aapt resource value: 0x7f080106
+			public const int txtPassword1 = 2131230982;
 			
-			// aapt resource value: 0x7f080105
-			public const int txtPassword2 = 2131230981;
+			// aapt resource value: 0x7f080107
+			public const int txtPassword2 = 2131230983;
 			
 			// aapt resource value: 0x7f0800b0
 			public const int txtUserName = 2131230896;
@@ -3834,8 +3840,8 @@ namespace AIS_Demonstrator
 			// aapt resource value: 0x7f080016
 			public const int view_offset_helper = 2131230742;
 			
-			// aapt resource value: 0x7f080108
-			public const int visible = 2131230984;
+			// aapt resource value: 0x7f08010a
+			public const int visible = 2131230986;
 			
 			// aapt resource value: 0x7f0800da
 			public const int volume_item_container = 2131230938;

@@ -143,7 +143,7 @@ namespace AIS_Demonstrator
                 switch (Device.RuntimePlatform)
                 {
                     case "Android":
-                        sessionName = "OPC UA Xamarin Client Android";
+                        sessionName = "AIS Demonstrator Android Applikation";
                         break;
                     case "UWP":
                         sessionName = "OPC UA Xamarin Client UWP";
@@ -162,13 +162,12 @@ namespace AIS_Demonstrator
                     #region Subscription + monitoredItems
                     // Code for Monitored Items based on http://opcfoundation.github.io/UA-.NETStandard/help/index.htm#client_development.htm
 
-                    // Create Monitored Item for the CoffeeLevel
+                    // Create ´Subscription
                     Subscription subscription = new Subscription() // new Subscription(OpcClient.session.DefaultSubscription)
                     {
                         PublishingInterval = 1000,
                         PublishingEnabled = true
                     };
-
                     // CoffeeLevel
                     MonitoredItem CoffeeLevel = new MonitoredItem(subscription.DefaultItem)
                     {
@@ -198,7 +197,7 @@ namespace AIS_Demonstrator
                     // CleanlinessLevel
                     MonitoredItem CleanlinessLevel = new MonitoredItem(subscription.DefaultItem)
                     {
-                        StartNodeId = "ns=1;s=CleanlinessLevel",
+                        StartNodeId = "ns=1;s=Cleanliness",
                         DisplayName = "MonitoredCleanlinessLevel",
                         AttributeId = Attributes.Value,
                         MonitoringMode = MonitoringMode.Reporting,

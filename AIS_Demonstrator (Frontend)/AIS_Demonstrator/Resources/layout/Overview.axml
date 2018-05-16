@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/overview"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -86,6 +87,20 @@
         android:layout_width="fill_parent"
         android:layout_height="5dp"
         android:background="#2263a7" />
+    <TextView
+        android:id="@+id/refreshMachineState"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6sp"
+        android:layout_marginTop="6sp"
+        android:paddingLeft="18sp"
+        android:paddingTop="2sp"
+        android:paddingBottom="2sp"
+        android:background="@android:color/white"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:text="Maschinendaten Aktualisieren" />
     <LinearLayout
         android:id="@+id/ContainerMachineState"
         android:layout_width="fill_parent"

@@ -34,7 +34,7 @@ namespace AIS_Demonstrator
         // Declare and initialise variable for OPC UA Server Endpoint
         public string endpointUrl = "init";
         static LabelViewModel textInfo = new LabelViewModel();
-        SampleClient OpcClient = new SampleClient(textInfo);
+        public static SampleClient OpcClient = new SampleClient(textInfo); //todo debug: remove static if it causes problems - 16.05.18
         #endregion
 
         async void Connect() //copied and modified Function "OnConnect" from UA Xamarin Client.MainPage.xaml.cs"
@@ -63,51 +63,31 @@ namespace AIS_Demonstrator
                 if (connectionStatus == SampleClient.ConnectionStatus.Connected)
                 {
                     Toast.MakeText(this, GetString(Resource.String.ConnectionSuccess)+ " Endpoint: " + endpointUrl, ToastLength.Short).Show();   // display a success message if the connection could be established
-
-                    //Tree tree;
-
-                    // not needed: ConnectIndicator is a spinning animation
-                    // ConnectButton.Text = "Disconnect";
-
-                    // tree = OpcClient.GetRootNode(textInfo);
-                    // if (tree.currentView[0].children == true)
-                    // {
-                    //    tree = OpcClient.GetChildren(tree.currentView[0].id);
-                    // }
-
-                    // not needed: ConnectIndicator is a spinning animation
-                    // ConnectIndicator.IsRunning = false;
-                    // Page treeViewRoot = new TreeView(tree, OpcClient);
-                    // treeViewRoot.Title = "/Root";
-                    // await Navigation.PushAsync(treeViewRoot);
-                    // Toast.MakeText(this, OpcClient.valueCoffeeLevel.ToString(), ToastLength.Short).Show();
                 }
                 else
                 {
                     Toast.MakeText(this, GetString(Resource.String.ConnectionFailed), ToastLength.Short).Show();
                 }
             }
-            else
-            {
-                // not needed: ConnectIndicator is a spinning animation
-                // ConnectIndicator.IsRunning = false;
-            } 
-
         }
 
         private ViewPager _pager;
         private Toolbar _toolbar;
         private TabLayout _tabLayout;
-        // OPC UA Notification Event Handler
-        private NotificationEventHandler NotificationEventHandler;
 
-        protected override void OnCreate(Bundle bundle)
+        protected async override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             Forms.Init(this, bundle);
 
             UserName = Intent.GetStringExtra("USERNAME");
             UserId = Intent.GetIntExtra("USERID", -1);
+
+            #region Connect to OPC UA Server
+            // when View is created: connect the client to the specified Endpoint
+            Connect();
+            endpointUrl = Intent.GetStringExtra("ENDPOINT"); //ToDo debug: delete this line
+            #endregion
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
@@ -135,14 +115,6 @@ namespace AIS_Demonstrator
                 TabLayout.Tab tab = _tabLayout.GetTabAt(i);
                 tab.SetCustomView(adapter.GetTabView(i));
             }
-
-            #region Connect to OPC UA Server
-            // when View is created: connect the client to the specified Endpoint
-            Connect();
-            
-            endpointUrl = Intent.GetStringExtra("ENDPOINT"); //ToDo debug: delete this line
-            Toast.MakeText(this, OpcClient.valueCoffeeLevel.ToString(), ToastLength.Short).Show();  //ToDo debug: delete this line
-            #endregion
         }
 
         protected override void OnDestroy()
@@ -204,8 +176,9 @@ namespace AIS_Demonstrator
 
         public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
         {
-
-            Toast.MakeText(this, OpcClient.valueCoffeeLevel.ToString(), ToastLength.Short).Show();  // ToDo debug: delete this line
+            // Toast.MakeText(this, OpcClient.valueCoffeeLevel.ToString(), ToastLength.Short).Show();  // ToDo debug: delete this line
+            // Fragment overview = FragmentManager.FindFragmentById(Resource.Id.overview);
+            // overview.updateData();
         }
 
         public void OnPageSelected(int position)

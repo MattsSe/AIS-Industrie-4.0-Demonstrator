@@ -5,6 +5,7 @@ using Android.Graphics;
 // ReSharper disable once RedundantUsingDirective
 using Android.Graphics;
 using Android.OS;
+using Android.App;
 using Android.Support.V4.View;
 using Android.Util;
 using Android.Views;
@@ -19,6 +20,7 @@ namespace AIS_Demonstrator.Fragments
         private TextView _textOptionCostOverview;
         private TextView _textOptionMachine;
         private TextView _textOptionCostSetting;
+        private TextView _textOptionRefresh;
         private View _view;
         private ViewPager _pager;
 
@@ -50,10 +52,14 @@ namespace AIS_Demonstrator.Fragments
             //_textOptionCostSetting.Enabled = false;
             //_textOptionCostSetting.SetBackgroundColor(Color.Gray);
 
-            SetupContainerMachineState();
+            // Click handler for the "Refresh machine data" button. Added for OPC UA Support
+            _textOptionRefresh = _view.FindViewById<TextView>(Resource.Id.refreshMachineState);
+            _textOptionRefresh.Click += OptionRefresh_Click;
+
+            SetupContainerMachineState(ref MainActivity.OpcClient.valueCoffeeLevel, ref MainActivity.OpcClient.valueWaterLevel, ref MainActivity.OpcClient.valueCleanlinessLevel);
             return _view;
         }
-
+      
         //Show Profile via MenuPager
         private void OptionProfile_Click(object sender, EventArgs e)
         {
@@ -71,6 +77,12 @@ namespace AIS_Demonstrator.Fragments
                 .AddToBackStack("costOverviewDialog");
             transaction.Commit();
             Activity.SupportFragmentManager.ExecutePendingTransactions();
+        }
+
+        // Refresh Button Logic
+        private void OptionRefresh_Click(object sender, EventArgs e)
+        {
+            SetupContainerMachineState(ref MainActivity.OpcClient.valueCoffeeLevel, ref MainActivity.OpcClient.valueWaterLevel, ref MainActivity.OpcClient.valueCleanlinessLevel);
         }
 
         //Show Machine Setting DialogFragment
@@ -98,13 +110,13 @@ namespace AIS_Demonstrator.Fragments
         }
 
         //Sets Height for MachineState Levels dynamicly
-        private void SetupContainerMachineState()
+        private void SetupContainerMachineState(ref int CoffeeLevel, ref int WaterLevel, ref int CleanlinessLevel)
         {
             //Get Container Height
             DisplayMetrics displayMetrics = Activity.Resources.DisplayMetrics;
             float layoutWeight = 0.5f;
             float height = displayMetrics.WidthPixels * layoutWeight; //Get Height of Container MachineState
-            height = height - 60; //Subtract Padding and Text
+            height = height - 90; //Subtract Padding and Text | used to be 60, but increased to 90 when the Refresh MachineState Button was added
 
             //Find Views
             View wL1 = _view.FindViewById<View>(Resource.Id.WaterLevel1);
@@ -116,17 +128,21 @@ namespace AIS_Demonstrator.Fragments
             View cL1 = _view.FindViewById<View>(Resource.Id.CleanLevel1);
             View cL2 = _view.FindViewById<View>(Resource.Id.CleanLevel2);
 
-            //TODO Implement OPC UA and Get Machine Parameters (Water, Bean, Clean)
+            //Calculate decimal value from OPC UA passed percent value
+            float dWaterLevel = ((float) WaterLevel) / 100;
+            float dCoffeeLevel = ((float) CoffeeLevel) / 100;
+            float dCleanlinessLevel = ((float) CleanlinessLevel) / 100;
+
 
             //Set Height
-            wL1.LayoutParameters.Height = (int)Math.Round(height * 0.33f);
-            wL2.LayoutParameters.Height = (int)Math.Round(height * 0.66f);
+            wL1.LayoutParameters.Height = (int)Math.Round(height * dWaterLevel);
+            wL2.LayoutParameters.Height = (int)Math.Round(height * (1 - dWaterLevel));
 
-            bL1.LayoutParameters.Height = (int)Math.Round(height * 0.5f);
-            bL2.LayoutParameters.Height = (int)Math.Round(height * 0.5f);
+            bL1.LayoutParameters.Height = (int)Math.Round(height * dCoffeeLevel);
+            bL2.LayoutParameters.Height = (int)Math.Round(height * (1 - dCoffeeLevel) );
 
-            cL1.LayoutParameters.Height = (int)Math.Round(height * 0.75f);
-            cL2.LayoutParameters.Height = (int)Math.Round(height * 0.25f);
+            cL1.LayoutParameters.Height = (int)Math.Round(height * dCleanlinessLevel);
+            cL2.LayoutParameters.Height = (int)Math.Round(height * (1 - dCleanlinessLevel) );
         }
     }
 }

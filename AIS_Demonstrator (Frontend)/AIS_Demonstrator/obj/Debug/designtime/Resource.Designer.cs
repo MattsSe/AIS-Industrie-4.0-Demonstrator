@@ -3406,6 +3406,9 @@ namespace AIS_Demonstrator
 			public static int optionWaterHardness = 0;
 			
 			// aapt resource value: 0
+			public static int overview = 0;
+			
+			// aapt resource value: 0
 			public static int pager = 0;
 			
 			// aapt resource value: 0
@@ -3437,6 +3440,9 @@ namespace AIS_Demonstrator
 			
 			// aapt resource value: 2131492947
 			public static int radio = 2131492947;
+			
+			// aapt resource value: 0
+			public static int refreshMachineState = 0;
 			
 			// aapt resource value: 0
 			public static int relativeLayout2 = 0;
