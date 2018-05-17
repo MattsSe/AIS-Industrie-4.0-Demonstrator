@@ -286,6 +286,7 @@ namespace AIS_Demonstrator
         }
 
         #region DeactivatedFeatures
+        // Original Features from the .NET Sample Client implementation, not needed for this OPC UA Client
         /*
         public Tree GetRootNode(LabelViewModel textInfo)
         {
@@ -473,7 +474,53 @@ namespace AIS_Demonstrator
         } */
         #endregion
 
-        public string VariableRead(string node)
+        #region custom Variable Write Method
+        /// <summary>
+        /// Returns the ServiceResult from the ResponseHeader of the Variable Write Operation
+        /// </summary>
+        /// <param name="value">The int value that is to be written to the Node in the Server Namespace.</param>
+        /// <param name="nodeId">The NodeId of the Node where the value shall be written.</param>
+        public string VariableWrite(UInt16 value, string nodeId)
+        {
+            if (session != null)
+            {
+                if (session.Connected)
+                {
+                    StatusCodeCollection results = null;
+                    DiagnosticInfoCollection diagnosticInfos = null;
+                    // create a new WriteValueCollection (needed to call the Write Mehtod of the session)
+                    WriteValueCollection nodesToWrite = new WriteValueCollection();
+                    nodesToWrite.Add(new WriteValue
+                    {
+                        // NodeId of the Node to write
+                        NodeId = NodeId.Parse(nodeId),
+                        // We want to write the Value of the Node
+                        AttributeId = Attributes.Value,
+                        Value = new DataValue() { WrappedValue = value}
+                    });
+                    // Actually write the Data. The method session.Write returns the responseHeader of the Write request response which is passed as the return value of this Method (VariableWrite)
+                    ResponseHeader responseHeader = session.Write(null, nodesToWrite, out results, out diagnosticInfos);
+                    if (responseHeader.ServiceResult.ToString() == "Good")
+                    {
+                        // ToDo: add this to Resources/values/Strings.xml
+                        return "Kaffeebestellung ist raus!";
+                    }
+                    else
+                    {
+                        // ToDo: add this to Resources/values/Strings.xml
+                        return "Ups! Da ist etwas schief gelaufen!";
+                    }
+                }
+                // ToDo: add this to Resources/values/Strings.xml
+                else return "Fehler! Keine Verbindung mit OPC UA Server!";
+            }
+            // ToDo: add this to Resources/values/Strings.xml 
+            else return "Fehler! Keine Session!";
+        }
+        #endregion
+
+        // currently unused, but might be useful to read the MachineState upon App initialization / first creation of OverviewFragment ?
+        public string VariableRead(string nodeId)
         {
             try
             {
@@ -481,7 +528,7 @@ namespace AIS_Demonstrator
                 DiagnosticInfoCollection diagnosticInfos = null;
                 ReadValueIdCollection nodesToRead = new ReadValueIdCollection();
                 ReadValueId valueId = new ReadValueId();
-                valueId.NodeId = new NodeId(node);
+                valueId.NodeId = new NodeId(nodeId);
                 valueId.AttributeId = Attributes.Value;
                 valueId.IndexRange = null;
                 valueId.DataEncoding = null;

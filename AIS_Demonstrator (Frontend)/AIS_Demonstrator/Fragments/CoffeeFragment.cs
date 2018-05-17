@@ -6,6 +6,10 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AlertDialog = Android.Support.V7.App.AlertDialog;
+using Java.Lang;
+
+// Added for OPC UA Support
+using Opc.Ua;
 
 namespace AIS_Demonstrator.Fragments
 {
@@ -77,8 +81,10 @@ namespace AIS_Demonstrator.Fragments
             alert.SetTitle(GetString(Resource.String.AlertTitle));
             alert.SetMessage(GetString(Resource.String.AlertMessage));
             alert.SetPositiveButton(GetString(Resource.String.ButtonPositive), (senderAlert, args) => {             
-                MakeCoffee();
-                Toast.MakeText(Activity, GetString(Resource.String.MessagePositive) + " 10 Sekunden", ToastLength.Short).Show();
+                //MakeCoffee();
+                Toast.MakeText(Activity, MakeCoffee(), ToastLength.Short).Show();
+
+                // Toast.MakeText(Activity, GetString(Resource.String.MessagePositive) + " 10 Sekunden", ToastLength.Short).Show();
             });
             alert.SetNegativeButton(GetString(Resource.String.ButtonNegative), (senderAlert, args) => {
                 Toast.MakeText(Activity, GetString(Resource.String.MessageNegative), ToastLength.Short).Show();
@@ -94,15 +100,29 @@ namespace AIS_Demonstrator.Fragments
         }
 
         //Send command to machine and add order to history
-        private void MakeCoffee()
+        private string MakeCoffee()
         {
-            //TODO Implement OPC UA and "make coffee"
-
             //Connect to Coffee-DB
             //Remove the following lines if Login is diabled
             DataBase dataBase = new DataBase();
             dataBase.CreateDataBase();
 
+            // get current Coffee Variables
+            UInt16 coffeeQuantity = (UInt16) dataBase.GetCoffeeQuantity(_currentCoffeeName);
+            UInt16 milkQuantity = (UInt16) dataBase.GetMilkQuantity(_currentCoffeeName);
+            UInt16 coffeeStrength = (UInt16) dataBase.GetCoffeeStregth(_currentCoffeeName);
+
+            // hard-coded NodeIDs of the Variable Nodes to write
+            string coffeeQuantityNodeId = "ns=1;s=CoffeeQuantityVariable";
+            string milkQuantityNodeId = "ns=1;s=MilkQuantityVariable";
+            string coffeestrengthNodeId = "ns=1;s=CoffeeStrengthVariable";
+
+            // Write Values to OPC UA Server Namespace
+            string responseCQ = MainActivity.OpcClient.VariableWrite(coffeeQuantity, coffeeQuantityNodeId);
+            string responseMQ = MainActivity.OpcClient.VariableWrite(milkQuantity, milkQuantityNodeId);
+            string responseCS = MainActivity.OpcClient.VariableWrite(coffeeStrength, coffeestrengthNodeId);
+
+            // Insert Order into History
             History history = new History
             {
                 CoffeeName = _currentCoffeeName,
@@ -116,6 +136,14 @@ namespace AIS_Demonstrator.Fragments
             HistoryDb historyDb = new HistoryDb();
             historyDb.CreateDataBase();
             historyDb.InsertTableHistory(history);
+
+            return (responseCQ);
+
+        }
+        //Simulated Server
+        private void RequestSim()
+        {
+            Thread.Sleep(1000);
         }
     }
 }

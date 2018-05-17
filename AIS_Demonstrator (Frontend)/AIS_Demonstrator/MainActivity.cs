@@ -30,6 +30,9 @@ namespace AIS_Demonstrator
     {
         public static string UserName { get; set; }
         public static int UserId { get; private set; }
+        public static string responseCQ = "No Coffee Ordered";
+        public static string responseMQ = "No Coffee Ordered";
+        public static string responseCS = "No Coffee Ordered";
         #region OPC UA Declarations
         // Declare and initialise variable for OPC UA Server Endpoint
         public string endpointUrl = "init";

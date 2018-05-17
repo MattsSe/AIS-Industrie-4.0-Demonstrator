@@ -128,6 +128,7 @@ function post_initialize() {
 		CoffeeQuantity = addressSpace.addVariable({
 			componentOf: CoffeeOrderObject,
 			browseName: "CoffeeQuantity",
+			nodeId: "ns=1;s=CoffeeQuantityVariable",
 			dataType: opcua.DataType.UInt16,
 			description: "Die Variable für die Kaffeemenge, in ml.",
 			value: {	// implements get and set functions for the value
@@ -145,6 +146,7 @@ function post_initialize() {
 		CoffeeQuantity = addressSpace.addVariable({
 			componentOf: CoffeeOrderObject,
 			browseName: "MilkQuantity",
+			nodeId: "ns=1;s=MilkQuantityVariable",
 			dataType: opcua.DataType.UInt16,
 			description: "Die Variable für die Milchmenge, in ml.",
 			value: {	// implements get and set functions for the value
@@ -162,7 +164,8 @@ function post_initialize() {
 		CoffeeQuantity = addressSpace.addVariable({
 			componentOf: CoffeeOrderObject,
 			browseName: "CoffeeStrength",
-			dataType: opcua.DataType.Byte,
+			nodeId: "ns=1;s=CoffeeStrengthVariable",
+			dataType: opcua.DataType.UInt16,
 			description: "Die Variable für die Kaffeestärke. Möglich sind die Werte {1, 2, 3, 4, 5}.",
 			value: {	// implements get and set functions for the value
                 get: function () {
