@@ -20,9 +20,9 @@ var opcua = require("node-opcua");
 // declaration of internal Variables, used to handle the OPC UA Variables before writing them to a DB
 var valueCoffeeLevel = 60;	//ToDo: initialize with 0, 100 is only for testing
 var valueWaterLevel = 40;	//ToDo: initialize with 0, 100 is only for testing
-var valueCleanlinessLevel = 80;	//ToDo: initialize with 0, 100 is only for testing
+var valueCleanlinessLevel = 100;	//ToDo: initialize with 0, 100 is only for testing
 var valueCoffeeQuantity = 225;	//ToDo: initialize with 0, 225 is only for testing
-var valueCoffeeStrength = 4;	//ToDo: initialize with 0, 4 is only for testing
+var valueCoffeeStrength = 4;	//ToDo: initialize with 1, 4 is only for testing
 var valueMilkQuantity = 25;	//ToDo: initialize with 0, 25 is only for testing
 
 
@@ -35,8 +35,8 @@ var server = new opcua.OPCUAServer({
 	// securityModes= [MessageSecurityMode.NONE, MessageSecurityMode.SIGN, MessageSecurityMode.SIGNANDENCRYPT] // ToDo: Security Implementierung
 	// allowAnonymous= true,	// Tells if the server default endpoints should allow anonymous connection. Default: true
 	buildInfo : {
-        productName: "MeinTestServer2",
-        buildNumber: "12345",
+        productName: "CoffeeOrder_Service",
+        buildNumber: "1.0",
         buildDate: new Date(2018,4,24)
     }
 });
@@ -44,7 +44,7 @@ var server = new opcua.OPCUAServer({
 function post_initialize() {
 	
 	//	declaration
-	function construct_my_address_space(server) {
+	function construct_address_space(server) {
 		var addressSpace = server.engine.addressSpace;
 		
 		// Add MachineState Object to the namespace
@@ -266,7 +266,7 @@ function post_initialize() {
 	//	end of declaration
 	
     console.log("initialized");
-	construct_my_address_space(server);	// Call function to construct the server address space.
+	construct_address_space(server);	// Call function to construct the server address space.
 
 }
 server.initialize(post_initialize);
@@ -276,7 +276,7 @@ server.start(function () {
 	console.log("port ", server.endpoints[0].port);
     var endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
     console.log(" the primary server endpoint url is ", endpointUrl );
-	setInterval(function(){
+	setInterval(function(){	// This function displays the current number of Subscriptions handled by the server every 15 seconds
 			console.log("Aktuelle Anzahl an Subscriptions: ", server.currentSubscriptionCount);
 			}, 15000)
 });
