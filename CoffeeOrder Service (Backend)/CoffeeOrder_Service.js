@@ -11,22 +11,14 @@ The CoffeeOrder Service offers the following Services:
 */
 
 
-/* global console, require */
+/* Required packages */
 var opcua = require("node-opcua");
+var async = require("async");
 
 // ToDo: implement MySQL database
 // var mysql = require("mysql");
 
-// declaration of internal Variables, used to handle the OPC UA Variables before writing them to a DB
-var valueCoffeeLevel = 60;	//ToDo: initialize with 0, 100 is only for testing
-var valueWaterLevel = 40;	//ToDo: initialize with 0, 100 is only for testing
-var valueCleanlinessLevel = 100;	//ToDo: initialize with 0, 100 is only for testing
-var valueCoffeeQuantity = 225;	//ToDo: initialize with 0, 225 is only for testing
-var valueCoffeeStrength = 4;	//ToDo: initialize with 1, 4 is only for testing
-var valueMilkQuantity = 25;	//ToDo: initialize with 0, 25 is only for testing
-
-
-// instantiate Server
+// Server Instantiation
 var server = new opcua.OPCUAServer({
     port: 34197, // the port of the listening socket of the server
     resourcePath: "CoffeeOrder", // this path will be added to the endpoint resource name
@@ -41,9 +33,129 @@ var server = new opcua.OPCUAServer({
     }
 });
 
+// Client Instantiation
+// used for the OPC UA Client part of the CoffeeOrder_Service.
+// This is NOT related to the Frontend (Android Application), instead this client is used to handle communication between the CoffeeOrder_Service and Codesys.
+var client = new opcua.OPCUAClient();	// instantiate a new OPC UA Client
+var client_session;	// 
+// var client_subscription;	// the client subscription is used to get updates about variable changes from the CODESYS server
+var CodesysEndpoint = "";	// the endpoint URL of the Codesys OPC UA Server
+
+
+// declaration of internal Variables, used to handle the OPC UA Variables before writing them to a DB
+var valueCoffeeLevel = 60;	//ToDo: initialize with 0, 100 is only for testing
+var valueWaterLevel = 40;	//ToDo: initialize with 0, 100 is only for testing
+var valueCleanlinessLevel = 100;	//ToDo: initialize with 0, 100 is only for testing
+var valueCoffeeQuantity = 225;	//ToDo: initialize with 0, 225 is only for testing
+var valueCoffeeStrength = 4;	//ToDo: initialize with 1, 4 is only for testing
+var valueMilkQuantity = 25;	//ToDo: initialize with 0, 25 is only for testing
+
+// Function that establishes a Client connection with the Codesys Server
+async function ClientConnection () {
+    async.series([
+
+        // step 1 : connect to the CODESYS OPC UA Server
+        function connect(callback)  {
+            client.connect(CodesysEndpoint,function (err) {
+                if (err) {
+                    console.log("Cannot connect to Codesys endpoint URL: ", CodesysEndpoint);
+                } else {
+                    console.log("Connected to CODESYS Server!");
+                }
+                callback(err);
+            });
+        },
+    
+        // step 2 : create a new session 
+        function createsession(callback) {
+            client.createSession( function(err,session) { // creates a new Session with the "anonymous" Role
+                if(!err) {
+                    client_session = session;
+                    console.log("Session created!");
+                }
+                else {
+                    console.log("Error! Session could not be created! (CODESYS Server)");
+                }
+                callback(err);
+            });
+        },
+        
+        // step 5: install a subscription and install a monitored item for 10 seconds
+        /*
+        function(callback) {
+           
+           client_subscription=new opcua.ClientSubscription(client_session,{
+               requestedPublishingInterval: 1000,
+               requestedLifetimeCount: 20,
+               requestedMaxKeepAliveCount: 2,
+               maxNotificationsPerPublish: 10,
+               publishingEnabled: true,
+               priority: 10
+           });
+           
+           client_subscription.on("started",function(){
+               console.log("subscription started for 2 seconds - subscriptionId=",client_subscription.subscriptionId);
+           }).on("keepalive",function(){
+               console.log("keepalive");
+           }).on("terminated",function(){
+               console.log("terminated");
+           });
+           
+           setTimeout(function(){
+               client_subscription.terminate(callback);
+           },15000);    // Terminate subscription after this time (in ms)
+           
+           // install monitored item
+           var monitoredItem  = client_subscription.monitor({
+               nodeId: opcua.resolveNodeId("ns=1;s=CoffeeLevel"),
+               attributeId: opcua.AttributeIds.Value
+           },
+           {
+               samplingInterval: 50, // "Abtastrate" in ms mit der der Wert des subscribed Attribute gelesen wird.
+               discardOldest: true,
+               queueSize: 5 // Bestimmt, wie groß die Queue (die Liste mit "gemerkten" Werten) ist.
+           },
+           opcua.read_service.TimestampsToReturn.Both
+           );
+           console.log("-------------------------------------");
+           
+           monitoredItem.on("changed",function(dataValue){
+              // execute some code whenever the value of the monitored node changes
+           });
+        },
+        */
+    ],
+    function(err) {
+        if (err) {
+            console.log("Async series failure: ",err);
+        } else {
+            console.log("Debug: Async series completed!");
+        }
+    }) ;
+}
+// Function that Closes the Client Connection
+function ClientDisconnect () {
+    client_session.close(function(err){
+        if(err) {
+            console.log("Session.close failed!");
+        }
+        else {
+            console.log("Session closed.");
+        }
+    });
+    client.disconnect(function(err){
+        if(err) {
+            console.log("Client.disconnect failed!");
+        }
+        else {
+            console.log("Disconnected!");
+        }
+    })
+}
+
 function post_initialize() {
 	
-	//	declaration
+	//	function to construct the address space
 	function construct_address_space(server) {
 		var addressSpace = server.engine.addressSpace;
 		
@@ -269,6 +381,9 @@ function post_initialize() {
 	construct_address_space(server);	// Call function to construct the server address space.
 
 }
+
+// actual program starts here
+
 server.initialize(post_initialize);
 
 server.start(function () {
