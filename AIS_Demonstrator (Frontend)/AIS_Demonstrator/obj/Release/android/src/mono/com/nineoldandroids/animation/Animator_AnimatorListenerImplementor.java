@@ -16,7 +16,7 @@ public class Animator_AnimatorListenerImplementor
 			"n_onAnimationRepeat:(Lcom/nineoldandroids/animation/Animator;)V:GetOnAnimationRepeat_Lcom_nineoldandroids_animation_Animator_Handler:NineOldAndroids.Animation.Animator/IAnimatorListenerInvoker, NineOldAndroids\n" +
 			"n_onAnimationStart:(Lcom/nineoldandroids/animation/Animator;)V:GetOnAnimationStart_Lcom_nineoldandroids_animation_Animator_Handler:NineOldAndroids.Animation.Animator/IAnimatorListenerInvoker, NineOldAndroids\n" +
 			"";
-		mono.android.Runtime.register ("NineOldAndroids.Animation.Animator+IAnimatorListenerImplementor, NineOldAndroids, Version=2.4.0.0, Culture=neutral, PublicKeyToken=null", Animator_AnimatorListenerImplementor.class, __md_methods);
+		mono.android.Runtime.register ("NineOldAndroids.Animation.Animator+IAnimatorListenerImplementor, NineOldAndroids", Animator_AnimatorListenerImplementor.class, __md_methods);
 	}
 
 
@@ -24,7 +24,7 @@ public class Animator_AnimatorListenerImplementor
 	{
 		super ();
 		if (getClass () == Animator_AnimatorListenerImplementor.class)
-			mono.android.TypeManager.Activate ("NineOldAndroids.Animation.Animator+IAnimatorListenerImplementor, NineOldAndroids, Version=2.4.0.0, Culture=neutral, PublicKeyToken=null", "", this, new java.lang.Object[] {  });
+			mono.android.TypeManager.Activate ("NineOldAndroids.Animation.Animator+IAnimatorListenerImplementor, NineOldAndroids", "", this, new java.lang.Object[] {  });
 	}
 
 

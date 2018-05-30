@@ -13,7 +13,7 @@ public class ValueAnimator_AnimatorUpdateListenerImplementor
 		__md_methods = 
 			"n_onAnimationUpdate:(Lcom/nineoldandroids/animation/ValueAnimator;)V:GetOnAnimationUpdate_Lcom_nineoldandroids_animation_ValueAnimator_Handler:NineOldAndroids.Animation.ValueAnimator/IAnimatorUpdateListenerInvoker, NineOldAndroids\n" +
 			"";
-		mono.android.Runtime.register ("NineOldAndroids.Animation.ValueAnimator+IAnimatorUpdateListenerImplementor, NineOldAndroids, Version=2.4.0.0, Culture=neutral, PublicKeyToken=null", ValueAnimator_AnimatorUpdateListenerImplementor.class, __md_methods);
+		mono.android.Runtime.register ("NineOldAndroids.Animation.ValueAnimator+IAnimatorUpdateListenerImplementor, NineOldAndroids", ValueAnimator_AnimatorUpdateListenerImplementor.class, __md_methods);
 	}
 
 
@@ -21,7 +21,7 @@ public class ValueAnimator_AnimatorUpdateListenerImplementor
 	{
 		super ();
 		if (getClass () == ValueAnimator_AnimatorUpdateListenerImplementor.class)
-			mono.android.TypeManager.Activate ("NineOldAndroids.Animation.ValueAnimator+IAnimatorUpdateListenerImplementor, NineOldAndroids, Version=2.4.0.0, Culture=neutral, PublicKeyToken=null", "", this, new java.lang.Object[] {  });
+			mono.android.TypeManager.Activate ("NineOldAndroids.Animation.ValueAnimator+IAnimatorUpdateListenerImplementor, NineOldAndroids", "", this, new java.lang.Object[] {  });
 	}
 
 

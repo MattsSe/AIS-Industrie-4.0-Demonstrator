@@ -3329,12 +3329,12 @@ containing a value of this type.
     }
     public static final class id {
         public static final int ALT=0x7f080032;
-        public static final int BeanLevel1=0x7f0800fd;
-        public static final int BeanLevel2=0x7f0800fe;
+        public static final int BeanLevel1=0x7f080101;
+        public static final int BeanLevel2=0x7f080102;
         public static final int CTRL=0x7f080033;
-        public static final int CleanLevel1=0x7f0800ff;
-        public static final int CleanLevel2=0x7f080100;
-        public static final int ContainerMachineState=0x7f0800f9;
+        public static final int CleanLevel1=0x7f080103;
+        public static final int CleanLevel2=0x7f080104;
+        public static final int ContainerMachineState=0x7f0800fd;
         public static final int FUNCTION=0x7f080034;
         public static final int META=0x7f080035;
         public static final int OptionPowder=0x7f0800c3;
@@ -3343,8 +3343,8 @@ containing a value of this type.
         public static final int TextViewL=0x7f08009f;
         public static final int TextViewM=0x7f0800a0;
         public static final int TextViewR=0x7f0800a1;
-        public static final int WaterLevel1=0x7f0800fa;
-        public static final int WaterLevel2=0x7f0800fb;
+        public static final int WaterLevel1=0x7f0800fe;
+        public static final int WaterLevel2=0x7f0800ff;
         public static final int action0=0x7f0800e5;
         public static final int action_bar=0x7f08007c;
         public static final int action_bar_activity_content=0x7f080001;
@@ -3380,7 +3380,7 @@ containing a value of this type.
         public static final int buttonPanel=0x7f080063;
         public static final int buttonPositve=0x7f0800b4;
         public static final int buttonPrepare=0x7f08008e;
-        public static final int buttonSignup=0x7f080106;
+        public static final int buttonSignup=0x7f08010a;
         public static final int cancel_action=0x7f0800e6;
         public static final int center=0x7f080045;
         public static final int center_horizontal=0x7f080046;
@@ -3397,6 +3397,8 @@ containing a value of this type.
         public static final int custom=0x7f08006d;
         public static final int customPanel=0x7f08006c;
         public static final int decor_content_parent=0x7f08007a;
+        public static final int decorativeline1=0x7f0800f8;
+        public static final int decorativeline2=0x7f0800fb;
         public static final int default_activity_button=0x7f080060;
         public static final int design_bottom_sheet=0x7f0800a7;
         public static final int design_menu_item_action_area=0x7f0800ae;
@@ -3427,7 +3429,7 @@ containing a value of this type.
         public static final int icon_group=0x7f0800f3;
         public static final int ifRoom=0x7f08003a;
         public static final int image=0x7f08005f;
-        public static final int imageView1=0x7f080101;
+        public static final int imageView1=0x7f080105;
         public static final int info=0x7f0800ef;
         public static final int italic=0x7f080059;
         public static final int item_touch_helper_previous_elevation=0x7f080000;
@@ -3441,9 +3443,9 @@ containing a value of this type.
         public static final int list_item=0x7f080061;
         public static final int main_content=0x7f080099;
         public static final int main_content2=0x7f0800c2;
-        public static final int masked=0x7f080109;
+        public static final int masked=0x7f08010d;
         public static final int media_actions=0x7f0800e8;
-        public static final int message=0x7f080107;
+        public static final int message=0x7f08010b;
         public static final int middle=0x7f080031;
         public static final int mini=0x7f080053;
         public static final int mr_art=0x7f0800d4;
@@ -3480,6 +3482,7 @@ containing a value of this type.
         public static final int notification_main_column=0x7f0800eb;
         public static final int notification_main_column_container=0x7f0800ea;
         public static final int optionWaterHardness=0x7f0800c0;
+        public static final int overview=0x7f0800f5;
         public static final int pager=0x7f0800c7;
         public static final int pagerI=0x7f08008c;
         public static final int pagerT=0x7f08008d;
@@ -3491,6 +3494,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f080006;
         public static final int progress_horizontal=0x7f080007;
         public static final int radio=0x7f080075;
+        public static final int refreshMachineState=0x7f0800fc;
         public static final int relativeLayout2=0x7f0800bc;
         public static final int right=0x7f08004a;
         public static final int right_icon=0x7f0800f0;
@@ -3542,13 +3546,13 @@ containing a value of this type.
         public static final int text2=0x7f08001b;
         public static final int textCoffeeName=0x7f08008b;
         public static final int textCurrentSum=0x7f08009a;
-        public static final int textOptionCostOverview=0x7f0800f6;
-        public static final int textOptionCostSetting=0x7f0800f8;
-        public static final int textOptionMachine=0x7f0800f7;
-        public static final int textOptionName=0x7f080102;
-        public static final int textOptionPassword=0x7f080103;
+        public static final int textOptionCostOverview=0x7f0800f7;
+        public static final int textOptionCostSetting=0x7f0800fa;
+        public static final int textOptionMachine=0x7f0800f9;
+        public static final int textOptionName=0x7f080106;
+        public static final int textOptionPassword=0x7f080107;
         public static final int textOptionPay=0x7f08009b;
-        public static final int textOptionProfile=0x7f0800f5;
+        public static final int textOptionProfile=0x7f0800f6;
         public static final int textSpacerNoButtons=0x7f08006a;
         public static final int textSpacerNoTitle=0x7f080069;
         public static final int textStat1=0x7f080091;
@@ -3560,7 +3564,7 @@ containing a value of this type.
         public static final int textStat4=0x7f080094;
         public static final int textStat41=0x7f080098;
         public static final int textView1=0x7f0800b8;
-        public static final int textWaterLevel=0x7f0800fc;
+        public static final int textWaterLevel=0x7f080100;
         public static final int text_input_password_toggle=0x7f0800af;
         public static final int textinput_counter=0x7f080014;
         public static final int textinput_error=0x7f080015;
@@ -3582,15 +3586,15 @@ containing a value of this type.
         public static final int txtMilkQuantity=0x7f0800b6;
         public static final int txtNewPassword=0x7f0800b2;
         public static final int txtOldPassword=0x7f0800b1;
-        public static final int txtPassword1=0x7f080104;
-        public static final int txtPassword2=0x7f080105;
+        public static final int txtPassword1=0x7f080108;
+        public static final int txtPassword2=0x7f080109;
         public static final int txtUserName=0x7f0800b0;
         public static final int uniform=0x7f08002d;
         public static final int up=0x7f080009;
         public static final int useLogo=0x7f080026;
         public static final int view1=0x7f08009d;
         public static final int view_offset_helper=0x7f080016;
-        public static final int visible=0x7f080108;
+        public static final int visible=0x7f08010c;
         public static final int volume_item_container=0x7f0800da;
         public static final int withText=0x7f08003c;
         public static final int wrap_content=0x7f08002e;
@@ -3699,75 +3703,81 @@ containing a value of this type.
         public static final int tooltip=0x7f030051;
     }
     public static final class string {
-        public static final int AlertMessage=0x7f090042;
-        public static final int AlertMessagePay=0x7f090068;
+        public static final int AlertMessage=0x7f090045;
+        public static final int AlertMessagePay=0x7f09006c;
         /** CoffeeAlert
          */
-        public static final int AlertTitle=0x7f090041;
-        public static final int AlertTitlePay=0x7f090067;
-        public static final int ButtonNegative=0x7f090045;
-        public static final int ButtonPositive=0x7f090043;
-        public static final int Cancel=0x7f090064;
-        public static final int Cappuccino=0x7f09003f;
-        public static final int ChangePassword=0x7f090055;
+        public static final int AlertTitle=0x7f090044;
+        public static final int AlertTitlePay=0x7f09006b;
+        public static final int ButtonNegative=0x7f090048;
+        public static final int ButtonPositive=0x7f090046;
+        public static final int Cancel=0x7f090068;
+        public static final int Cappuccino=0x7f090042;
+        public static final int ChangePassword=0x7f090058;
         /** OverViewFragment
          */
-        public static final int ChangeUserData=0x7f090054;
-        public static final int CostOverviewDialog=0x7f090051;
-        public static final int CostSettingDialog=0x7f090052;
+        public static final int ChangeUserData=0x7f090057;
+        public static final int ConnectionFailed=0x7f09003e;
+        public static final int ConnectionSuccess=0x7f09003f;
+        public static final int CostOverviewDialog=0x7f090054;
+        public static final int CostSettingDialog=0x7f090055;
         /** CostOverview
          */
-        public static final int CurrentSum=0x7f090065;
+        public static final int CurrentSum=0x7f090069;
         /** DialogNames
          */
-        public static final int DialogCoffeeValue=0x7f090050;
+        public static final int DialogCoffeeValue=0x7f090053;
         /** LoginActivity
          */
-        public static final int EmptyUserName=0x7f09005a;
-        public static final int EmptyUserPassword=0x7f09005b;
+        public static final int EmptyUserName=0x7f09005d;
+        public static final int EmptyUserPassword=0x7f09005e;
         /** CostSettings
          */
-        public static final int ErrorParse=0x7f090062;
-        public static final int LargeCoffee=0x7f09003e;
-        public static final int LatteMacchiato=0x7f090040;
-        public static final int MachineSettingDialog=0x7f090053;
+        public static final int ErrorParse=0x7f090066;
+        public static final int LargeCoffee=0x7f090041;
+        public static final int LatteMacchiato=0x7f090043;
+        public static final int MachineSettingDialog=0x7f090056;
         /** MachineSettings
          */
-        public static final int MachineSettingsTitle=0x7f09005f;
-        public static final int MessageNegative=0x7f090046;
-        public static final int MessageNegativePay=0x7f09006a;
-        public static final int MessagePositive=0x7f090044;
-        public static final int MessagePositivePay=0x7f090069;
+        public static final int MachineSettingsTitle=0x7f090063;
+        public static final int MessageNegative=0x7f090049;
+        public static final int MessageNegativePay=0x7f09006e;
+        public static final int MessagePositive=0x7f090047;
+        public static final int MessagePositivePay=0x7f09006d;
         /** CoffeeStats
          */
-        public static final int MissingValue=0x7f09004c;
-        public static final int NewPassword=0x7f090057;
-        public static final int NoErrorParse=0x7f090063;
-        public static final int OldPassword=0x7f090056;
-        public static final int Password=0x7f090058;
-        public static final int PasswordNotMatching=0x7f09005e;
-        public static final int Pay=0x7f090066;
-        public static final int PowderedCoffee=0x7f090061;
+        public static final int MissingValue=0x7f09004f;
+        public static final int NewPassword=0x7f09005a;
+        /** OPC UA
+         */
+        public static final int NoAppCertificate=0x7f09003d;
+        public static final int NoErrorParse=0x7f090067;
+        public static final int OldPassword=0x7f090059;
+        public static final int Password=0x7f09005b;
+        public static final int PasswordNotMatching=0x7f090061;
+        public static final int Pay=0x7f09006a;
+        public static final int PowderedCoffee=0x7f090065;
         /** Coffee Type
          */
-        public static final int SmallCoffee=0x7f09003d;
-        public static final int StatCalories=0x7f09004b;
-        public static final int StatCoffeeQuantity=0x7f090048;
-        public static final int StatCoffeeStregth=0x7f09004a;
-        public static final int StatMilkQuantity=0x7f090049;
+        public static final int SmallCoffee=0x7f090040;
+        public static final int StatCalories=0x7f09004e;
+        public static final int StatCoffeeQuantity=0x7f09004b;
+        public static final int StatCoffeeStregth=0x7f09004d;
+        public static final int StatMilkQuantity=0x7f09004c;
         /** CoffeeStats
          */
-        public static final int StatTotalQuantity=0x7f090047;
-        public static final int StregthTooHigh=0x7f09004e;
-        public static final int StregthTooLow=0x7f09004f;
+        public static final int StatTotalQuantity=0x7f09004a;
+        public static final int StregthTooHigh=0x7f090051;
+        public static final int StregthTooLow=0x7f090052;
         /** SupportActionBar
          */
         public static final int SupportActionBarTitle=0x7f09003c;
-        public static final int UserName=0x7f090059;
-        public static final int ValueTooHigh=0x7f09004d;
-        public static final int WaterHardness=0x7f090060;
-        public static final int WrongUserName=0x7f09005c;
-        public static final int WrongUserPassword=0x7f09005d;
+        public static final int UserName=0x7f09005c;
+        public static final int ValueTooHigh=0x7f090050;
+        public static final int WaterHardness=0x7f090064;
+        public static final int WrongEndpoint=0x7f090062;
+        public static final int WrongUserName=0x7f09005f;
+        public static final int WrongUserPassword=0x7f090060;
         public static final int abc_action_bar_home_description=0x7f090015;
         public static final int abc_action_bar_up_description=0x7f090016;
         public static final int abc_action_menu_overflow_description=0x7f090017;
