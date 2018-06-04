@@ -39,7 +39,10 @@ var server = new opcua.OPCUAServer({
 var client = new opcua.OPCUAClient();	// instantiate a new OPC UA Client
 var client_session;	// 
 // var client_subscription;	// the client subscription is used to get updates about variable changes from the CODESYS server
-var CodesysEndpoint = "";	// the endpoint URL of the Codesys OPC UA Server
+var CodesysEndpoint = "opc.tcp://JakobsDesktop:4840";	// the endpoint URL of the Codesys OPC UA Server
+// constants: NodeIDs of the relevant Variables in the CODESYS Control OPC UA Server Namespace
+const NodeID_stringPackMLStatus = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus";
+const NodeID_boolSmallCoffee = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[2]";
 
 
 // declaration of internal Variables, used to handle the OPC UA Variables before writing them to a DB
@@ -49,6 +52,8 @@ var valueCleanlinessLevel = 100;	//ToDo: initialize with 0, 100 is only for test
 var valueCoffeeQuantity = 225;	//ToDo: initialize with 0, 225 is only for testing
 var valueCoffeeStrength = 4;	//ToDo: initialize with 1, 4 is only for testing
 var valueMilkQuantity = 25;	//ToDo: initialize with 0, 25 is only for testing
+var cooldown = false;	// Helper varaible used to flag the toButton Method as "on cooldown", meant to be used with a timer which resets the flag after cooldownTime seconds
+var cooldowntime = 10;	// Default value for the cooldown in seconds
 
 // Function that establishes a Client connection with the Codesys Server
 async function ClientConnection () {
@@ -58,9 +63,9 @@ async function ClientConnection () {
         function connect(callback)  {
             client.connect(CodesysEndpoint,function (err) {
                 if (err) {
-                    console.log("Cannot connect to Codesys endpoint URL: ", CodesysEndpoint);
+                    console.log("Client: Cannot connect to Codesys endpoint URL: ", CodesysEndpoint);
                 } else {
-                    console.log("Connected to CODESYS Server!");
+                    console.log("Client: Connected to CODESYS OPC UA Server at Endpoint URL: ", CodesysEndpoint);
                 }
                 callback(err);
             });
@@ -71,10 +76,10 @@ async function ClientConnection () {
             client.createSession( function(err,session) { // creates a new Session with the "anonymous" Role
                 if(!err) {
                     client_session = session;
-                    console.log("Session created!");
+                    console.log("Client: Session created!");
                 }
                 else {
-                    console.log("Error! Session could not be created! (CODESYS Server)");
+                    console.log("Client: Error! Session could not be created! (CODESYS Server)");
                 }
                 callback(err);
             });
@@ -127,9 +132,7 @@ async function ClientConnection () {
     ],
     function(err) {
         if (err) {
-            console.log("Async series failure: ",err);
-        } else {
-            console.log("Debug: Async series completed!");
+            console.log("Client: Async series failure: ",err);
         }
     }) ;
 }
@@ -137,18 +140,18 @@ async function ClientConnection () {
 function ClientDisconnect () {
     client_session.close(function(err){
         if(err) {
-            console.log("Session.close failed!");
+            console.log("Client: Session.close failed!");
         }
         else {
-            console.log("Session closed.");
+            console.log("Client: Session closed.");
         }
     });
     client.disconnect(function(err){
         if(err) {
-            console.log("Client.disconnect failed!");
+            console.log("Client: Client.disconnect failed!");
         }
         else {
-            console.log("Disconnected!");
+            console.log("Client: Disconnected!");
         }
     })
 }
@@ -293,51 +296,29 @@ function post_initialize() {
 		var toButtonMethod = addressSpace.addMethod(CoffeeOrderObject, {		// ToDo: Here we add the method shell (without the actual functional logic) to the OPC UA Server Address Space
 			
 			browseName: "toButton",
+			nodeId: "ns=1;s=toButtonMethod",
+			description: "Diese Methode löst die Kaffeebestellung an der Kaffeemaschine (über die CODESYS Steuerung) aus. Zuerst wird die Kaffeestärke auf der Kaffeemaschine korrekt eingestellt. Danach entscheidet die Methode anhand der internen Variablen des CoffeeOrder Node, ob ein kleiner/mittlerer/großer Kaffee oder ein Cappuccino am ehesten zu den Werten passt und löst schließlich die passende Produktion aus.",
 			
-			// These are the Input Arguments that must be passed to the method upon calling it
+			//	These would be the Input Arguments that must be passed to the method upon calling it.
+			//	Not needed since the Method uses the internal values (valueCoffeeQuantity and valueMilkQuantity) 
+			/*	
 			inputArguments: [
 				{
 					name: "CoffeeQuantity",
 					description: {text: "Die Menge an Kaffee in der Bestellung, in ml"},
-					dataType: opcua.DataType.UInt32
+					dataType: opcua.DataType.UInt16
 				},
-				{
-					name: "MilkQuantity",
-					description: {text: "Die Menge an Milch in der Bestellung, in ml"},
-					dataType: opcua.DataType.UInt32
-				}
 			],
+			*/
 			
-			// These are the output arguments that the method returns when called
+			//	These are the output arguments that the method returns when called
 			outputArguments: [
 				{
-					name: "buttonToPress",
-					description: {text: "Virtueller Knopf auf dem Bedienpanel, der in CODESYS die Kaffeemaschine bedient"},
-					dataType: opcua.DataType.UInt32 // ToDo: change to my enum datatype CPbutton
+					name: "MethodResponse",
+					description: {text: "Informationen über das Resultat des Method Calls."},
+					dataType: opcua.DataType.String
 				}
 			]
-		/*
-			browseName: "Bell",
-
-			inputArguments: [
-				{
-					name: "nBells",
-					description: {text: "spezifiziert wie oft der Server kläffen soll"},
-					dataType: opcua.DataType.UInt32
-				}, {
-					name: "lautstaerke",
-					description: {text: "spezifiziert die Größe des Hundes [0 = klein ,100 = groß]"},
-					dataType: opcua.DataType.UInt32
-				}
-			],
-
-			outputArguments: [{
-				name: "Bells",
-				description: {text: "Die generierten Laute"},
-				dataType: opcua.DataType.String,
-				valueRank: 1
-			}]
-			*/
 		});
 
 		// optionally, we can adjust userAccessLevel attribute
@@ -345,11 +326,32 @@ function post_initialize() {
 		//toButtonMethod.inputArguments.userAccessLevel = opcua.makeAccessLevel("CurrentRead");
 		
 
-		/* toButtonMethod.bindMethod(function (inputArguments, context, callback) {	// ToDo: Here we add functional logic to the created method shell.
-			
-			// actual method logic code
-			
+		toButtonMethod.bindMethod(function (v, context, callback) {	// ToDo: Here we add functional logic to the created method shell.
+			// local variables
+			var ResultMessage = "Hoppla, die Methode wurde nicht ausgeführt!";	// Default Result Message
+			var callMethodResult = {
+				statusCode: opcua.StatusCodes.Bad,	// Initialize with status code "Bad", only set to good once method executed successfully
+				outputArguments: [{
+					dataType: opcua.DataType.String,
+					value: ResultMessage
+				}]
+			};
+			// actual method logic code goes here
+			if (cooldown == true) {
+				ResultMessage = "Method on cooldown";	// Todo debug uncomment line below instead
+				// ResultMessage = "Es wird gerade ein Kaffee zubereitet, bitte warten Sie einen Moment.";
+				callMethodResult.outputArguments.value = ResultMessage;
+				callback(null, callMethodResult);
+			}
+			else {	// Method currently not on cooldown
+				cooldown = true;	// Flag Method for Cooldown
+			}
+			callback(null, callMethodResult);
+
+			// EXAMPLE BELOW
+
 			// local variables for internal use within the function
+			/*
 			var nbBarks = inputArguments[0].value;
 			var volume = inputArguments[1].value;
 
@@ -371,27 +373,29 @@ function post_initialize() {
 				}]
 			};
 			callback(null, callMethodResult);
+			*/
 			
-		});*/
+			// END OF EXAMPLE
+			
+		});
 
 	}
 	//	end of declaration
 	
-    console.log("initialized");
+    console.log("Server: initialized");
 	construct_address_space(server);	// Call function to construct the server address space.
 
 }
 
 // actual program starts here
-
 server.initialize(post_initialize);
-
+ClientConnection();
 server.start(function () {
-    console.log("Server is now listening ... ( press CTRL+C to stop)");
-	console.log("port ", server.endpoints[0].port);
-    var endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
-    console.log(" the primary server endpoint url is ", endpointUrl );
-	setInterval(function(){	// This function displays the current number of Subscriptions handled by the server every 15 seconds
-			console.log("Aktuelle Anzahl an Subscriptions: ", server.currentSubscriptionCount);
-			}, 15000)
+	console.log("Server is now listening ... ( press CTRL+C to stop)");
+	console.log("Server port: ", server.endpoints[0].port);
+	var endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
+	console.log("Server: the primary server endpoint url is ", endpointUrl);
+	setInterval(function () {	// This function displays the current number of Subscriptions handled by the server every 15 seconds
+		console.log("Server: current number of active subscriptions: ", server.currentSubscriptionCount);
+	}, 15000)
 });
