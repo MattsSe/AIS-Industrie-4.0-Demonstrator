@@ -98,8 +98,8 @@ async.series([
        
        the_subscription.on("started",function(){
            console.log("subscription started for 2 seconds - subscriptionId=",the_subscription.subscriptionId);
-       }).on("keepalive",function(){
-           console.log("keepalive");
+       }).on("keepalive",function(dataValue){
+           console.log("Subscription Keelapive: Der PackML Status ist immer noch: ", dataValue.value.value);
        }).on("terminated",function(){
 		   console.log("terminated");
        });
