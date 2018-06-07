@@ -173,7 +173,7 @@ async function ClientConnection () {
             monitoredItem_intPackMLStatus.on("changed", function (dataValue) {
                 // execute some code whenever the value of the monitored node changes
                 codesys_intPackMLStatus = dataValue.value.value;
-                console.log("Subscription: PackML Status ist jetzt: ", codesys_intPackMLStatus);
+                console.log("Subscription: PackML intStatus ist jetzt: ", codesys_intPackMLStatus);
 			});
 			monitoredItem_stringPackMLStatus.on("changed", function (dataValue) {
                 // execute some code whenever the value of the monitored node changes
@@ -227,7 +227,7 @@ function resetCooldown(){	// resets the cooldown when called. Should be called w
 }
 
 // The function pressButton is used within the toButton Method to "Press the Buttons" in Codesys. It takes the NodeID (in the Codesys OCP UA Namespace) of the button that is to be pressed .
-function pressButton(buttonToPressNodeID) {
+function pressButton(buttonToPressNodeID) {	// debug: used to be called with callback as argument
     var nodeToWrite = {		// this is the object which represents the write data. It consists of the actual value and some extra contextual data that is needed by the Codesys OPC UA Server.
         nodeId: buttonToPressNodeID,
         attributeId: opcua.AttributeIds.Value,
@@ -242,7 +242,6 @@ function pressButton(buttonToPressNodeID) {
     client_session.write(nodeToWrite, function (err, statusCode) {
         if (err) {
             console.log("Client: Write Error: ", err);
-			// return callback(err);
         }
         console.log("Client: Write Response Status Code: ", statusCode.name);
         if (statusCode == opcua.StatusCodes.Good) { // "if the button was pressed successfully"
@@ -250,7 +249,6 @@ function pressButton(buttonToPressNodeID) {
             setTimeout(() => client_session.write(nodeToWrite, function (err, statusCode2) {
                 if (err) {
                     console.log("Client: Write Reset Error: ", err);
-					// return callback(err);
                 }
                 // console.log("Client Debug: Write Reset Response Status Code: ", statusCode2.name);
             }), 500);   // Timer for the Reset, should be ~ 500 [ms]
@@ -260,6 +258,99 @@ function pressButton(buttonToPressNodeID) {
             console.log("Bad Status Code: ", statusCode.name);
 		}
     });
+}
+
+// The function setCoffeeStrength is used within the toButton Method to adjust the Coffee Strength setting of the Coffee Machine.
+async function setCoffeeStrength(callback) {	// debug: used to be called with callback as argument
+	var difference = valueCoffeeStrength - codesys_coffeeStrength;
+	if (difference != 0) {
+		if (codesys_coffeeStrength > valueCoffeeStrength) {	// correction in case the current coffee strength is higher than the desired coffee strength 
+			difference += 5;
+		}
+		// console.log("Debug: Desired Coffeestrength: ", valueCoffeeStrength);
+		// console.log("Debug: Current Coffeestrength: ", codesys_coffeeStrength);
+		// console.log("Debug: Button will be pressed ", difference, " times.");
+		async.whilst(	// documentation of async.whilst:	https://caolan.github.io/async/docs.html#whilst
+			function () { return difference > 0 },	    // test: this is the test for the whilst function: call the next function as long as "difference is not null"
+			function (cb) {                             // iteratee:
+				pressButton(NodeID_boolCoffeeStrength);
+				difference--;
+				setTimeout(function () {
+					cb(null, null);
+				}, 1500);
+			},
+			function (err) {
+				callback(err);                          // callback: "global" callback (callback of setCoffeeStrength) is only calles once the test does not pass anymore, i.e. once difference = 0 (which means the coffeestrength has been set to the correct value)
+			}
+		);
+	}
+	else {
+		callback();
+	}
+}
+
+// The function pressButton is used within the toButton Method to trigger the production of Coffee
+async function makeCoffee(callMethodResult, callback) {	// Debug: used to be called with callback as second parameter 
+	async.series([
+		//
+		//	*************************************
+		//	*		Wrapper Function Logic:		*
+		//	*	Decide which coffee to produce	*
+		//	*									*
+		//	*************************************
+		//	Concept:
+		//
+		//	Cappuccino: more or equal Milk than Coffee
+		//	Large: valueCoffeeQuantity more than 200
+		//	Medium: valueCoffeeQuantity less than 200 but more than 100
+		//	Small: valueCoffeeQuantity less than 100
+		//
+		function (callback2) {
+			if (valueMilkQuantity >= valueCoffeeQuantity) {
+				// make Cappuccino
+				console.log("DEBUG: make cappuccino");
+				callMethodResult.statusCode = opcua.StatusCodes.Good;
+				callMethodResult.outputArguments[0].value = "Bestellung ausgelöst: Ein Cappuccino wird für Sie zubereitet.";
+				pressButton(NodeID_boolCappuccino);
+				callback();
+				console.log("Bestellung ausgelöst: Ein Cappuccino der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
+			}
+			else {
+				if (valueCoffeeQuantity > 200) {
+					// make large Coffee
+					console.log("DEBUG: make large coffee");
+					callMethodResult.statusCode = opcua.StatusCodes.Good;
+					callMethodResult.outputArguments[0].value = "Bestellung ausgelöst: Ein großer Kaffee wird für Sie zubereitet.";
+					pressButton(NodeID_boolLargeCoffee);
+					callback();
+					console.log("Bestellung ausgelöst: Ein großer Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
+				}
+				else {
+					if (valueCoffeeQuantity > 100) {
+						// make medium Coffee
+						console.log("DEBUG: make medium coffee");
+						callMethodResult.statusCode = opcua.StatusCodes.Good;
+						callMethodResult.outputArguments[0].value = "Bestellung ausgelöst: Ein normaler Kaffee wird für Sie zubereitet.";
+						pressButton(NodeID_boolMediumCoffee);
+						callback();
+						console.log("Bestellung ausgelöst: Ein mittlerer Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
+					}
+					else {
+						// make small Coffee
+						console.log("DEBUG: make small coffee");
+						callMethodResult.statusCode = opcua.StatusCodes.Good;
+						callMethodResult.outputArguments[0].value = "Bestellung ausgelöst: Ein kleiner Kaffee wird für Sie zubereitet.";
+						pressButton(NodeID_boolSmallCoffee);
+						callback();
+						console.log("Bestellung ausgelöst: Ein kleiner Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
+					}
+				}
+			}
+		}],
+		function (err) {
+			// callback(err);
+		}
+	);
 }
 
 // The function post_initialize is used to construct the OPC UA address space for the CoffeeOrder Service. It also contains the toButton method's implementation.
@@ -334,9 +425,6 @@ async function post_initialize() {
             }
 		});
 		
-		// ToDo: add Enum Datatype for Control Panel Buttons in Codesys
-
-		
 		// Add CoffeeOrder Object to the namespace
 		var CoffeeOrderObject = addressSpace.addObject({
 			organizedBy: addressSpace.rootFolder.objects,
@@ -400,6 +488,7 @@ async function post_initialize() {
             }
 		});
 		
+		// Add toButtonMethod Method to CoffeeOrder Object (this is just the method shell without any code. For the code see "toButtonMethod.bindMethod(...)"" below)
 		var toButtonMethod = addressSpace.addMethod(CoffeeOrderObject, {		// ToDo: Here we add the method shell (without the actual functional logic) to the OPC UA Server Address Space
 			
 			browseName: "toButton",
@@ -419,42 +508,37 @@ async function post_initialize() {
 			*/
 			
 			//	These are the output arguments that the method returns when called
-			outputArguments: [
-				{
-					name: "MethodResponse",
-					description: {text: "Informationen über das Resultat des Method Calls."},
-					dataType: opcua.DataType.String
-				}
-			]
+			outputArguments: [{
+				name: "MethodResponse",
+				description: { text: "Informationen über das Resultat des Method Calls." },
+				dataType: opcua.DataType.String
+			}]
 		});
 
 		toButtonMethod.bindMethod(function (inputArguments, context, callback) {	// ToDo: Here we add functional logic to the created method shell.
 			// local variables
-			var ResultMessage = "Hoppla, die Methode wurde nicht ausgeführt!";	// Default Result Message
 			var callMethodResult = {
 				statusCode: opcua.StatusCodes.Bad,	// Initialize with status code "Bad", only set to good once method executed successfully
-				outputArguments: {
-					dataType: opcua.DataType.String,
-					value: "Hoppla, die Methode wurde nicht ausgeführt!"
-				}
+				outputArguments: [{
+					dataType: opcua.DataType.String
+				}]
 			};
-			callMethodResult.outputArguments.value = ResultMessage;
 			if (cooldown == true) {
-				ResultMessage = "Method on cooldown";	// Todo debug uncomment line below instead
+				callMethodResult.outputArguments[0].value = "Method on cooldown";	// Todo debug uncomment line below instead
+				callMethodResult.statusCode = opcua.StatusCodes.Good;
 				// ResultMessage = "Es wird gerade ein Kaffee zubereitet, bitte warten Sie einen Moment.";
-				callMethodResult.outputArguments.value = ResultMessage;
 				callback(null, callMethodResult);
 			}
 			else {
-				if (codesys_intPackMLStatus != 0) {
-					ResultMessage = "Fehler: die Kaffeemaschine ist gerade nicht betriebsbereit!";
-					callMethodResult.outputArguments.value = ResultMessage;
+				if (codesys_stringPackMLStatus != "IDLE") {
+					callMethodResult.outputArguments[0].value = "Fehler: die Kaffeemaschine ist gerade nicht betriebsbereit!";
+					callMethodResult.statusCode = opcua.StatusCodes.Good;
 					callback(null, callMethodResult);
 				}
 				else {	// Method currently not on cooldown and Coffee Machine is in IDLE Mode
 					if (!client_session) {	// checks if the session is null
-						ResultMessage = "Fehler: keine Session beim Codesys Server!";
-						callMethodResult.outputArguments.value = ResultMessage;
+						callMethodResult.outputArguments[0].value = "Fehler: keine Session beim Codesys Server!";
+						callMethodResult.statusCode = opcua.StatusCodes.Good;
 						callback(null, callMethodResult);
 					}
 					else {	// at this point we have validated cooldown, session and packML state
@@ -462,82 +546,24 @@ async function post_initialize() {
 						cooldown = true;	// Flag Method for Cooldown
 						setTimeout(() => resetCooldown(), (cooldowntime * 1000));	// reset cooldown after (cooldowntime) seconds
 
-						// set the correct coffe strength
-						var difference = valueCoffeeStrength - codesys_coffeeStrength;
-						if (codesys_coffeeStrength > valueCoffeeStrength) {	// correction in case the current coffee strength is higher than the desired coffee strength 
-							difference += 5;
-						}
-						console.log("Debug: Desired Coffeestrength: ", valueCoffeeStrength);
-						console.log("Debug: Current Coffeestrength: ", codesys_coffeeStrength);
-						console.log("Debug: Button will be pressed ", difference, " times.");
-						async.whilst(	// documentation of async.whilst:	https://caolan.github.io/async/docs.html#whilst
-							function () { return difference > 0 },	// this is the test for the whilst function: call the next function as long as "difference is not null"
-							function (cb) {
-								pressButton(NodeID_boolCoffeeStrength);
-								difference--;
-								setTimeout(cb, 1000);
-							},
-							function (err) {
-								// at this point the CoffeeStrength has been set to the correct value
+						async.series([	// using async.series to ensure these steps are executed in the correct order.
 
-								//	*************************************
-								//	*		Wrapper Function Logic:		*
-								//	*	Decide which coffee to produce	*
-								//	*									*
-								//	*************************************
-								//	Concept:
-								//	Cappuccino: more or equal Milk than Coffee
-								//	Large: valueCoffeeQuantity more than 200
-								//	Medium: valueCoffeeQuantity less than 200 but more than 100
-								//	Small: valueCoffeeQuantity less than 100
-								var ordered = false;
-								async.whilst(	// TODO: Debug this async.whilst, it always crashes :(
-									function () { return ordered },
-									function (cb2) {
-										if (valueMilkQuantity >= valueCoffeeQuantity) {
-											// make Cappuccino
-											pressButton(NodeID_boolCappuccino);
-											callMethodResult.statusCode = opcua.StatusCodes.Good;
-											ResultMessage = "Bestellung ausgelöst: Ein Cappuccino der Stärke " + codesys_coffeeStrength + " wurde für Sie bestellt.";
-											callMethodResult.outputArguments.value = ResultMessage;
-											console.log("Bestellung ausgelöst: Ein Cappuccino der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
-										}
-										else {
-											if (valueCoffeeQuantity > 200) {
-												// make large Coffee
-												pressButton(NodeID_boolLargeCoffee);
-												callMethodResult.statusCode = opcua.StatusCodes.Good;
-												ResultMessage = "Bestellung ausgelöst: Ein großer Kaffee wurde für Sie bestellt.";
-												callMethodResult.outputArguments.value = ResultMessage;
-												console.log("Bestellung ausgelöst: Ein großer Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
-											}
-											else {
-												if (valueCoffeeQuantity > 100) {
-													// make medium Coffee
-													pressButton(NodeID_boolMediumCoffee);
-													callMethodResult.statusCode = opcua.StatusCodes.Good;
-													ResultMessage = toString("Bestellung ausgelöst: Ein mittlerer Kaffee der Stärke ", codesys_coffeeStrength, " wurde für Sie bestellt.");
-													callMethodResult.outputArguments.value = ResultMessage;
-													console.log("Bestellung ausgelöst: Ein mittlerer Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
-												}
-												else {
-													// make small Coffee
-													pressButton(NodeID_boolSmallCoffee);
-													callMethodResult.statusCode = opcua.StatusCodes.Good;
-													ResultMessage = "Bestellung ausgelöst: Ein kleiner Kaffee der Stärke ", codesys_coffeeStrength, " wurde für Sie bestellt.";
-													callMethodResult.outputArguments.value = ResultMessage;
-													console.log("Bestellung ausgelöst: Ein kleiner Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
-												}
-											}
-										}
-									},
-									function (err) {
-										callback(null, callMethodResult);
-									}
-								);
+							// First we need to set the correct coffe strength
+							function (callback2) {
+								console.log("DEBUG async.series step 1: set coffee strength");
+								setCoffeeStrength(callback2);
+							},
+							// now we are ready to produce the coffee
+							function (callback3) {
+								console.log("DEBUG async.series step 2: make coffee");
+								makeCoffee(callMethodResult, callback3); // callMethodResult is passed to the function so that the results can be written depending on which coffee has been produced.
+							}
+						],
+							function (err, callback2) {
+								console.log("DEBUG: async.series completed. Coffee should have been ordered; methodResult should be correct...")
+								callback(null, callMethodResult);
 							}
 						);
-						console.log("Debug: async.whilst completed");
 					}
 				}
 			}

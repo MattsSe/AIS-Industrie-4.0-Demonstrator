@@ -104,16 +104,16 @@ async function ClientConnection() {
                 },
             );
             var monitoredItem_ServerStatus = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
-            nodeId: "ns=0;i=2259",   // this nodeID is specified as the server status nodeID in OPC UA specs, part 4, 6.7 
-            attributeId: opcua.AttributeIds.Value
-        },
-            {
-                samplingInterval: 100, // Check PackMLSTatus Value every 100ms (Only handles how often CODESYS checks the value internally, see requestedPublishingInterval to adjust "how often backend receives updated values")
-                discardOldest: true, // if true: only keeps the most recent value. We don't need to know the history of the PackMLStatus, therefore this should be true.
-                filter: null,    // Not needed; Filters can be used to only show value changes greater than a set tolerance
-                queueSize: 1 // We don't need to know the history of the PackMLStatus, therefore only the newest value is needed in the queue
+                nodeId: "ns=0;i=2259",   // this nodeID is specified as the server status nodeID in OPC UA specs, part 4, 6.7 
+                attributeId: opcua.AttributeIds.Value
             },
-        );
+                {
+                    samplingInterval: 100, // Check PackMLSTatus Value every 100ms (Only handles how often CODESYS checks the value internally, see requestedPublishingInterval to adjust "how often backend receives updated values")
+                    discardOldest: true, // if true: only keeps the most recent value. We don't need to know the history of the PackMLStatus, therefore this should be true.
+                    filter: null,    // Not needed; Filters can be used to only show value changes greater than a set tolerance
+                    queueSize: 1 // We don't need to know the history of the PackMLStatus, therefore only the newest value is needed in the queue
+                },
+            );
             var monitoredItem_CoffeeStrength = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
                 nodeId: NodeID_intCoffeeStrength,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus"),
                 attributeId: opcua.AttributeIds.Value
