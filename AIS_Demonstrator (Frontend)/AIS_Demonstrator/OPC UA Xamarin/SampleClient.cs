@@ -480,7 +480,7 @@ namespace AIS_Demonstrator
         /// </summary>
         /// <param name="value">The int value that is to be written to the Node in the Server Namespace.</param>
         /// <param name="nodeId">The NodeId of the Node where the value shall be written.</param>
-        public string VariableWrite(UInt16 value, string nodeId)
+        public ResponseHeader VariableWrite(UInt16 value, string nodeId)
         {
             if (session != null)
             {
@@ -496,11 +496,13 @@ namespace AIS_Demonstrator
                         NodeId = NodeId.Parse(nodeId),
                         // We want to write the Value of the Node
                         AttributeId = Attributes.Value,
-                        Value = new DataValue() { WrappedValue = value}
+                        Value = new DataValue() { WrappedValue = value }
                     });
                     // Actually write the Data. The method session.Write returns the responseHeader of the Write request response which is passed as the return value of this Method (VariableWrite)
                     ResponseHeader responseHeader = session.Write(null, nodesToWrite, out results, out diagnosticInfos);
-                    if (responseHeader.ServiceResult.ToString() == "Good")
+                    return responseHeader;
+                    /*
+                     * if (responseHeader.ServiceResult == StatusCodes.Good) // (responseHeader.ServiceResult.ToString() == "Good")
                     {
                         // ToDo: add this to Resources/values/Strings.xml
                         return "Kaffeebestellung ist raus!";
@@ -509,13 +511,13 @@ namespace AIS_Demonstrator
                     {
                         // ToDo: add this to Resources/values/Strings.xml
                         return "Ups! Da ist etwas schief gelaufen!";
-                    }
+                    }*/
                 }
                 // ToDo: add this to Resources/values/Strings.xml
-                else return "Fehler! Keine Verbindung mit OPC UA Server!";
+                else return null;   // "Fehler! Keine Verbindung mit OPC UA Server!";
             }
             // ToDo: add this to Resources/values/Strings.xml 
-            else return "Fehler! Keine Session!";
+            else return null;   // "Fehler! Keine Session!";
         }
         #endregion
 

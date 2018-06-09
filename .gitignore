@@ -1,6 +1,7 @@
 Testserver_2 - Backup
+AIS_Demonstrator (Frontend)/AIS_Demonstrator/obj/*
 /obj/*
-/bin/*
+AIS_Demonstrator (Frontend)/AIS_Demonstrator/bin/*
 CODESYS_daheim
 backup
 /CoffeeOrder Service (Backend)/CoffeeOrder_Service_brokenCallback.js

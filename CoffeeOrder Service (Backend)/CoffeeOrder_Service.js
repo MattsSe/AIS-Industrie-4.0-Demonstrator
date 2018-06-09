@@ -77,9 +77,9 @@ async function ClientConnection () {
         function connect(callback)  {
             client.connect(CodesysEndpoint,function (err) {
                 if (err) {
-                    console.log("Client: Cannot connect to Codesys endpoint URL: ", CodesysEndpoint);
+                    console.log(new Date().toLocaleString('de-DE') + " Client: Cannot connect to Codesys endpoint URL: ", CodesysEndpoint);
                 } else {
-                    console.log("Client: Connected to CODESYS OPC UA Server at Endpoint URL: ", CodesysEndpoint);
+                    console.log(new Date().toLocaleString('de-DE') + " Client: Connected to CODESYS OPC UA Server at Endpoint URL: ", CodesysEndpoint);
                 }
                 callback(err);
             });
@@ -90,10 +90,10 @@ async function ClientConnection () {
             client.createSession( function(err,session) { // creates a new Session with the "anonymous" Role
                 if(!err) {
                     client_session = session;
-                    console.log("Client: Session created!");
+                    console.log(new Date().toLocaleString('de-DE') + " Client: Session created!");
                 }
                 else {
-                    console.log("Client: Error! Session could not be created! (CODESYS Server)");
+                    console.log(new Date().toLocaleString('de-DE') + " Client: Error! Session could not be created! (CODESYS Server)");
                 }
                 callback(err);
             });
@@ -112,11 +112,11 @@ async function ClientConnection () {
             });
 
             subscription_Codesys.on("started", function () {
-                console.log("Client: subscription started for 30 seconds - subscriptionId=", subscription_Codesys.subscriptionId);
+                console.log(new Date().toLocaleString('de-DE') + " Client: subscription started for 30 seconds - subscriptionId=", subscription_Codesys.subscriptionId);
             }).on("keepalive", function () {
-                console.log("Client: Subscription Keelapive: Der PackML Status ist immer noch: ", dataValue.value.value);
+                console.log(new Date().toLocaleString('de-DE') + " Client: Subscription Keelapive: Der PackML Status ist immer noch: ", dataValue.value.value);
             }).on("terminated", function () {
-                console.log("Client: subscription terminated!");
+                console.log(new Date().toLocaleString('de-DE') + " Client: subscription terminated!");
             });
 
             /* setTimeout(function () {
@@ -171,34 +171,34 @@ async function ClientConnection () {
             );
 
             monitoredItem_intPackMLStatus.on("changed", function (dataValue) {
-                // execute some code whenever the value of the monitored node changes
+                // update internal variable whenever the value of the monitored item changes
                 codesys_intPackMLStatus = dataValue.value.value;
-                console.log("Subscription: PackML intStatus ist jetzt: ", codesys_intPackMLStatus);
+                //	console.log(new Date().toLocaleString('de-DE') + " Subscription: PackML intStatus ist jetzt: ", codesys_intPackMLStatus);
 			});
 			monitoredItem_stringPackMLStatus.on("changed", function (dataValue) {
-                // execute some code whenever the value of the monitored node changes
+                // update internal variable whenever the value of the monitored item changes
                 codesys_stringPackMLStatus = dataValue.value.value;
-                console.log("Subscription: PackML Status ist jetzt: ", codesys_stringPackMLStatus);
+                console.log(new Date().toLocaleString('de-DE') + " Subscription: PackML Status ist jetzt: ", codesys_stringPackMLStatus);
             });
             monitoredItem_CoffeeStrength.on("changed", function (dataValue) {
-                // execute some code whenever the value of the monitored node changes
+                // update internal variable whenever the value of the monitored item changes
                 codesys_coffeeStrength = 1 + dataValue.value.value;	// here we compensate for the fact that the coffeestrength in codesys ranges from 0 to 4 while in the frontend it ranges from 1 to 5
-                console.log("Subscription: CoffeeStrength ist jetzt: ", codesys_coffeeStrength);
+                console.log(new Date().toLocaleString('de-DE') + " Subscription: CoffeeStrength ist jetzt: ", codesys_coffeeStrength);
             });
             monitoredItem_ServerStatus.on("changed", function (dataValue) {
-                // execute some code whenever the value of the monitored node changes
+                // update internal variable whenever the value of the monitored item changes
                 codesys_serverStatus = dataValue.value.value;
                 if (codesys_serverStatus != 0) {
-                    console.log("ACHTUNG: CODESYS Server Status ist nicht mehr 'running'! ");
+                    console.log(new Date().toLocaleString('de-DE') + " ACHTUNG: CODESYS Server Status ist nicht mehr 'running'! ");
                 }
             });
         }
     ],
     function(err) {
         if (err) {
-            console.log("Client: Async series failure: ",err);
+            console.log(new Date().toLocaleString('de-DE') + " Client: Async series failure: ",err);
 		} /* else {
-			console.log("Debug: Async series completed!");
+			console.log(new Date().toLocaleString('de-DE') + " Debug: Async series completed!");
 		} */
     }) ;
 }
@@ -206,18 +206,18 @@ async function ClientConnection () {
 function ClientDisconnect () {
     client_session.close(function(err){
         if(err) {
-            console.log("Client: Session.close failed!");
+            console.log(new Date().toLocaleString('de-DE') + " Client: Session.close failed!");
         }
         else {
-            console.log("Client: Session closed.");
+            console.log(new Date().toLocaleString('de-DE') + " Client: Session closed.");
         }
     });
     client.disconnect(function(err){
         if(err) {
-            console.log("Client: Client.disconnect failed!");
+            console.log(new Date().toLocaleString('de-DE') + " Client: Client.disconnect failed!");
         }
         else {
-            console.log("Client: Disconnected!");
+            console.log(new Date().toLocaleString('de-DE') + " Client: Disconnected!");
         }
     })
 }
@@ -241,21 +241,21 @@ function pressButton(buttonToPressNodeID) {	// debug: used to be called with cal
     }
     client_session.write(nodeToWrite, function (err, statusCode) {
         if (err) {
-            console.log("Client: Write Error: ", err);
+            console.log(new Date().toLocaleString('de-DE') + " Client: Write Error: ", err);
         }
-        console.log("Client: Write Response Status Code: ", statusCode.name);
+        console.log(new Date().toLocaleString('de-DE') + " Client: Write Response Status Code: ", statusCode.name);
         if (statusCode == opcua.StatusCodes.Good) { // "if the button was pressed successfully"
             nodeToWrite.value.value.value = false;    // We need to set the Button Status  to false in order to "un-press" the button. This is done 500ms after the first write has returned a 'Good' Status Code
             setTimeout(() => client_session.write(nodeToWrite, function (err, statusCode2) {
                 if (err) {
-                    console.log("Client: Write Reset Error: ", err);
+                    console.log(new Date().toLocaleString('de-DE') + " Client: Write Reset Error: ", err);
                 }
-                // console.log("Client Debug: Write Reset Response Status Code: ", statusCode2.name);
+                // console.log(new Date().toLocaleString('de-DE') + " Client Debug: Write Reset Response Status Code: ", statusCode2.name);
             }), 500);   // Timer for the Reset, should be ~ 500 [ms]
-            // console.log("Client Debug: Write Status Code Good");
+            // console.log(new Date().toLocaleString('de-DE') + " Client Debug: Write Status Code Good");
         }
         else {
-            console.log("Bad Status Code: ", statusCode.name);
+            console.log(new Date().toLocaleString('de-DE') + " Bad Status Code: ", statusCode.name);
 		}
     });
 }
@@ -267,9 +267,9 @@ async function setCoffeeStrength(callback) {	// debug: used to be called with ca
 		if (codesys_coffeeStrength > valueCoffeeStrength) {	// correction in case the current coffee strength is higher than the desired coffee strength 
 			difference += 5;
 		}
-		// console.log("Debug: Desired Coffeestrength: ", valueCoffeeStrength);
-		// console.log("Debug: Current Coffeestrength: ", codesys_coffeeStrength);
-		// console.log("Debug: Button will be pressed ", difference, " times.");
+		// console.log(new Date().toLocaleString('de-DE') + " Debug: Desired Coffeestrength: ", valueCoffeeStrength);
+		// console.log(new Date().toLocaleString('de-DE') + " Debug: Current Coffeestrength: ", codesys_coffeeStrength);
+		// console.log(new Date().toLocaleString('de-DE') + " Debug: Button will be pressed ", difference, " times.");
 		async.whilst(	// documentation of async.whilst:	https://caolan.github.io/async/docs.html#whilst
 			function () { return difference > 0 },	    // test: this is the test for the whilst function: call the next function as long as "difference is not null"
 			function (cb) {                             // iteratee:
@@ -308,41 +308,41 @@ async function makeCoffee(callMethodResult, callback) {	// Debug: used to be cal
 		function (callback2) {
 			if (valueMilkQuantity >= valueCoffeeQuantity) {
 				// make Cappuccino
-				console.log("DEBUG: make cappuccino");
+				console.log(new Date().toLocaleString('de-DE') + " DEBUG: make cappuccino");
 				callMethodResult.statusCode = opcua.StatusCodes.Good;
 				callMethodResult.outputArguments[0].value = "Bestellung ausgelöst: Ein Cappuccino wird für Sie zubereitet.";
 				pressButton(NodeID_boolCappuccino);
 				callback();
-				console.log("Bestellung ausgelöst: Ein Cappuccino der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
+				console.log(new Date().toLocaleString('de-DE') + " Bestellung ausgelöst: Ein Cappuccino der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
 			}
 			else {
 				if (valueCoffeeQuantity > 200) {
 					// make large Coffee
-					console.log("DEBUG: make large coffee");
+					console.log(new Date().toLocaleString('de-DE') + " DEBUG: make large coffee");
 					callMethodResult.statusCode = opcua.StatusCodes.Good;
 					callMethodResult.outputArguments[0].value = "Bestellung ausgelöst: Ein großer Kaffee wird für Sie zubereitet.";
 					pressButton(NodeID_boolLargeCoffee);
 					callback();
-					console.log("Bestellung ausgelöst: Ein großer Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
+					console.log(new Date().toLocaleString('de-DE') + " Bestellung ausgelöst: Ein großer Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
 				}
 				else {
 					if (valueCoffeeQuantity > 100) {
 						// make medium Coffee
-						console.log("DEBUG: make medium coffee");
+						console.log(new Date().toLocaleString('de-DE') + " DEBUG: make medium coffee");
 						callMethodResult.statusCode = opcua.StatusCodes.Good;
 						callMethodResult.outputArguments[0].value = "Bestellung ausgelöst: Ein normaler Kaffee wird für Sie zubereitet.";
 						pressButton(NodeID_boolMediumCoffee);
 						callback();
-						console.log("Bestellung ausgelöst: Ein mittlerer Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
+						console.log(new Date().toLocaleString('de-DE') + " Bestellung ausgelöst: Ein mittlerer Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
 					}
 					else {
 						// make small Coffee
-						console.log("DEBUG: make small coffee");
+						console.log(new Date().toLocaleString('de-DE') + " DEBUG: make small coffee");
 						callMethodResult.statusCode = opcua.StatusCodes.Good;
 						callMethodResult.outputArguments[0].value = "Bestellung ausgelöst: Ein kleiner Kaffee wird für Sie zubereitet.";
 						pressButton(NodeID_boolSmallCoffee);
 						callback();
-						console.log("Bestellung ausgelöst: Ein kleiner Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
+						console.log(new Date().toLocaleString('de-DE') + " Bestellung ausgelöst: Ein kleiner Kaffee der Stärke ", codesys_coffeeStrength, " wurde bestellt.");
 					}
 				}
 			}
@@ -524,43 +524,40 @@ async function post_initialize() {
 				}]
 			};
 			if (cooldown == true) {
-				callMethodResult.outputArguments[0].value = "Method on cooldown";	// Todo debug uncomment line below instead
+				callMethodResult.outputArguments[0].value = "Fehler: Es wird gerade ein Kaffee zubereitet, bitte warten Sie einen Moment."; // "Method on cooldown";
 				callMethodResult.statusCode = opcua.StatusCodes.Good;
-				// ResultMessage = "Es wird gerade ein Kaffee zubereitet, bitte warten Sie einen Moment.";
 				callback(null, callMethodResult);
 			}
-			else {
-				if (codesys_stringPackMLStatus != "IDLE") {
-					callMethodResult.outputArguments[0].value = "Fehler: die Kaffeemaschine ist gerade nicht betriebsbereit!";
+			else {	// Method currently not on cooldown
+				if (!client_session) {	// checks if the session is null
+					callMethodResult.outputArguments[0].value = "Fehler: keine Session beim Codesys Server!";
 					callMethodResult.statusCode = opcua.StatusCodes.Good;
 					callback(null, callMethodResult);
 				}
-				else {	// Method currently not on cooldown and Coffee Machine is in IDLE Mode
-					if (!client_session) {	// checks if the session is null
-						callMethodResult.outputArguments[0].value = "Fehler: keine Session beim Codesys Server!";
+				else {	// Method currently not on cooldown and session with Codesys exists
+					if (codesys_stringPackMLStatus != "IDLE") {
+						callMethodResult.outputArguments[0].value = "Fehler: die Kaffeemaschine ist gerade nicht betriebsbereit!";
 						callMethodResult.statusCode = opcua.StatusCodes.Good;
 						callback(null, callMethodResult);
 					}
 					else {	// at this point we have validated cooldown, session and packML state
-
 						cooldown = true;	// Flag Method for Cooldown
 						setTimeout(() => resetCooldown(), (cooldowntime * 1000));	// reset cooldown after (cooldowntime) seconds
-
-						async.series([	// using async.series to ensure these steps are executed in the correct order.
-
-							// First we need to set the correct coffe strength
-							function (callback2) {
-								console.log("DEBUG async.series step 1: set coffee strength");
-								setCoffeeStrength(callback2);
-							},
-							// now we are ready to produce the coffee
-							function (callback3) {
-								console.log("DEBUG async.series step 2: make coffee");
-								makeCoffee(callMethodResult, callback3); // callMethodResult is passed to the function so that the results can be written depending on which coffee has been produced.
-							}
-						],
+						async.series(	// using async.series to ensure these steps are executed in the correct order.
+							[
+								// First we need to set the correct coffe strength
+								function (callback2) {
+									console.log(new Date().toLocaleString('de-DE') + " DEBUG async.series step 1: set coffee strength");
+									setCoffeeStrength(callback2);
+								},
+								// now we are ready to produce the coffee
+								function (callback3) {
+									console.log(new Date().toLocaleString('de-DE') + " DEBUG async.series step 2: make coffee");
+									makeCoffee(callMethodResult, callback3); // callMethodResult is passed to the function so that the results can be written depending on which coffee has been produced.
+								}
+							],	// lastly we return the CallMethodResult to the method call via the callback (this is the callback of toButtonMethod.bindMethod)
 							function (err, callback2) {
-								console.log("DEBUG: async.series completed. Coffee should have been ordered; methodResult should be correct...")
+								console.log(new Date().toLocaleString('de-DE') + " DEBUG: async.series completed. Coffee should have been ordered; methodResult should be correct...")
 								callback(null, callMethodResult);
 							}
 						);
@@ -570,12 +567,9 @@ async function post_initialize() {
 		});
 
 	}
-    console.log("Server: initialized");
+    console.log(new Date().toLocaleString('de-DE') + " Server: initialized");
 	construct_address_space(server);	// Call function to construct the server address space.
-
 }
-
-
 //		*********************************
 //		*								*
 //		*	ACTUAL PROGRAM STARTS HERE	*
@@ -586,11 +580,11 @@ async function post_initialize() {
 server.initialize(post_initialize);		// initialize the server and construct the address space
 ClientConnection();						// connect to Codesys
 server.start(function () {
-	console.log("Server is now listening ... ( press CTRL+C to stop)");
-	console.log("Server port: ", server.endpoints[0].port);
+	console.log(new Date().toLocaleString('de-DE') + " Server is now listening ... ( press CTRL+C to stop)");
+	console.log(new Date().toLocaleString('de-DE') + " Server port: ", server.endpoints[0].port);
 	var endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
-	console.log("Server: the primary server endpoint url is ", endpointUrl);
+	console.log(new Date().toLocaleString('de-DE') + " Server: the primary server endpoint url is ", endpointUrl);
 	/* setInterval(function () {	// This function displays the current number of Subscriptions handled by the server every 15 seconds
-		console.log("Server: current number of active subscriptions: ", server.currentSubscriptionCount);
+		console.log(new Date().toLocaleString('de-DE') + " Server: current number of active subscriptions: ", server.currentSubscriptionCount);
 	}, 15000) */
 });

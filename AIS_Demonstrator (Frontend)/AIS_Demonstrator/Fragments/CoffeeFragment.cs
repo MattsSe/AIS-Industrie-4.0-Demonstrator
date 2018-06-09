@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AIS_Demonstrator.SQLite;
 using Android.OS;
 using Android.Support.V4.View;
@@ -117,11 +118,32 @@ namespace AIS_Demonstrator.Fragments
             string milkQuantityNodeId = "ns=1;s=MilkQuantityVariable";
             string coffeestrengthNodeId = "ns=1;s=CoffeeStrengthVariable";
 
-            // Write Values to OPC UA Server Namespace
-            string responseCQ = MainActivity.OpcClient.VariableWrite(coffeeQuantity, coffeeQuantityNodeId);
-            string responseMQ = MainActivity.OpcClient.VariableWrite(milkQuantity, milkQuantityNodeId);
-            string responseCS = MainActivity.OpcClient.VariableWrite(coffeeStrength, coffeestrengthNodeId);
+            // hard-coded NodeID of the Object and the Method
+            NodeId ObjectNodeID = NodeId.Parse("ns=1;s=CoffeeOrder");
+            NodeId MethodNodeID = NodeId.Parse("ns=1;s=toButtonMethod");
 
+            // Variables for handling the Method Call Result
+            IList<object> callMethodResult = null;
+            string resultMessage = "Fehler: Kommunikation mit dem Backend ist fehlgeschlagen";  // default value is overwritten later when the toButton Method is successfully called.
+
+            // Write Values to OPC UA Server Namespace
+            ResponseHeader responseCQ = MainActivity.OpcClient.VariableWrite(coffeeQuantity, coffeeQuantityNodeId);
+            ResponseHeader responseMQ = MainActivity.OpcClient.VariableWrite(milkQuantity, milkQuantityNodeId);
+            ResponseHeader responseCS = MainActivity.OpcClient.VariableWrite(coffeeStrength, coffeestrengthNodeId);
+
+            // Call toButton() Method in OPC UA Server Namespace if all three write requests were successful
+            if (responseCQ != null && responseMQ != null && responseCS != null) // check if all three variables were written to the server
+            {
+                if (responseCQ.ServiceResult == StatusCodes.Good && responseMQ.ServiceResult == StatusCodes.Good && responseCS.ServiceResult == StatusCodes.Good)   // check if all three variable writes were successful
+                {
+                    // Actually call the method which initiates a coffee order
+                    callMethodResult = MainActivity.OpcClient.session.Call(ObjectNodeID, MethodNodeID, null);
+                    foreach (var x in callMethodResult)
+                    {
+                        resultMessage = x.ToString();
+                    }
+                }
+            }
             // Insert Order into History
             History history = new History
             {
@@ -137,7 +159,7 @@ namespace AIS_Demonstrator.Fragments
             historyDb.CreateDataBase();
             historyDb.InsertTableHistory(history);
 
-            return (responseCQ);
+            return (resultMessage);
 
         }
         //Simulated Server
