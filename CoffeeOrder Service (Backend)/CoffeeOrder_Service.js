@@ -584,7 +584,7 @@ server.start(function () {
 	console.log(new Date().toLocaleString('de-DE') + " Server port: ", server.endpoints[0].port);
 	var endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
 	console.log(new Date().toLocaleString('de-DE') + " Server: the primary server endpoint url is ", endpointUrl);
-	/* setInterval(function () {	// This function displays the current number of Subscriptions handled by the server every 15 seconds
+	setInterval(function () {	// This function displays the current number of Subscriptions handled by the server every 15 seconds
 		console.log(new Date().toLocaleString('de-DE') + " Server: current number of active subscriptions: ", server.currentSubscriptionCount);
-	}, 15000) */
+	}, 15000)
 });
