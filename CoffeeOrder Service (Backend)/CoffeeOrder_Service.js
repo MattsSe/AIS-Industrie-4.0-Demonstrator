@@ -28,7 +28,7 @@ var server = new opcua.OPCUAServer({
 	buildInfo : {
         productName: "CoffeeOrder_Service",
         buildNumber: "1.0",
-        buildDate: new Date(2018,4,24)
+        buildDate: new Date(2018,6,19)
     }
 });
 
@@ -38,15 +38,15 @@ var server = new opcua.OPCUAServer({
 var client = new opcua.OPCUAClient();	// instantiate a new OPC UA Client
 var client_session;	// 
 // var client_subscription;	// the client subscription is used to get updates about variable changes from the CODESYS server
-const CodesysEndpoint = "opc.tcp://JakobsDesktop:4840"; // "opc.tcp://JAKOBSDESKTOP:34197/CoffeeOrder";
-const NodeID_intCoffeeStrength = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.iButtonStatus[11]"; // NodeID of the variable for the current CoffeeStrength. Ranges from 0 ("Sehr Mild") to 4 ("Sehr Kräftig")
-const NodeID_boolSmallCoffee = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[2]";        // NodeID of the Switch to produce a small Coffee
-const NodeID_boolMediumCoffee = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[3]";       // NodeID of the Switch to produce a medium Coffee    
-const NodeID_boolLargeCoffee = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[4]";        // NodeID of the Switch to produce a large Coffee
-const NodeID_boolCappuccino = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[1]";         // NodeID of the Switch to produce a Cappuccino
-const NodeID_boolCoffeeStrength = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[11]";         // NodeID of the Switch to cycle through the Coffee Strength
-const NodeID_intPackMLStatus = "ns=4;s=|var|CODESYS Control Win V3.Application.Glob_Var.CM_PackML_Status";              // NodeID of the global Codesys Variable "CM_PackML_Status"
-const NodeID_stringPackMLStatus = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus";    // NodeID of the PackML Status Variable as a String within FB_CoffeeMachineOperation
+const CodesysEndpoint = "opc.tcp://192.168.0.102:4840";// ToDo: delete home version "opc.tcp://JakobsDesktop:4840";
+const NodeID_intCoffeeStrength = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.iButtonStatus[11]"; // NodeID of the variable for the current CoffeeStrength. Ranges from 0 ("Sehr Mild") to 4 ("Sehr Kräftig")
+const NodeID_boolSmallCoffee = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[2]";        // NodeID of the Switch to produce a small Coffee
+const NodeID_boolMediumCoffee = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[3]";       // NodeID of the Switch to produce a medium Coffee    
+const NodeID_boolLargeCoffee = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[4]";        // NodeID of the Switch to produce a large Coffee
+const NodeID_boolCappuccino = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[1]";         // NodeID of the Switch to produce a Cappuccino
+const NodeID_boolCoffeeStrength = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[11]";         // NodeID of the Switch to cycle through the Coffee Strength
+const NodeID_intPackMLStatus = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Glob_Var.CM_PackML_Status";              // NodeID of the global Codesys Variable "CM_PackML_Status"
+const NodeID_stringPackMLStatus = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.sPackMLStatus";    // NodeID of the PackML Status Variable as a String within FB_CoffeeMachineOperation
 // About PackML Status:
 /* PackML Status is a custom Enum Data Type created within the Codesys Program. The Enum type is called "PackML_Status".
 Sadly OPC UA does not provide this custom Datatype, so it should be handled as an int in this program. */
@@ -125,7 +125,7 @@ async function ClientConnection () {
 
             // install monitored items
             var monitoredItem_intPackMLStatus = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
-                nodeId: NodeID_intPackMLStatus,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus"),
+                nodeId: NodeID_intPackMLStatus,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.sPackMLStatus"),
                 attributeId: opcua.AttributeIds.Value
             },
                 {
@@ -136,7 +136,7 @@ async function ClientConnection () {
                 },
 			);
 			var monitoredItem_stringPackMLStatus = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
-                nodeId: NodeID_stringPackMLStatus,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus"),
+                nodeId: NodeID_stringPackMLStatus,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.sPackMLStatus"),
                 attributeId: opcua.AttributeIds.Value
             },
                 {
@@ -158,7 +158,7 @@ async function ClientConnection () {
                 },
             );
             var monitoredItem_CoffeeStrength = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
-                nodeId: NodeID_intCoffeeStrength,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus"),
+                nodeId: NodeID_intCoffeeStrength,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.sPackMLStatus"),
                 attributeId: opcua.AttributeIds.Value
             },
                 {
