@@ -78,7 +78,7 @@ namespace AIS_Demonstrator
             valueCleanlinessLevel = 0;
         }
 
-        public async void CreateCertificate(AssetManager assets) //ToDo: this method causes a System.NullReferenceException when called in MainActivity.cs . Fix plz!
+        public async void CreateCertificate(AssetManager assets)
         {
             ApplicationInstance application = new ApplicationInstance
             {
@@ -145,6 +145,7 @@ namespace AIS_Demonstrator
                     case "Android":
                         sessionName = "AIS Demonstrator Android Applikation";
                         break;
+                        // other cases are irrelevant for the Industrie 4.0 Demonstrator as of now
                     case "UWP":
                         sessionName = "OPC UA Xamarin Client UWP";
                         break;
