@@ -28,7 +28,7 @@ var server = new opcua.OPCUAServer({
 	buildInfo : {
         productName: "CoffeeOrder_Service",
         buildNumber: "1.0",
-        buildDate: new Date(2018,6,19)
+        buildDate: new Date(2018,4,24)
     }
 });
 
@@ -38,7 +38,7 @@ var server = new opcua.OPCUAServer({
 var client = new opcua.OPCUAClient();	// instantiate a new OPC UA Client
 var client_session;	// 
 // var client_subscription;	// the client subscription is used to get updates about variable changes from the CODESYS server
-const CodesysEndpoint = "opc.tcp://JakobsDesktop:4840";// ToDo: delete home version "opc.tcp://JakobsDesktop:4840";
+const CodesysEndpoint = "opc.tcp://JakobsDesktop:4840"; // "opc.tcp://JAKOBSDESKTOP:34197/CoffeeOrder";
 const NodeID_intCoffeeStrength = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.iButtonStatus[11]"; // NodeID of the variable for the current CoffeeStrength. Ranges from 0 ("Sehr Mild") to 4 ("Sehr Kräftig")
 const NodeID_boolSmallCoffee = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[2]";        // NodeID of the Switch to produce a small Coffee
 const NodeID_boolMediumCoffee = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[3]";       // NodeID of the Switch to produce a medium Coffee    
@@ -125,7 +125,7 @@ async function ClientConnection () {
 
             // install monitored items
             var monitoredItem_intPackMLStatus = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
-                nodeId: NodeID_intPackMLStatus,
+                nodeId: NodeID_intPackMLStatus,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus"),
                 attributeId: opcua.AttributeIds.Value
             },
                 {
@@ -136,7 +136,7 @@ async function ClientConnection () {
                 },
 			);
 			var monitoredItem_stringPackMLStatus = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
-                nodeId: NodeID_stringPackMLStatus,
+                nodeId: NodeID_stringPackMLStatus,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus"),
                 attributeId: opcua.AttributeIds.Value
             },
                 {
@@ -375,7 +375,6 @@ async function post_initialize() {
 			dataType: opcua.DataType.UInt16,	// ToDo: Vielleicht eignet sich ein anderer Datentyp besser, noch mal evaluieren sobald ich die Daten im Frontend verwende.
 			description: "Die Variable für den Kaffeestand in der Kaffeemaschine. Gibt an, wie voll der Kaffeebohnen- oder -pulverbehälter prozentual ist. Der Wert sollte also zwischen 0 (leer) und 100 (voll) liegen.",
 			browseName: "CoffeeLevel",
-			displayName: "CoffeeLevel Variable",
 			currentRead: 0,
 			currentWrite: 1,
 			nodeId: "ns=1;s=CoffeeLevel",	// The NodeID of the CoffeeLevel Object: NamespaceIndex = 1, IdentifierType = string, Identifier = CoffeeLevel
@@ -396,7 +395,6 @@ async function post_initialize() {
 			dataType: opcua.DataType.UInt16,	// ToDo: Vielleicht eignet sich ein anderer Datentyp besser, noch mal evaluieren sobald ich die Daten im Frontend verwende.
 			description: "Die Variable für den Wasserstand in der Kaffeemaschine. Gibt an, wie voll der Wasserbehälter prozentual ist. Der Wert sollte also zwischen 0 (leer) und 100 (voll) liegen.",
 			browseName: "WaterLevel",
-			displayName: "WaterLevel Variable",
 			nodeId: "ns=1;s=WaterLevel",
 			value: {	// implements get and set functions for the value
                 get: function () {
@@ -415,7 +413,6 @@ async function post_initialize() {
 			dataType: opcua.DataType.UInt16,	// ToDo: Vielleicht eignet sich ein anderer Datentyp besser, noch mal evaluieren sobald ich die Daten im Frontend verwende.
 			description: "Die Variable für die Sauberkeit der Kaffeemaschine. Gibt einen ungefähren Richtwert an, wie Sauber die Maschine ist. Der Wert sollte zwischen 100 (frisch gereinigt) und 0 (Reinigung steht an) liegen.",
 			browseName: "Cleanliness",
-			displayName: "Cleanliness Variable",
 			nodeId: "ns=1;s=Cleanliness",
 			value: {	// implements get and set functions for the value
                 get: function () {
@@ -441,7 +438,6 @@ async function post_initialize() {
 		CoffeeQuantity = addressSpace.addVariable({
 			componentOf: CoffeeOrderObject,
 			browseName: "CoffeeQuantity",
-			displayName: "CoffeeQuantity Variable",
 			nodeId: "ns=1;s=CoffeeQuantityVariable",
 			dataType: opcua.DataType.UInt16,
 			description: "Die Variable für die Kaffeemenge, in ml.",
@@ -460,7 +456,6 @@ async function post_initialize() {
 		CoffeeQuantity = addressSpace.addVariable({
 			componentOf: CoffeeOrderObject,
 			browseName: "MilkQuantity",
-			displayName: "MilkQuantity Variable",
 			nodeId: "ns=1;s=MilkQuantityVariable",
 			dataType: opcua.DataType.UInt16,
 			description: "Die Variable für die Milchmenge, in ml.",
@@ -479,7 +474,6 @@ async function post_initialize() {
 		CoffeeQuantity = addressSpace.addVariable({
 			componentOf: CoffeeOrderObject,
 			browseName: "CoffeeStrength",
-			displayName: "CoffeeStrength Variable",
 			nodeId: "ns=1;s=CoffeeStrengthVariable",
 			dataType: opcua.DataType.UInt16,
 			description: "Die Variable für die Kaffeestärke. Möglich sind die Werte {1, 2, 3, 4, 5}.",
@@ -498,7 +492,6 @@ async function post_initialize() {
 		var toButtonMethod = addressSpace.addMethod(CoffeeOrderObject, {		// ToDo: Here we add the method shell (without the actual functional logic) to the OPC UA Server Address Space
 			
 			browseName: "toButton",
-			displayName: "toButton Method",
 			nodeId: "ns=1;s=toButtonMethod",
 			description: "Diese Methode löst die Kaffeebestellung an der Kaffeemaschine (über die CODESYS Steuerung) aus. Zuerst wird die Kaffeestärke auf der Kaffeemaschine korrekt eingestellt. Danach entscheidet die Methode anhand der internen Variablen des CoffeeOrder Node, ob ein kleiner/mittlerer/großer Kaffee oder ein Cappuccino am ehesten zu den Werten passt und löst schließlich die passende Produktion aus.",
 			
