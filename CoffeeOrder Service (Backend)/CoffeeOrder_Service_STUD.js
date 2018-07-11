@@ -18,19 +18,24 @@ var async = require("async");
 // var mysql = require("mysql");
 
 // Server Instantiation
-var server = new opcua.OPCUAServer({
-    port: 34197, // the port of the listening socket of the server
-    resourcePath: "CoffeeOrder", // this path will be added to the endpoint resource name
-	// defaultSecureTokenLifetime: 60000, // the default secure token life time in ms. /* Breaks the server for some reason. Error "Could not connect to server: BadInvalidArgument" */
-	// securityPolicies= [SecurityPolicy.None, SecurityPolicy.Basic128Rsa15, SecurityPolicy.Basic256] // ToDo: Security Implementierung
+const options = {
+	// Security Options
+	// defaultSecureTokenLifetime: 60000,	// defaultSecureTokenLifetime: 60000, // the default secure token life time in ms. /* Breaks the server for some reason. Error "Could not connect to server: BadInvalidArgument" */
+	// securityPolicies: SecurityPolicy.Basic128Rsa15,	// securityPolicies= [SecurityPolicy.None, SecurityPolicy.Basic128Rsa15, SecurityPolicy.Basic256] // ToDo: Security Implementierung
 	// securityModes= [MessageSecurityMode.NONE, MessageSecurityMode.SIGN, MessageSecurityMode.SIGNANDENCRYPT] // ToDo: Security Implementierung
 	// allowAnonymous= true,	// Tells if the server default endpoints should allow anonymous connection. Default: true
+	
+	// Network Options
+    port: 34197, // the port of the listening socket of the server
+	resourcePath: "CoffeeOrder", // this path will be added to the endpoint resource name
+	
 	buildInfo : {
         productName: "CoffeeOrder_Service",
         buildNumber: "1.0",
         buildDate: new Date(2018,4,24)
     }
-});
+};
+var server = new opcua.OPCUAServer(options);
 
 // Client Instantiation
 // used for the OPC UA Client part of the CoffeeOrder_Service.
@@ -125,7 +130,7 @@ async function ClientConnection () {
 
             // install monitored items
             var monitoredItem_intPackMLStatus = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
-                nodeId: NodeID_intPackMLStatus,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus"),
+                nodeId: NodeID_intPackMLStatus,
                 attributeId: opcua.AttributeIds.Value
             },
                 {
@@ -136,7 +141,7 @@ async function ClientConnection () {
                 },
 			);
 			var monitoredItem_stringPackMLStatus = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
-                nodeId: NodeID_stringPackMLStatus,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus"),
+                nodeId: NodeID_stringPackMLStatus,
                 attributeId: opcua.AttributeIds.Value
             },
                 {
@@ -158,7 +163,7 @@ async function ClientConnection () {
                 },
             );
             var monitoredItem_CoffeeStrength = subscription_Codesys.monitor({ // monitoring mode is automatically set to "reporting"
-                nodeId: NodeID_intCoffeeStrength,   // opcua.resolveNodeId("ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.sPackMLStatus"),
+                nodeId: NodeID_intCoffeeStrength,
                 attributeId: opcua.AttributeIds.Value
             },
                 {
