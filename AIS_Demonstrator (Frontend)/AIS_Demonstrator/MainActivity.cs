@@ -29,6 +29,7 @@ namespace AIS_Demonstrator
     public class MainActivity : AppCompatActivity, ViewPager.IOnPageChangeListener
     {
         public static string UserName { get; set; }
+        public static string UserPassword { get; set; }
         public static int UserId { get; private set; }
         public static string responseCQ = "No Coffee Ordered";
         public static string responseMQ = "No Coffee Ordered";
@@ -62,7 +63,9 @@ namespace AIS_Demonstrator
             if (connectToServer == true)
             {
                 var connectionStatus = await Task.Run(() => OpcClient.OpcClient(endpointUrl));
-                
+                Toast.MakeText(this, OpcClient.haveAppCertificate.ToString(), ToastLength.Short).Show(); // ToDo Delete (Debug)
+                Toast.MakeText(this, OpcClient.ServerCertPath.ToString(), ToastLength.Short).Show(); // ToDo Delete (Debug)
+                Toast.MakeText(this, OpcClient.ClientCertPath.ToString(), ToastLength.Short).Show(); // ToDo Delete (Debug)
                 if (connectionStatus == SampleClient.ConnectionStatus.Connected)
                 {
                     Toast.MakeText(this, GetString(Resource.String.ConnectionSuccess)+ " Endpoint: " + endpointUrl, ToastLength.Short).Show();   // display a success message if the connection could be established
@@ -84,6 +87,7 @@ namespace AIS_Demonstrator
             Forms.Init(this, bundle);
 
             UserName = Intent.GetStringExtra("USERNAME");
+            UserPassword = Intent.GetStringExtra("PASSWORD");
             UserId = Intent.GetIntExtra("USERID", -1);
 
             #region Connect to OPC UA Server

@@ -109,6 +109,7 @@ namespace AIS_Demonstrator
                 intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
                 //intent.AddFlags(ActivityFlags.NoHistory);
                 intent.PutExtra("USERNAME", _editUserName.Text);
+                intent.PutExtra("PASSWORD", _editUserPassword.Text);
                 intent.PutExtra("USERID", _userDataBase.GetUserId(_editUserName.Text));
                 //pass server Endpoint to MainActivity
                 intent.PutExtra("ENDPOINT", _editServerEndpoint.Text);

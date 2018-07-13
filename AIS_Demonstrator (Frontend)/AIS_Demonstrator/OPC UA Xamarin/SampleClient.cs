@@ -51,7 +51,7 @@ namespace AIS_Demonstrator
             Connected,
             Error
         }
-        
+
         public ConnectionStatus connectionStatus;
         public bool haveAppCertificate;
         public Session session;
@@ -61,11 +61,14 @@ namespace AIS_Demonstrator
         public int valueCoffeeLevel;
         public int valueWaterLevel;
         public int valueCleanlinessLevel;
+        public string ServerCertPath;   // Path to the file of the server certification in the device's storage
+        public string ClientCertPath;   // Path to the file of the client certification in the device's storage
+        public string configPath;       // Path to the file of the client configuration in the device's storage
 
         private LabelViewModel info;
         private ApplicationConfiguration config;
 
-        public SampleClient (LabelViewModel text)
+        public SampleClient(LabelViewModel text)
         {
             connectionStatus = ConnectionStatus.None;
             session = null;
@@ -97,39 +100,161 @@ namespace AIS_Demonstrator
 
             // new code to find location of config.xml file + load its content into "context" variable
             // the CreateCertificate Variable is now called with the content string as a parameter since the AssetManager needs to be instantiated in an Activity
-            string filename = application.ConfigSectionName + ".Config.xml";
+            string configFilename = application.ConfigSectionName + ".Config.xml";
+            string serverCertFilename = "server_selfsigned_cert_2048.pem";
+            string clientCertFilename = "client_selfsigned_cert_2048.pem";
             string currentFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal); // gets the path of the Internal Storage as a string
+            ServerCertPath = currentFolder + serverCertFilename;
+            ClientCertPath = currentFolder + clientCertFilename;
+            configPath = currentFolder + configFilename;
 
             // in case the config file doesn't exist: create new config file in internal storage as a copy of the Asset config
-            if (!File.Exists(currentFolder + filename))
+            if (!File.Exists(currentFolder + configFilename))
             {
                 string content;
-                using (StreamReader sr = new StreamReader(assets.Open(filename)))
+                using (StreamReader sr = new StreamReader(assets.Open(configFilename)))
+                {
+                    content = sr.ReadToEnd();
+                } 
+                File.WriteAllText(currentFolder + configFilename, content); 
+
+                #region CustomConfigGeneration
+                /*
+                // Inspired by https://github.com/OPCFoundation/UA-.NETStandard/issues/243
+                // create a new configuration and save it to a file
+
+                // Step 1: create a new configuration
+                config = new ApplicationConfiguration()
+                {
+                    ApplicationName = "AIS Demonstrator OPC UA HMI-Applikation",
+                    ApplicationType = ApplicationType.Client,
+                    ApplicationUri = "urn:" + Utils.GetHostName() + ":AIS_I4.0_Demonstrator:HMI_Applikation",
+                    SecurityConfiguration = new SecurityConfiguration
+                    {
+                        ApplicationCertificate = new CertificateIdentifier
+                        {
+                            StoreType = "Directory",    // "Directory" ?
+                            StorePath = "/data/user/0/AIS_Demonstrator.AIS_Demonstrator/",
+                            SubjectName = "AIS_Demonstrator_HMI_Applikation"    // "CN=AIS_Demonstrator_HMI_Applikation, C=DE, S=Bayern, O=AIS, DC=localhost"
+                        },
+                        TrustedPeerCertificates = new CertificateTrustList
+                        {
+                            StoreType = "Directory",
+                            StorePath = "/data/user/0/AIS_Demonstrator.AIS_Demonstrator/",
+                        },
+                        TrustedIssuerCertificates = new CertificateTrustList
+                        {
+                            StoreType = "Directory",
+                            StorePath = "/storage/emulated/0/OPC Foundation/PKI/issuer",
+                        },
+                        RejectedCertificateStore = new CertificateTrustList
+                        {
+                            StoreType = "Directory",
+                            StorePath = "/storage/emulated/0/OPC Foundation/PKI/rejected",
+                        },
+                        NonceLength = 32,
+                        AutoAcceptUntrustedCertificates = true  // ToDo: Only for debug, set to "false" for release
+                    },
+                    TransportConfigurations = new TransportConfigurationCollection(),
+                    TransportQuotas = new TransportQuotas
+                    {
+                        OperationTimeout = 15000,
+                        MaxStringLength = 1048576,
+                        MaxByteStringLength = 4194304,
+                        MaxArrayLength = 65535,
+                        MaxMessageSize = 4194304,
+                        MaxBufferSize = 65535,
+                        ChannelLifetime = 300000,
+                        SecurityTokenLifetime = 3600000
+                    },
+                    ClientConfiguration = new ClientConfiguration
+                    {
+                        DefaultSessionTimeout = 60000,
+                        WellKnownDiscoveryUrls = new StringCollection(), // "opc.tcp://{0}:4840/UADiscovery",
+                        MinSubscriptionLifetime = 10000
+                    },
+                    TraceConfiguration = new TraceConfiguration
+                    {
+                        OutputFilePath = "%LocalApplicationData%/Logs/AIS_Demonstrator_OPCUA_HMI_Applikation.log.txt",
+                        DeleteOnLoad = true,
+                        TraceMasks = 519
+                    },
+                    DisableHiResClock = true
+                };
+
+                // Step 2: save the new configuration to a file
+                config.SaveToFile(currentFolder + configFilename);
+                */
+                #endregion
+            }
+            else
+            {   // The config file already exists
+                // Load configuration from file
+                config = await application.LoadApplicationConfiguration(currentFolder + configFilename, false);
+            }
+            // in case the client certificate file doesn't exist: create new certificate file in internal storage as a copy of the Asset client certificate
+            /* if (!File.Exists(currentFolder + clientCertFilename))
+            {
+                string content;
+                using (StreamReader sr = new StreamReader(assets.Open(clientCertFilename)))
                 {
                     content = sr.ReadToEnd();
                 }
-                File.WriteAllText(currentFolder + filename, content);
+                File.WriteAllText(currentFolder + clientCertFilename, content);
+            } */
+            // in case the server certificate file doesn't exist: create new certificate file in internal storage as a copy of the Asset server certificate
+            if (!File.Exists(ServerCertPath))
+            {
+                string content;
+                using (StreamReader sr = new StreamReader(assets.Open(serverCertFilename)))
+                {
+                    content = sr.ReadToEnd();
+                }
+                File.WriteAllText(ServerCertPath, content);
             }
-            // load the application configuration.
-            config = await application.LoadApplicationConfiguration(currentFolder + filename, false);
 
             // check the application certificate.
             haveAppCertificate = await application.CheckApplicationInstanceCertificate(false, 0);
+            // haveAppCertificate = config.SecurityConfiguration.ApplicationCertificate.Certificate != null;   // ToDo Delete this line or the one above
+
+            // Create a new app certificate if no certificate is present
+            if (!haveAppCertificate)
+            {
+                X509Certificate2 appCertificate = CertificateFactory.CreateCertificate(
+                       config.SecurityConfiguration.ApplicationCertificate.StoreType,       // string storeType
+                       config.SecurityConfiguration.ApplicationCertificate.StorePath,       // string storePath
+                       null,                                                                // string password
+                       config.ApplicationUri,                                               // string applicationUri
+                       config.ApplicationName,                                              // string applicationName
+                       config.SecurityConfiguration.ApplicationCertificate.SubjectName,     // string subjectName
+                       null,                                                                // IList<string> domainNames
+                       2048,                                                                // ushort KeySize
+                       DateTime.UtcNow - TimeSpan.FromDays(1),                              // DateTime startDate
+                       24,                                                                  // ushort lifetimeInMonths
+                       256,                                                                 // ushort hashSizeInBits
+                       false,                                                               // bool isCA; default = false
+                       null,                                                                // X509certificate2 issuerCACertKey
+                       null                                                                 // byte[] publicKey; default = null
+                       );
+
+                config.SecurityConfiguration.ApplicationCertificate.Certificate = appCertificate;
+
+            }
 
             if (haveAppCertificate)
             {
                 config.ApplicationUri = Utils.GetApplicationUriFromCertificate(config.SecurityConfiguration.ApplicationCertificate.Certificate);
-         
+
                 config.CertificateValidator.CertificateValidation += new CertificateValidationEventHandler(CertificateValidator_CertificateValidation);
             }
         }
 
-        public async Task<ConnectionStatus>OpcClient(string endpointURL)
+        public async Task<ConnectionStatus> OpcClient(string endpointURL)
         {
             try
             {
                 Uri endpointURI = new Uri(endpointURL);
-                var selectedEndpoint = CoreClientUtils.SelectEndpoint(endpointURL, haveAppCertificate, 15000);
+                var selectedEndpoint = CoreClientUtils.SelectEndpoint(endpointURL, false, 15000);
 
                 info.LabelText = "Selected endpoint uses: " + selectedEndpoint.SecurityPolicyUri.Substring(selectedEndpoint.SecurityPolicyUri.LastIndexOf('#') + 1);
 
@@ -139,13 +264,13 @@ namespace AIS_Demonstrator
 
                 var platform = Device.RuntimePlatform;
                 var sessionName = "";
-                
+
                 switch (Device.RuntimePlatform)
                 {
                     case "Android":
                         sessionName = "AIS Demonstrator Android Applikation";
                         break;
-                        // other cases are irrelevant for the Industrie 4.0 Demonstrator as of now
+                    // other cases are irrelevant for the Industrie 4.0 Demonstrator as of now
                     case "UWP":
                         sessionName = "OPC UA Xamarin Client UWP";
                         break;
@@ -153,7 +278,21 @@ namespace AIS_Demonstrator
                         sessionName = "OPC UA Xamarin Client IOS";
                         break;
                 }
-                session = await Session.Create(config, endpoint, false, sessionName, 60000, new UserIdentity(new AnonymousIdentityToken()), null);
+                #region Copied from github Issues 446
+                /*
+                 * Copied from https://github.com/OPCFoundation/UA-.NETStandard/issues/446
+                 */
+                UserTokenPolicy utp = new UserTokenPolicy();
+                utp.TokenType = UserTokenType.UserName;
+
+                UserTokenPolicyCollection utpCollection = new UserTokenPolicyCollection();
+                utpCollection.Add(utp);
+                selectedEndpoint.UserIdentityTokens = utpCollection;
+                selectedEndpoint.SecurityMode = MessageSecurityMode.SignAndEncrypt;
+                UserIdentity SessionUserIdentity = new UserIdentity(MainActivity.UserName, MainActivity.UserPassword);
+
+                #endregion
+                session = await Session.Create(config, endpoint, false, sessionName, 30000, SessionUserIdentity, null);
 
 
                 if (session != null)
@@ -212,7 +351,7 @@ namespace AIS_Demonstrator
                     subscription.AddItem(CoffeeLevel);
                     subscription.AddItem(WaterLevel);
                     subscription.AddItem(CleanlinessLevel);
-                    
+
                     // add Subscription to Session
                     session.AddSubscription(subscription);
                     subscription.Create();
@@ -226,7 +365,7 @@ namespace AIS_Demonstrator
                 // register keep alive handler
                 session.KeepAlive += Client_KeepAlive;
             }
-            catch 
+            catch
             {
                 connectionStatus = ConnectionStatus.Error;
             }
@@ -241,7 +380,7 @@ namespace AIS_Demonstrator
                 {
                     info.LabelText = "";
                 }
-                
+
                 session.Close();
             }
         }
@@ -540,8 +679,8 @@ namespace AIS_Demonstrator
                 string value = "";
                 if (values[0].Value != null)
                 {
-                    var rawValue  = values[0].WrappedValue.ToString();
-                    value = rawValue.Replace("|","\r\n").Replace("{","").Replace("}","");
+                    var rawValue = values[0].WrappedValue.ToString();
+                    value = rawValue.Replace("|", "\r\n").Replace("{", "").Replace("}", "");
                 }
                 return value;
             }

@@ -4,18 +4,27 @@
     <ManifestDocument>obj\Release\lp\53\jl\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\54\jl\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\56\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\56\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\57\jl\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\58\jl\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\59\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\59\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\60\jl\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\61\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\61\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\62\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\62\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\63\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\63\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\64\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\64\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\65\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\65\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\66\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\66\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\67\jl\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\68\jl\AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj\Release\lp\68\jl\manifest\AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj\Release\lp\69\jl\AndroidManifest.xml</ManifestDocument>
   </ManifestDocuments>
   <NativeLibraries />

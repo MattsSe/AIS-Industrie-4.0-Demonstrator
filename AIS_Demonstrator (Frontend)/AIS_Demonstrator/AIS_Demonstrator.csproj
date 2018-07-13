@@ -319,6 +319,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <AndroidAsset Include="Assets\server_selfsigned_cert_2048.pem" />
+    <AndroidAsset Include="Assets\client_selfsigned_cert_2048.pem" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -432,7 +434,9 @@
     <AndroidResource Include="Resources\drawable\ProfileBorder.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Opc.Ua.AIS_Demonstrator.Config.xml" />
+    <AndroidAsset Include="Assets\Opc.Ua.AIS_Demonstrator.Config.xml">
+      <SubType>Designer</SubType>
+    </AndroidAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

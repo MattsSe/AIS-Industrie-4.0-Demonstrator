@@ -4,5 +4,6 @@
     <SelectedDevice>oreo_device</SelectedDevice>
     <DefaultDevice>oreo_device</DefaultDevice>
     <AndroidDesignerPreferredDevice>Nexus 4</AndroidDesignerPreferredDevice>
+    <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
 </Project>

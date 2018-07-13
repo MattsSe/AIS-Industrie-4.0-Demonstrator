@@ -1,5 +1,9 @@
+#!/usr/bin/env node		// should make this directly executable on RPi without needing to type "node" before the filename
+
 // CoffeeOrder Service by Jakob Lammel
 // Based on https://github.com/node-opcua/node-opcua/blob/master/documentation/server_with_method.js
+// Security Features based on https://github.com/node-opcua/node-opcua/blob/master/packages/node-opcua-samples/bin/simple_secure_server.js
+// See more examples for how to implement node-opcua applications in the npm package 'node-opcua-samples' ($ npm install node-opcua-samples)
 // Node-opcua API documentation can be found here: http://node-opcua.github.io/api_doc/0.2.0/
 
 /*CoffeeOrder Service is supposed to be an OPC UA Server that serves as a backend for the AIS Industrie 4.0 Demostrator.
@@ -13,24 +17,101 @@ The CoffeeOrder Service offers the following Services:
 /* Required packages */
 var opcua = require("node-opcua");
 var async = require("async");
+var path = require("path");
+var _ = require("underscore");
 
 // ToDo: implement MySQL database
 // var mysql = require("mysql");
 
+const SecurityPolicy = opcua.SecurityPolicy;
+const MessageSecurityMode = opcua.MessageSecurityMode;
+var get_fully_qualified_domain_name = opcua.get_fully_qualified_domain_name;
+var makeApplicationUrn = opcua.makeApplicationUrn;
+
+// used to create path of server certificate and server private key files
+function constructFilename(filename) {
+    return path.join(__dirname, filename);
+}
+
+// a simple user manager
+// ToDo: implement user generation
+var users = [
+	{
+		Name: "Anna",
+		Password: "123456"
+	},
+	{
+		Name: "Test",
+		Password: "Test1234!"
+	}
+];
+var userManager = {
+	isValidUser: function (userName, pw) {
+		console.log("--- DEBUG ---".cyan);
+		console.log("--- Sent Username :".cyan + userName);
+		console.log("--- Sent Password :".cyan + pw);
+		for (i = 0; i < users.length; i++) {
+			if (users[i].Name == userName && users[i].Password == pw) {
+				console.log("   --- User erfolgreich Authentifiziert ---".yellow);
+				console.log("   Username: " + userName);
+				return true;
+			}
+		}
+		console.log("--- Authentifizierung fehlgeschlagen! ---".yellow);
+		console.log("   Username: " + userName);
+		return false;
+		/* if (userName === "Anna" && password === "123456") {
+            return true;
+        }
+        if (userName === "Test" && password === "Test1234!") {
+            return true;
+        }
+        return false;	*/
+    }
+};
+
+// Certificate files used for server security
+var server_certificate_file = constructFilename("certificates/server_selfsigned_cert_2048.pem");
+var server_certificate_privatekey_file = constructFilename("certificates/server_key_2048.pem");
+
 // Server Instantiation
 const options = {
 	// Security Options
-	// defaultSecureTokenLifetime: 60000,	// defaultSecureTokenLifetime: 60000, // the default secure token life time in ms. /* Breaks the server for some reason. Error "Could not connect to server: BadInvalidArgument" */
+	securityPolicies: [
+		SecurityPolicy.None,		// ToDo: debug only! comment out for release!
+        SecurityPolicy.Basic256Sha256
+    ],
+    securityModes: [
+		MessageSecurityMode.NONE,	// ToDo: debug only! comment out for release!
+        MessageSecurityMode.SIGN,
+        MessageSecurityMode.SIGNANDENCRYPT
+    ],
+
+	certificateFile: server_certificate_file,
+	privateKeyFile: server_certificate_privatekey_file,
+	// defaultSecureTokenLifetime: 6000,	// the default secure token life time in ms. default value is 60000 /* Breaks the server for some reason. Error "Could not connect to server: BadInvalidArgument" */
+	userManager: userManager,				// use the userManager variable (with attached function to determine valid users) as the server user manager
+	allowAnonymous: false,					// don't allow anonymous users (you can only create a session with a valid username + password combination. Every conbination listed in the users variable is considered valid)
+	
 	// securityPolicies: SecurityPolicy.Basic128Rsa15,	// securityPolicies= [SecurityPolicy.None, SecurityPolicy.Basic128Rsa15, SecurityPolicy.Basic256] // ToDo: Security Implementierung
 	// securityModes= [MessageSecurityMode.NONE, MessageSecurityMode.SIGN, MessageSecurityMode.SIGNANDENCRYPT] // ToDo: Security Implementierung
 	// allowAnonymous= true,	// Tells if the server default endpoints should allow anonymous connection. Default: true
 	
+	// Server Information
+	serverInfo: {
+        applicationUri: "CoffeeOrder_Service",
+        productUri: "CoffeeOrder_Service",
+        applicationName: {text: "CoffeeOrder_Service_STUD", locale: "de"},
+        gatewayServerUri: null,
+        discoveryProfileUri: null,
+        discoveryUrls: []
+    },
 	// Network Options
     port: 34197, // the port of the listening socket of the server
-	resourcePath: "CoffeeOrder", // this path will be added to the endpoint resource name
+	resourcePath: "CoffeeOrder_STUD", // this path will be added to the endpoint resource name
 	
 	buildInfo : {
-        productName: "CoffeeOrder_Service",
+        productName: "CoffeeOrder_Service_STUD",
         buildNumber: "1.0",
         buildDate: new Date(2018,4,24)
     }
@@ -572,9 +653,27 @@ async function post_initialize() {
 		});
 
 	}
-    console.log(new Date().toLocaleString('de-DE') + " Server: initialized");
+    console.log(new Date().toLocaleString('de-DE') + " Server: initialized".yellow);
 	construct_address_space(server);	// Call function to construct the server address space.
 }
+
+// Display information about newly created or closed sessions
+server.on("create_session", function (session) {
+    console.log(new Date().toLocaleString('de-DE') + " Server: Session created :".yellow);
+	console.log("   client application name: ", session.clientDescription.applicationName.toString());
+    console.log("   client application type: ", session.clientDescription.applicationType.toString());
+    console.log("   session name: ", session.sessionName ? session.sessionName.toString() : "<null>");
+    console.log("   session timeout: ", session.sessionTimeout);
+	console.log("   session id: ", session.sessionId);
+	session.clientDescription.sec
+});
+
+server.on("session_closed", function (session, reason) {
+    console.log(new Date().toLocaleString('de-DE') + " Server: Session Closed :".yellow, reason);
+    console.log("   client application name: ", session.clientDescription.applicationName.toString());
+    console.log("   session name: ", session.sessionName ? session.sessionName.toString() : "<null>");
+});
+
 //		*********************************
 //		*								*
 //		*	ACTUAL PROGRAM STARTS HERE	*
@@ -585,11 +684,8 @@ async function post_initialize() {
 server.initialize(post_initialize);		// initialize the server and construct the address space
 ClientConnection();						// connect to Codesys
 server.start(function () {
-	console.log(new Date().toLocaleString('de-DE') + " Server is now listening ... ( press CTRL+C to stop)");
-	console.log(new Date().toLocaleString('de-DE') + " Server port: ", server.endpoints[0].port);
+	console.log(new Date().toLocaleString('de-DE') + " Server is now listening ... ( press CTRL+C to stop)".yellow);
+	console.log(new Date().toLocaleString('de-DE') + " Server port: ".yellow, server.endpoints[0].port);
 	var endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
-	console.log(new Date().toLocaleString('de-DE') + " Server: the primary server endpoint url is ", endpointUrl);
-	setInterval(function () {	// This function displays the current number of Subscriptions handled by the server every 15 seconds
-		console.log(new Date().toLocaleString('de-DE') + " Server: current number of active subscriptions: ", server.currentSubscriptionCount);
-	}, 15000)
+	console.log(new Date().toLocaleString('de-DE') + " Server: the primary server endpoint url is ".yellow, endpointUrl.cyan);
 });
