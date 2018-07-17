@@ -9,6 +9,7 @@
   "author": "JakLa",
   "license": "ISC",
   "dependencies": {
+    "inquirer": "^6.0.0",
     "node-opcua": "^0.3.0"
   }
 }

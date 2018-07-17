@@ -14,7 +14,7 @@
     <!-- Where the application instance certificate is stored (MachineDefault) -->
     <ApplicationCertificate>
       <StoreType>Directory</StoreType>
-      <StorePath>/data/user/0/AIS_Demonstrator.AIS_Demonstrator</StorePath>
+      <StorePath>/storage/emulated/0/OPC Foundation/PKI/own</StorePath>
       <SubjectName>CN=AIS_Demonstrator_HMI_Applikation, C=DE, S=Bayern, O=AIS, DC=localhost</SubjectName>
     </ApplicationCertificate>
 
@@ -27,7 +27,7 @@
     <!-- Where the trust list is stored (UA Applications) -->
     <TrustedPeerCertificates>
       <StoreType>Directory</StoreType>
-      <StorePath>/data/user/0/AIS_Demonstrator.AIS_Demonstrator</StorePath>
+      <StorePath>/storage/emulated/0/OPC Foundation/PKI/trusted</StorePath>
     </TrustedPeerCertificates>
 
     <!-- The directory used to store invalid certficates for later review by the administrator. -->

@@ -14,14 +14,17 @@ The CoffeeOrder Service offers the following Services:
 */
 
 
-/* Required packages */
-var opcua = require("node-opcua");
-var async = require("async");
-var path = require("path");
-var _ = require("underscore");
+// Required npm packages
+var opcua = require("node-opcua");		// required to provide OPC UA functionalities.
+var async = require("async");			// required for some async functionality. (Async functionalities should be part of Node.js as of Node 7.6 by default but oh well...)
+var path = require("path");				// required for certificate management & finding path to certificate files
+var _ = require("underscore");			// required for certificate management & finding path to certificate files
+var readline = require('readline');	// used to listen to user commands during execution (e.g. "add" and "users")
+var inquirer = require('inquirer');		// used by addUsers() to guide the amdin when adding new OPC UA Users
 
-// ToDo: implement MySQL database
-// var mysql = require("mysql");
+// flag used to determine whether or not adding new OPC UA Users during runtime is possible.
+// if set to "true", commands "add" and "users" are available during runtime
+const enableAddUser = true;
 
 const SecurityPolicy = opcua.SecurityPolicy;
 const MessageSecurityMode = opcua.MessageSecurityMode;
@@ -33,8 +36,15 @@ function constructFilename(filename) {
     return path.join(__dirname, filename);
 }
 
-// a simple user manager
-// ToDo: implement user generation
+// readline Interface, needed to parse user input and detect commands
+const rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout,
+	prompt: '>> '
+  });
+
+// array of (default) users which can be used in the Android HMI-Application to gain access to the server
+// can be extended dynamically using the "add" command if enableAddUsers = true; is set above
 var users = [
 	{
 		Name: "Anna",
@@ -45,6 +55,7 @@ var users = [
 		Password: "Test1234!"
 	}
 ];
+// a simple user manager used for authentication by the OPC UA Server
 var userManager = {
 	isValidUser: function (userName, pw) {
 		console.log("--- DEBUG ---".cyan);
@@ -154,6 +165,69 @@ var valueCoffeeStrength = 4;	//ToDo: initialize with 1, 4 is only for testing
 var valueMilkQuantity = 25;	//ToDo: initialize with 0, 25 is only for testing
 var cooldown = false;	// Helper varaible used to flag the toButton Method as "on cooldown", meant to be used with a timer which resets the flag after cooldownTime seconds
 var cooldowntime = 60;	// Default value for the cooldown in seconds
+
+// questions used by inquirer in addUsers() to add new OPC UA Users
+var questions = [
+	{
+	  type: 'input',
+	  name: 'username',
+	  message: "Please enter a Username for the new user: ",
+	  validate: function (value) {  // only accept non-existing and non-empty usernames
+		for (var i = 0; i < users.length; i++) {
+		  if (users[i].Name == value) {
+			return "Username already exists! Please enter another Username";
+		  }
+		}
+		if (value != "") {
+		  return true;
+		}
+		return "Username can't be empty!";
+	  }
+	},
+	{
+	  type: 'password',
+	  name: 'password',
+	  message: "Please enter the password for the new user: ",
+	  mask: '*',
+	  validate: function (value) {  // only accept non-empty passwords
+		if (value != "") {
+		  return true;
+		}
+		return "The Password can't be empty!";
+	  }
+	}
+  ];
+
+  // tied to command "add": function to add another OPC UA User which can be used in the Android HMI-Application
+function addUser() {
+	rl.pause();                 // pause readline stream (stop listening for "add" and "users" commands so they aren't triggered accidentally)
+	var newuser = null;
+	inquirer.prompt(questions)  // ask the user about username/password
+	  .then(answers => {        // save the answers as a new user
+		newuser = {
+		  Name: answers.username,
+		  Password: answers.password
+		}
+	  })
+	  .then(() => {             // add the new user to the array of existing users
+		users.push(newuser);    // this is the place where the new user could be saved to a database instead if this feature is added in the future
+	  })
+	  .then(function () {       // display success message
+		console.log("Added new user: ", users[users.length - 1].Name);
+		rl.resume();
+	  })
+	  .then(function () {       // re-activate the readline stream (resume listening for "add" and "users" commands)
+		rl.prompt();
+	  });
+  };
+  
+  // tied to command "users": function to print out all currently available users to the console
+  function logAvailableUsers() {
+	for (var i = 0; i < users.length; i++) {
+	  console.log("     User ", i + 1, "'s Username: ", users[i].Name);
+	}
+	rl.prompt();
+  };
 
 // Function that establishes a Client connection with the Codesys Server
 async function ClientConnection () {
@@ -683,9 +757,41 @@ server.on("session_closed", function (session, reason) {
 
 server.initialize(post_initialize);		// initialize the server and construct the address space
 ClientConnection();						// connect to Codesys
-server.start(function () {
+server.start(function () {				// start the OPC UA Server
 	console.log(new Date().toLocaleString('de-DE') + " Server is now listening ... ( press CTRL+C to stop)".yellow);
 	console.log(new Date().toLocaleString('de-DE') + " Server port: ".yellow, server.endpoints[0].port);
 	var endpointUrl = server.endpoints[0].endpointDescriptions()[0].endpointUrl;
-	console.log(new Date().toLocaleString('de-DE') + " Server: the primary server endpoint url is ".yellow, endpointUrl.cyan);
+	console.log(new Date().toLocaleString('de-DE') + " Server: the primary server endpoint url is \n".yellow, endpointUrl.cyan);
+
+	// after the OPC UA Server has been started:
+	// listen for commands typed by the user and call functions linked to commands
+	if (enableAddUser) {
+		console.log("Available commands:".green);
+		console.log("       \"add\":".yellow, " Add a new user that can be used to access the OPC UA Server.");
+		console.log("               Note that users are not saved after shutdown!");
+		console.log("     \"users\":".yellow, " Display all usernames that can currently be used.");
+		rl.prompt();
+		rl.on('line', (line) => {
+			switch (line.trim()) {
+				case 'add':
+					addUser();
+					break;
+				case 'users':
+					logAvailableUsers()
+					break;
+				default:
+					break;
+			}
+		});
+	}
+	else {
+		console.log("Adding users is disabled. Re-enable it by setting enableAddUser = true; in the code.").red;
+		rl.on('line', (line) => {
+			switch (line.trim()) {
+				default:
+					console.log("--- COMMANDS DISABLED - Re-enable by setting enableAddUser = true; ---");
+					break;
+			}
+		});
+	}
 });

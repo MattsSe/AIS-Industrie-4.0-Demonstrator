@@ -104,8 +104,11 @@ namespace AIS_Demonstrator
             string serverCertFilename = "server_selfsigned_cert_2048.pem";
             string clientCertFilename = "client_selfsigned_cert_2048.pem";
             string currentFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal); // gets the path of the Internal Storage as a string
-            ServerCertPath = currentFolder + serverCertFilename;
-            ClientCertPath = currentFolder + clientCertFilename;
+            string PKIPath = "/storage/emulated/0/OPC Foundation/PKI/";
+            Directory.CreateDirectory(PKIPath + "trusted/");
+            Directory.CreateDirectory(PKIPath + "own/");
+            ServerCertPath = PKIPath + "trusted/" + serverCertFilename;
+            ClientCertPath = PKIPath + "own/" + clientCertFilename;
             configPath = currentFolder + configFilename;
 
             // in case the config file doesn't exist: create new config file in internal storage as a copy of the Asset config
@@ -202,16 +205,20 @@ namespace AIS_Demonstrator
                 }
                 File.WriteAllText(currentFolder + clientCertFilename, content);
             } */
+            
             // in case the server certificate file doesn't exist: create new certificate file in internal storage as a copy of the Asset server certificate
             if (!File.Exists(ServerCertPath))
             {
-                string content;
+                assets.Open(serverCertFilename).CopyTo(File.Create(ServerCertPath));
+                /* string content;
                 using (StreamReader sr = new StreamReader(assets.Open(serverCertFilename)))
                 {
                     content = sr.ReadToEnd();
                 }
-                File.WriteAllText(ServerCertPath, content);
+                File.WriteAllText(ServerCertPath, content);*/
             }
+
+
 
             // check the application certificate.
             haveAppCertificate = await application.CheckApplicationInstanceCertificate(false, 0);
