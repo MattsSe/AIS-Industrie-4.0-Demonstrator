@@ -13,9 +13,9 @@ namespace AIS_Demonstrator
 {
     public class MenuPagerAdapter : FragmentPagerAdapter
     {
-        private readonly string[] _tabTitles = { "Kaffee", "Übersicht", "Profil" };
+        // private readonly string[] _tabTitles = { "Kaffee", "Übersicht", "Profil" };
         //Use this instead if Login is disabled
-        //private readonly string[] _tabTitles = { "Kaffee", "Übersicht" }; 
+        private readonly string[] _tabTitles = { "Kaffee", "Übersicht" }; 
         readonly Context _context;
 
         // ReSharper disable once UnusedMember.Global

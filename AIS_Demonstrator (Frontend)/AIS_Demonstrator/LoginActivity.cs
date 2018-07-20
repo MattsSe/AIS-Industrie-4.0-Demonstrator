@@ -23,10 +23,12 @@ namespace AIS_Demonstrator
         private Button _buttonSignup;
         private Button _buttonLogin;
         private ProgressBar _progressBar;
-        private UserDataBase _userDataBase;
         private EditText _editUserName;
         private EditText _editUserPassword;
         private EditText _editServerEndpoint;
+
+        // Deactivated local User Database
+        // private UserDataBase _userDataBase;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -35,9 +37,12 @@ namespace AIS_Demonstrator
             // Set the start-up view to "Login"
             SetContentView(Resource.Layout.Login);
 
+            // Deactivated local User Database
+            /*
             //Load DB
             _userDataBase = new UserDataBase();
             _userDataBase.CreateDataBase();
+            */
 
             //Find Views
             _editUserName = FindViewById<EditText>(Resource.Id.editUserName);
@@ -51,11 +56,15 @@ namespace AIS_Demonstrator
             _progressBar = FindViewById<ProgressBar>(Resource.Id.progressBarLogin);
             _buttonSignup.Click += (sender, args) =>
             {
+                Toast.MakeText(this, "Das Anlegen neuer User ist zur Zeit deaktiviert. Bitte einen Admin, dir im Back-End einen neuen User anzulegen.", ToastLength.Short).Show();
+                // User Creation has been deactivated by Jakob Lammel. The local user database is no longer used, and User Creation for OPC UA is handled in the back-end by an administrator.
                 //Show Signup Dialog
+                /*
                 FragmentTransaction transaction = FragmentManager.BeginTransaction();
                 DialogSignUp signUpDialog = new DialogSignUp();
                 signUpDialog.Show(transaction, "signUpDialog Fragment");
                 signUpDialog.OnSignupComplete += SignUpDialog_OnSignupComplete;
+                */
             };
             #endregion
 
@@ -81,6 +90,11 @@ namespace AIS_Demonstrator
                     Toast.MakeText(this, GetString(Resource.String.EmptyUserPassword), ToastLength.Short).Show();
                     return;
                 }
+
+                // Username and Password checks have been disabled by Jakob Lammel because it is no longer necessary.
+                // User Credentials are checked by the server once this application tries to get a session.
+                
+                /*
                 if (_userDataBase.CheckUserName(_editUserName.Text) == false)
                 {
                     Toast.MakeText(this, GetString(Resource.String.WrongUserName), ToastLength.Short).Show();
@@ -92,6 +106,7 @@ namespace AIS_Demonstrator
                     _editUserPassword.Text = "";
                     return;
                 }
+                */
 
                 //UserName and UserPassword correct
 
@@ -110,7 +125,8 @@ namespace AIS_Demonstrator
                 //intent.AddFlags(ActivityFlags.NoHistory);
                 intent.PutExtra("USERNAME", _editUserName.Text);
                 intent.PutExtra("PASSWORD", _editUserPassword.Text);
-                intent.PutExtra("USERID", _userDataBase.GetUserId(_editUserName.Text));
+                // Deactivated local User Database
+                // intent.PutExtra("USERID", _userDataBase.GetUserId(_editUserName.Text));
                 //pass server Endpoint to MainActivity
                 intent.PutExtra("ENDPOINT", _editServerEndpoint.Text);
                 StartActivity(intent);
@@ -135,7 +151,8 @@ namespace AIS_Demonstrator
                 UserName = userName,
                 UserPassword = password
             };
-            _userDataBase.InsertTableUser(user);
+            // Deactivated local User Database
+            // _userDataBase.InsertTableUser(user);
         }
 
         //Simulated Server

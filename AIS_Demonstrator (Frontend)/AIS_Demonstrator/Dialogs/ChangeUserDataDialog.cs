@@ -83,7 +83,8 @@ namespace AIS_Demonstrator.Dialogs
             //UserPassword correct
             User user = new User()
             {
-                Id = MainActivity.UserId,
+                // Deactivated local User Database
+                // Id = MainActivity.UserId,
                 UserName = _editUserName.Text,
                 UserPassword = _editNewPassword.Text
             };

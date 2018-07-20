@@ -4,8 +4,8 @@
   xmlns="http://opcfoundation.org/UA/SDK/Configuration.xsd"
   schemaLocation="./Schema/ApplicationConfiguration.xsd"
 >
-  <ApplicationName>UA AIS_Demonstrator</ApplicationName>
-  <ApplicationUri>urn:localhost:OPCFoundation:XamarinSampleClient</ApplicationUri>
+  <ApplicationName>AIS Demonstrator OPC UA HMI-Applikation</ApplicationName>
+  <ApplicationUri>urn:localhost:AIS_I4.0_Demonstrator:HMI_Applikation</ApplicationUri>
   <ProductUri>http://opcfoundation.org/UA/XamarinSampleClient</ProductUri>
   <ApplicationType>Client_1</ApplicationType>
 
@@ -15,7 +15,7 @@
     <ApplicationCertificate>
       <StoreType>Directory</StoreType>
       <StorePath>/storage/emulated/0/OPC Foundation/PKI/own</StorePath>
-      <SubjectName>CN=UA Xamarin Sample Client, C=US, S=Arizona, O=OPC Foundation, DC=localhost</SubjectName>
+      <SubjectName>CN=AIS_Demonstrator_HMI_Applikation, C=DE, S=Bayern, O=AIS, DC=localhost</SubjectName>
     </ApplicationCertificate>
 
     <!-- Where the issuer certificate are stored (certificate authorities) -->

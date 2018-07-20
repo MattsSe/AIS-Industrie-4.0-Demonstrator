@@ -144,7 +144,9 @@ namespace AIS_Demonstrator.Fragments
                     }
                 }
             }
+            // deactivated according to "Anleitung zur Android Applikation" since user profiles needed to be deactivated.
             // Insert Order into History
+            /*
             History history = new History
             {
                 CoffeeName = _currentCoffeeName,
@@ -158,6 +160,7 @@ namespace AIS_Demonstrator.Fragments
             HistoryDb historyDb = new HistoryDb();
             historyDb.CreateDataBase();
             historyDb.InsertTableHistory(history);
+            */
 
             return (resultMessage);
 

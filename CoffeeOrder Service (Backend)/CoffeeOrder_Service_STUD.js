@@ -271,10 +271,10 @@ async function ClientConnection () {
                 priority: 10 // Byte
             });
 
-            subscription_Codesys.on("started", function () {
-                console.log(new Date().toLocaleString('de-DE') + " Client: subscription started for 30 seconds - subscriptionId=", subscription_Codesys.subscriptionId);
+            subscription_Codesys.on("started", function () {	// ToDo: delete, only for debugging purposes
+                // console.log(new Date().toLocaleString('de-DE') + " Client: subscription started for 30 seconds - subscriptionId=", subscription_Codesys.subscriptionId);
             }).on("keepalive", function () {
-                console.log(new Date().toLocaleString('de-DE') + " Client: Subscription Keelapive: Der PackML Status ist immer noch: ", dataValue.value.value);
+                console.log(new Date().toLocaleString('de-DE') + " Client: Subscription Keelapive - PackML state is: ", dataValue.value.value);
             }).on("terminated", function () {
                 console.log(new Date().toLocaleString('de-DE') + " Client: subscription terminated!");
             });

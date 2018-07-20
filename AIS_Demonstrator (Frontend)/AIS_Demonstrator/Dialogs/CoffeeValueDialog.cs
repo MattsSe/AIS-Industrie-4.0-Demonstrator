@@ -93,10 +93,10 @@ namespace AIS_Demonstrator.Dialogs
                 _editMilkQuantity.Text = "250";
                 return;
             }
-            if (int.Parse(_editCoffeeStregth.Text) > 7)
+            if (int.Parse(_editCoffeeStregth.Text) > 5)
             {
                 Toast.MakeText(Activity, GetString(Resource.String.StregthTooHigh), ToastLength.Short).Show();
-                _editCoffeeStregth.Text = "7";
+                _editCoffeeStregth.Text = "5";
                 return;
             }
             if (int.Parse(_editCoffeeStregth.Text) < 1)

@@ -88,7 +88,8 @@ namespace AIS_Demonstrator
 
             UserName = Intent.GetStringExtra("USERNAME");
             UserPassword = Intent.GetStringExtra("PASSWORD");
-            UserId = Intent.GetIntExtra("USERID", -1);
+            // Deactivated local User Database
+            // UserId = Intent.GetIntExtra("USERID", -1);
 
             #region Connect to OPC UA Server
             // when View is created: connect the client to the specified Endpoint
@@ -222,7 +223,7 @@ namespace AIS_Demonstrator
             //Update DB
             User user = new User()
             {
-                Id = UserId,
+                // Id = UserId,
                 UserImage = picData
             };
             userDataBase.UpdateProfileImage(user);

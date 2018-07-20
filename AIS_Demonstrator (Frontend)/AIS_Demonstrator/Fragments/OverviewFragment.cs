@@ -34,8 +34,8 @@ namespace AIS_Demonstrator.Fragments
             _textOptionProfile = _view.FindViewById<TextView>(Resource.Id.textOptionProfile);
             _textOptionProfile.Click += OptionProfile_Click;
             //Use this in addition if Login is disabled
-            //_textOptionProfile.Enabled = false;
-            //_textOptionProfile.SetBackgroundColor(Color.Gray);
+            _textOptionProfile.Enabled = false;
+            _textOptionProfile.SetBackgroundColor(Color.Gray);
 
             _textOptionCostOverview = _view.FindViewById<TextView>(Resource.Id.textOptionCostOverview);
             _textOptionCostOverview.Click += OptionCostOverview_Click;
