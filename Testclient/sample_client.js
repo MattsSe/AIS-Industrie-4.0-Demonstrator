@@ -4,9 +4,11 @@ var async = require("async");
 
 var client = new opcua.OPCUAClient();
 // var endpointUrl = "opc.tcp://" + require("os").hostname() + ":34197/UA/Testserver";
-var endpointUrl = "opc.tcp://JAKOBSDESKTOP:34197/UA/Testserver";
+var endpointUrl = "opc.tcp://raspberrypi:34197/CoffeeOrder_STUD";
 
 var the_session, the_subscription;
+
+const userInfo = {userName: "Anna", password: "123456"}
 
 async.series([
 
@@ -25,7 +27,7 @@ async.series([
 
     // step 2 : createSession
     function(callback) {
-        client.createSession( function(err,session) { // creates a new Session with the "anonymous" Role
+        client.createSession(userInfo, function(err,session) { // creates a new Session with the "anonymous" Role
             if(!err) {
                 the_session = session;
 				console.log("success of step 2");

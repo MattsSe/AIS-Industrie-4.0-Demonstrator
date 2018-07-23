@@ -102,14 +102,14 @@ const options = {
 	serverInfo: {
         applicationUri: "CoffeeOrder_Service",
         productUri: "CoffeeOrder_Service",
-        applicationName: {text: "CoffeeOrder_Service_STUD", locale: "de"},
+        applicationName: {text: "CoffeeOrder_Service", locale: "de"},
         gatewayServerUri: null,
         discoveryProfileUri: null,
         discoveryUrls: []
     },
 	// Network Options
     port: 34197, // the port of the listening socket of the server
-	resourcePath: "CoffeeOrder_STUD", // this path will be added to the endpoint resource name
+	resourcePath: "CoffeeOrder", // this path will be added to the endpoint resource name
 	
 	buildInfo : {
         productName: "CoffeeOrder_Service_STUD",
@@ -125,7 +125,7 @@ var server = new opcua.OPCUAServer(options);
 var client = new opcua.OPCUAClient();	// instantiate a new OPC UA Client
 var client_session;	// 
 // var client_subscription;	// the client subscription is used to get updates about variable changes from the CODESYS server
-const CodesysEndpoint = "opc.tcp://192.168.5.5:4840";//
+const CodesysEndpoint = "opc.tcp://192.168.0.101:4840"; // "opc.tcp://localhost:4840";
 const NodeID_intCoffeeStrength = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.iButtonStatus[11]"; // NodeID of the variable for the current CoffeeStrength. Ranges from 0 ("Sehr Mild") to 4 ("Sehr Kräftig")
 const NodeID_boolSmallCoffee = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[2]";        // NodeID of the Switch to produce a small Coffee
 const NodeID_boolMediumCoffee = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[3]";       // NodeID of the Switch to produce a medium Coffee    
