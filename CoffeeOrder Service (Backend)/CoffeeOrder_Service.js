@@ -265,6 +265,8 @@ async function ClientConnection () {
     
         // step 2 : create a new session 
         function createsession(callback) {
+			// see for User Authentication documentation: http://node-opcua.github.io/api_doc/0.2.0/classes/OPCUAClient.html#method_connect
+			// const userIdentityInfo  = { userName: "JoeDoe", password:"secret"};
             client.createSession( function(err,session) { // creates a new Session with the "anonymous" Role
                 if(!err) {
                     client_session = session;
@@ -439,7 +441,7 @@ function pressButton(buttonToPressNodeID) {	// debug: used to be called with cal
 }
 
 // The function setCoffeeStrength is used within the toButton Method to adjust the Coffee Strength setting of the Coffee Machine.
-async function setCoffeeStrength(callback) {	// debug: used to be called with callback as argument
+async function setCoffeeStrength(callback) {
 	var difference = valueCoffeeStrength - codesys_coffeeStrength;
 	if (difference != 0) {
 		if (codesys_coffeeStrength > valueCoffeeStrength) {	// correction in case the current coffee strength is higher than the desired coffee strength 
@@ -458,7 +460,7 @@ async function setCoffeeStrength(callback) {	// debug: used to be called with ca
 				}, 1500);
 			},
 			function (err) {
-				callback(err);                          // callback: "global" callback (callback of setCoffeeStrength) is only calles once the test does not pass anymore, i.e. once difference = 0 (which means the coffeestrength has been set to the correct value)
+				callback(err);                          // callback: "global" callback (callback of setCoffeeStrength) is only called once the test does not pass anymore, i.e. once difference = 0 (which means the coffeestrength has been set to the correct value)
 			}
 		);
 	}
