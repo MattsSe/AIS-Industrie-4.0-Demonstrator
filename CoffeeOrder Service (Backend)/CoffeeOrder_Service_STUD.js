@@ -5,6 +5,7 @@
 // Security Features based on https://github.com/node-opcua/node-opcua/blob/master/packages/node-opcua-samples/bin/simple_secure_server.js
 // See more examples for how to implement node-opcua applications in the npm package 'node-opcua-samples' ($ npm install node-opcua-samples)
 // Node-opcua API documentation can be found here: http://node-opcua.github.io/api_doc/0.2.0/
+// CODESYS OPC UA Server security integration was developed according to CODESYS OPC UA Documentation at https://help.codesys.com/webapp/_cds_runtime_opc_ua_server;product=codesys;version=3.5.13.0#benutzerverwaltung-unter-opc-ua  (accessed on 18.08.2018)
 
 /*CoffeeOrder Service is supposed to be an OPC UA Server that serves as a backend for the AIS Industrie 4.0 Demostrator.
 Frontend Applications (e.g. the AIS_Demonstrator Android App by Florian Hänel) can establish a connection to the Service via the OPC UA endpoint URL.
@@ -125,7 +126,7 @@ var server = new opcua.OPCUAServer(options);
 var client = new opcua.OPCUAClient();	// instantiate a new OPC UA Client
 var client_session;	// 
 // var client_subscription;	// the client subscription is used to get updates about variable changes from the CODESYS server
-const CodesysEndpoint =  "opc.tcp://192.168.0.101:4840"; // "opc.tcp://localhost:4840";
+const CodesysEndpoint =  "opc.tcp://localhost:4840";
 const NodeID_intCoffeeStrength = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.iButtonStatus[11]"; // NodeID of the variable for the current CoffeeStrength. Ranges from 0 ("Sehr Mild") to 4 ("Sehr Kräftig")
 const NodeID_boolSmallCoffee = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[2]";        // NodeID of the Switch to produce a small Coffee
 const NodeID_boolMediumCoffee = "ns=4;s=|var|CODESYS Control Win V3.Application.Main.fbCMOperation.arrSwitch[3]";       // NodeID of the Switch to produce a medium Coffee    
@@ -265,7 +266,9 @@ async function ClientConnection () {
     
         // step 2 : create a new session 
         function createsession(callback) {
-            client.createSession( function(err,session) { // creates a new Session with the "anonymous" Role
+			// see for User Authentication documentation: http://node-opcua.github.io/api_doc/0.2.0/classes/OPCUAClient.html#method_connect
+			const userIdentityInfo  = { userName: "CoffeeOrder_Service", password:"1337BackEnd!"};
+            client.createSession(userIdentityInfo, function(err,session) { // creates a new Session with the "Back-End" Role which has been configured in OPC UA
                 if(!err) {
                     client_session = session;
                     console.log(new Date().toLocaleString('de-DE') + " Client: Session created!".cyan);
