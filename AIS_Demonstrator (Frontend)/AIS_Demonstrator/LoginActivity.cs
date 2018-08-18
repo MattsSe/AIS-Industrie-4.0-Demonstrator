@@ -56,7 +56,7 @@ namespace AIS_Demonstrator
             _progressBar = FindViewById<ProgressBar>(Resource.Id.progressBarLogin);
             _buttonSignup.Click += (sender, args) =>
             {
-                Toast.MakeText(this, "Das Anlegen neuer User ist zur Zeit deaktiviert. Bitte einen Admin, dir im Back-End einen neuen User anzulegen.", ToastLength.Short).Show();
+                Toast.MakeText(this, "Das Anlegen neuer User ist zur Zeit deaktiviert. Bitte einen Admin, dir im Back-End einen neuen User anzulegen.", ToastLength.Long).Show();
                 // User Creation has been deactivated by Jakob Lammel. The local user database is no longer used, and User Creation for OPC UA is handled in the back-end by an administrator.
                 //Show Signup Dialog
                 /*

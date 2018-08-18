@@ -81,16 +81,16 @@ namespace AIS_Demonstrator.Dialogs
                 Toast.MakeText(Activity, GetString(Resource.String.StatCoffeeStregth) + " " + GetString(Resource.String.MissingValue), ToastLength.Short).Show();
                 return;
             }
-            if (int.Parse(_editCoffeeQuantity.Text) > 250)
+            if (int.Parse(_editCoffeeQuantity.Text) > 120)
             {
                 Toast.MakeText(Activity, GetString(Resource.String.StatCoffeeQuantity) + " " + GetString(Resource.String.ValueTooHigh), ToastLength.Short).Show();
-                _editCoffeeQuantity.Text = "250";
+                _editCoffeeQuantity.Text = "120";
                 return;
             }
-            if (int.Parse(_editMilkQuantity.Text) > 250)
+            if (int.Parse(_editMilkQuantity.Text) > 120)
             {
                 Toast.MakeText(Activity, GetString(Resource.String.StatMilkQuantity) + " " + GetString(Resource.String.ValueTooHigh), ToastLength.Short).Show();
-                _editMilkQuantity.Text = "250";
+                _editMilkQuantity.Text = "120";
                 return;
             }
             if (int.Parse(_editCoffeeStregth.Text) > 5)

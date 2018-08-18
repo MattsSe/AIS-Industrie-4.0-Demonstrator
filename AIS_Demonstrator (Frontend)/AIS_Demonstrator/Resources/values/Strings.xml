@@ -31,7 +31,7 @@
   
   <!--CoffeeStats-->
   <string name="MissingValue">wurde nicht eingegeben!</string>
-  <string name="ValueTooHigh">ist zu groß!\nMenge wurde auf das Maximum (250ml) gesetzt.</string>
+  <string name="ValueTooHigh">ist zu groß!\nMenge wurde auf das Maximum (120ml) gesetzt.</string>
   <string name="StregthTooHigh">Kaffeestärke ist zu groß!\nStärke wurde auf maximale Stufe (5) gesetzt.</string>
   <string name="StregthTooLow">Kaffeestärke ist zu niedrig!\nStärke wurde auf minimale Stufe (1) gesetzt.</string>
   

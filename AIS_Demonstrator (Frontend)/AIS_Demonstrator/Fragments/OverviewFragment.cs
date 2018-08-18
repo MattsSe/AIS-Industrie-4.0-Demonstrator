@@ -40,8 +40,8 @@ namespace AIS_Demonstrator.Fragments
             _textOptionCostOverview = _view.FindViewById<TextView>(Resource.Id.textOptionCostOverview);
             _textOptionCostOverview.Click += OptionCostOverview_Click;
             //Use this in addition if Login is disabled
-            //_textOptionCostOverview.Enabled = false;
-            //_textOptionCostOverview.SetBackgroundColor(Color.Gray);
+            _textOptionCostOverview.Enabled = false;
+            _textOptionCostOverview.SetBackgroundColor(Color.Gray);
 
             _textOptionMachine = _view.FindViewById<TextView>(Resource.Id.textOptionMachine);
             _textOptionMachine.Click += OptionMachine_Click;
@@ -49,8 +49,8 @@ namespace AIS_Demonstrator.Fragments
             _textOptionCostSetting = _view.FindViewById<TextView>(Resource.Id.textOptionCostSetting);
             _textOptionCostSetting.Click += OptionCostSetting_Click;
             //Use this in addition if Login is disabled
-            //_textOptionCostSetting.Enabled = false;
-            //_textOptionCostSetting.SetBackgroundColor(Color.Gray);
+            _textOptionCostSetting.Enabled = false;
+            _textOptionCostSetting.SetBackgroundColor(Color.Gray);
 
             // Click handler for the "Refresh machine data" button. Added for OPC UA Support
             _textOptionRefresh = _view.FindViewById<TextView>(Resource.Id.refreshMachineState);
@@ -82,17 +82,8 @@ namespace AIS_Demonstrator.Fragments
         // Refresh OverviewFragment in order to re-render the MachineData bars
         private void OptionRefresh_Click(object sender, EventArgs e)
         {
-            /*
-            FragmentTransaction transaction = this.FragmentManager.BeginTransaction();
-            OverviewFragment newFragment = new OverviewFragment();
-            transaction.Replace(Resource.Id.overview, newFragment);
-            View line1 = View.FindViewById<View>(Resource.Id.decorativeline1);
-            line1.Visibility = ViewStates.Gone;
-            View line2 = View.FindViewById<View>(Resource.Id.decorativeline2);
-            line2.Visibility = ViewStates.Gone;
-            transaction.Commit();
-            */ //ToDo: Debug this so that the Button gets destroyed as well as the lines
             SetupContainerMachineState(ref MainActivity.OpcClient.valueCoffeeLevel, ref MainActivity.OpcClient.valueWaterLevel, ref MainActivity.OpcClient.valueCleanlinessLevel);
+            _view.RefreshDrawableState();
         }
 
         //Show Machine Setting DialogFragment
@@ -144,15 +135,20 @@ namespace AIS_Demonstrator.Fragments
             float dCleanlinessLevel = ((float) CleanlinessLevel) / 100;
 
 
+
             //Set Height
+            wL1.SetMinimumHeight((int)Math.Round(height * dWaterLevel));    // triggers the refresh of the view for some reason
             wL1.LayoutParameters.Height = (int)Math.Round(height * dWaterLevel);
             wL2.LayoutParameters.Height = (int)Math.Round(height * (1 - dWaterLevel));
-
+            //wL2.SetMinimumHeight((int)Math.Round(height * (1 - dWaterLevel)));
             bL1.LayoutParameters.Height = (int)Math.Round(height * dCoffeeLevel);
             bL2.LayoutParameters.Height = (int)Math.Round(height * (1 - dCoffeeLevel) );
 
             cL1.LayoutParameters.Height = (int)Math.Round(height * dCleanlinessLevel);
             cL2.LayoutParameters.Height = (int)Math.Round(height * (1 - dCleanlinessLevel) );
+
+
+            _view.FindViewById<View>(Resource.Id.ContainerMachineState).ForceLayout();
         }
     }
 }

@@ -120,75 +120,7 @@ namespace AIS_Demonstrator
                     content = sr.ReadToEnd();
                 } 
                 File.WriteAllText(currentFolder + configFilename, content); 
-
-                #region CustomConfigGeneration
-                /*
-                // Inspired by https://github.com/OPCFoundation/UA-.NETStandard/issues/243
-                // create a new configuration and save it to a file
-
-                // Step 1: create a new configuration
-                config = new ApplicationConfiguration()
-                {
-                    ApplicationName = "AIS Demonstrator OPC UA HMI-Applikation",
-                    ApplicationType = ApplicationType.Client,
-                    ApplicationUri = "urn:" + Utils.GetHostName() + ":AIS_I4.0_Demonstrator:HMI_Applikation",
-                    SecurityConfiguration = new SecurityConfiguration
-                    {
-                        ApplicationCertificate = new CertificateIdentifier
-                        {
-                            StoreType = "Directory",    // "Directory" ?
-                            StorePath = "/data/user/0/AIS_Demonstrator.AIS_Demonstrator/",
-                            SubjectName = "AIS_Demonstrator_HMI_Applikation"    // "CN=AIS_Demonstrator_HMI_Applikation, C=DE, S=Bayern, O=AIS, DC=localhost"
-                        },
-                        TrustedPeerCertificates = new CertificateTrustList
-                        {
-                            StoreType = "Directory",
-                            StorePath = "/data/user/0/AIS_Demonstrator.AIS_Demonstrator/",
-                        },
-                        TrustedIssuerCertificates = new CertificateTrustList
-                        {
-                            StoreType = "Directory",
-                            StorePath = "/storage/emulated/0/OPC Foundation/PKI/issuer",
-                        },
-                        RejectedCertificateStore = new CertificateTrustList
-                        {
-                            StoreType = "Directory",
-                            StorePath = "/storage/emulated/0/OPC Foundation/PKI/rejected",
-                        },
-                        NonceLength = 32,
-                        AutoAcceptUntrustedCertificates = true  // ToDo: Only for debug, set to "false" for release
-                    },
-                    TransportConfigurations = new TransportConfigurationCollection(),
-                    TransportQuotas = new TransportQuotas
-                    {
-                        OperationTimeout = 15000,
-                        MaxStringLength = 1048576,
-                        MaxByteStringLength = 4194304,
-                        MaxArrayLength = 65535,
-                        MaxMessageSize = 4194304,
-                        MaxBufferSize = 65535,
-                        ChannelLifetime = 300000,
-                        SecurityTokenLifetime = 3600000
-                    },
-                    ClientConfiguration = new ClientConfiguration
-                    {
-                        DefaultSessionTimeout = 60000,
-                        WellKnownDiscoveryUrls = new StringCollection(), // "opc.tcp://{0}:4840/UADiscovery",
-                        MinSubscriptionLifetime = 10000
-                    },
-                    TraceConfiguration = new TraceConfiguration
-                    {
-                        OutputFilePath = "%LocalApplicationData%/Logs/AIS_Demonstrator_OPCUA_HMI_Applikation.log.txt",
-                        DeleteOnLoad = true,
-                        TraceMasks = 519
-                    },
-                    DisableHiResClock = true
-                };
-
-                // Step 2: save the new configuration to a file
-                config.SaveToFile(currentFolder + configFilename);
-                */
-                #endregion
+                
             }
             else
             {   // The config file already exists
@@ -648,23 +580,10 @@ namespace AIS_Demonstrator
                     // Actually write the Data. The method session.Write returns the responseHeader of the Write request response which is passed as the return value of this Method (VariableWrite)
                     ResponseHeader responseHeader = session.Write(null, nodesToWrite, out results, out diagnosticInfos);
                     return responseHeader;
-                    /*
-                     * if (responseHeader.ServiceResult == StatusCodes.Good) // (responseHeader.ServiceResult.ToString() == "Good")
-                    {
-                        // ToDo: add this to Resources/values/Strings.xml
-                        return "Kaffeebestellung ist raus!";
-                    }
-                    else
-                    {
-                        // ToDo: add this to Resources/values/Strings.xml
-                        return "Ups! Da ist etwas schief gelaufen!";
-                    }*/
                 }
-                // ToDo: add this to Resources/values/Strings.xml
-                else return null;   // "Fehler! Keine Verbindung mit OPC UA Server!";
+                else return null;
             }
-            // ToDo: add this to Resources/values/Strings.xml 
-            else return null;   // "Fehler! Keine Session!";
+            else return null;
         }
         #endregion
 

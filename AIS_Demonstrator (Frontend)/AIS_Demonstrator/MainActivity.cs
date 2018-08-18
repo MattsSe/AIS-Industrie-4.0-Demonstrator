@@ -38,7 +38,7 @@ namespace AIS_Demonstrator
         // Declare and initialise variable for OPC UA Server Endpoint
         public string endpointUrl = "init";
         static LabelViewModel textInfo = new LabelViewModel();
-        public static SampleClient OpcClient = new SampleClient(textInfo); //todo debug: remove static if it causes problems - 16.05.18
+        public static SampleClient OpcClient = new SampleClient(textInfo);
         #endregion
 
         async void Connect() //copied and modified Function "OnConnect" from UA Xamarin Client.MainPage.xaml.cs"
@@ -46,9 +46,6 @@ namespace AIS_Demonstrator
             // Retrieve ServerEndpoint from LoginActivity
             endpointUrl = Intent.GetStringExtra("ENDPOINT");
             bool connectToServer = true;
-
-            // not needed: ConnectIndicator is a spinning animation
-            // ConnectIndicator.IsRunning = true;
 
             AssetManager assets = this.Assets; //AssetManager to be given to CreateCertificate function in order to be able to access the Config.xml file from the Assets
             
@@ -63,9 +60,6 @@ namespace AIS_Demonstrator
             if (connectToServer == true)
             {
                 var connectionStatus = await Task.Run(() => OpcClient.OpcClient(endpointUrl));
-                Toast.MakeText(this, OpcClient.haveAppCertificate.ToString(), ToastLength.Short).Show(); // ToDo Delete (Debug)
-                Toast.MakeText(this, OpcClient.ServerCertPath.ToString(), ToastLength.Short).Show(); // ToDo Delete (Debug)
-                Toast.MakeText(this, OpcClient.ClientCertPath.ToString(), ToastLength.Short).Show(); // ToDo Delete (Debug)
                 if (connectionStatus == SampleClient.ConnectionStatus.Connected)
                 {
                     Toast.MakeText(this, GetString(Resource.String.ConnectionSuccess)+ " Endpoint: " + endpointUrl, ToastLength.Short).Show();   // display a success message if the connection could be established
@@ -94,7 +88,6 @@ namespace AIS_Demonstrator
             #region Connect to OPC UA Server
             // when View is created: connect the client to the specified Endpoint
             Connect();
-            endpointUrl = Intent.GetStringExtra("ENDPOINT"); //ToDo debug: delete this line
             #endregion
 
             // Set our view from the "main" layout resource
@@ -184,9 +177,7 @@ namespace AIS_Demonstrator
 
         public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
         {
-            // Toast.MakeText(this, OpcClient.valueCoffeeLevel.ToString(), ToastLength.Short).Show();  // ToDo debug: delete this line
-            // Fragment overview = FragmentManager.FindFragmentById(Resource.Id.overview);
-            // overview.updateData();
+            // 
         }
 
         public void OnPageSelected(int position)

@@ -497,7 +497,7 @@ async function makeCoffee(callMethodResult, callback) {	// Debug: used to be cal
 				console.log(new Date().toLocaleString('de-DE') + " Order completed: A \'Cappuccino\' (CoffeeStrength: ", codesys_coffeeStrength, ") has been ordered.".green);
 			}
 			else {
-				if (valueCoffeeQuantity > 200) {
+				if (valueCoffeeQuantity >= 120) {
 					// make large Coffee
 					// console.log(new Date().toLocaleString('de-DE') + " DEBUG: make large coffee");	// only for debug
 					callMethodResult.statusCode = opcua.StatusCodes.Good;
@@ -507,7 +507,7 @@ async function makeCoffee(callMethodResult, callback) {	// Debug: used to be cal
 					console.log(new Date().toLocaleString('de-DE') + " Order completed: A \'Large Coffee\' (CoffeeStrength: ", codesys_coffeeStrength, ") has been ordered.".green);
 				}
 				else {
-					if (valueCoffeeQuantity > 100) {
+					if (valueCoffeeQuantity >= 90) {
 						// make medium Coffee
 						// console.log(new Date().toLocaleString('de-DE') + " DEBUG: make medium coffee");
 						callMethodResult.statusCode = opcua.StatusCodes.Good;

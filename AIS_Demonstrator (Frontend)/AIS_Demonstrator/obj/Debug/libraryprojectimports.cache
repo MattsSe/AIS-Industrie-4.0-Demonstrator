@@ -1,11 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Paths>
   <Jars>
-    <Jar>obj\Debug\lp\1\jl\formsviewgroup.jar</Jar>
-    <Jar>obj\Debug\lp\32\jl\NineOldAndroids.jar</Jar>
-    <Jar>obj\Debug\lp\51\jl\arch-core-common.jar</Jar>
-    <Jar>obj\Debug\lp\52\jl\arch-lifecycle-common.jar</Jar>
-    <Jar>obj\Debug\lp\55\jl\support-annotations.jar</Jar>
     <Jar>D:\Projekte (git)\AIS - Industrie 4.0 Demonstrator\AIS_Demonstrator (Frontend)\AIS_Demonstrator\obj\Debug\lp\1\jl\formsviewgroup.jar</Jar>
     <Jar>D:\Projekte (git)\AIS - Industrie 4.0 Demonstrator\AIS_Demonstrator (Frontend)\AIS_Demonstrator\obj\Debug\lp\32\jl\NineOldAndroids.jar</Jar>
     <Jar>D:\Projekte (git)\AIS - Industrie 4.0 Demonstrator\AIS_Demonstrator (Frontend)\AIS_Demonstrator\obj\Debug\lp\51\jl\arch-core-common.jar</Jar>
