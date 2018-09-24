@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="AIS_Demonstrator.AIS_Demonstrator" android:versionName="2.1" android:installLocation="auto" android:versionCode="2">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="AIS_Demonstrator.AIS_Demonstrator" android:versionName="2.2" android:installLocation="auto" android:versionCode="2">
   <!--suppress UsesMinSdkAttributes-->
   <uses-sdk android:minSdkVersion="16" />
   <uses-permission android:name="android.permission.INTERNET" />
@@ -9,7 +9,7 @@
   <uses-permission android:name="android.permission.READ_SYNC_STATS" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-  <application android:label="AIS_Demonstrator" android:theme="@style/Theme" android:name="android.app.Application" android:allowBackup="true" android:icon="@drawable/icon" android:debuggable="true">
+  <application android:label="AIS Industrie 4.0 Demonstrator" android:theme="@style/Theme" android:name="android.app.Application" android:allowBackup="true" android:icon="@drawable/icon" android:debuggable="true">
     <activity android:icon="@drawable/icon" android:label="AIS Industrie 4.0 Demonstrator" android:name="md5a015150e89100aaba0b2edc1f6e002d8.LoginActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
