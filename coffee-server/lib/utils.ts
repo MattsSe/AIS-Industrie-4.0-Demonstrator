@@ -25,7 +25,7 @@ export namespace config {
         if (user() && pass()) {
             conn += `${user()}:${pass()}`
         }
-        return `${conn}@${host()}:${port()}/COFFEEdb`
+        return `${conn}@${host()}:${port()}/coffeedb`
     }
 
 }

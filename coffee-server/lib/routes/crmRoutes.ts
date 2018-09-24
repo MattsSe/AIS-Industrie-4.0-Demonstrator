@@ -1,12 +1,18 @@
 import {Request, Response, NextFunction} from "express";
 import { ContactController } from "../controllers/crmController";
 
+/**
+ * This class enables the express routes
+ */
 export class Routes { 
     
-    public contactController: ContactController = new ContactController() 
-    
-    public routes(app): void {   
-        
+    public contactController: ContactController = new ContactController()
+
+    /**
+     * create the routes for this application
+     * @param app the express app
+     */
+    public routes(app): void {
         app.route('/')
         .get((req: Request, res: Response) => {            
             res.status(200).send({
