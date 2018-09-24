@@ -23,6 +23,10 @@
       { "name": "tslint-language-service"}
     ]
   },
+  "include": [
+    "lib/**/*.ts",
+    "index.ts"
+  ],
   "exclude": [
     "node_modules",
     "helpers"
