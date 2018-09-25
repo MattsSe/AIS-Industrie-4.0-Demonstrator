@@ -2,7 +2,10 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as errorhandler from 'strong-error-handler';
 import {Routes} from "./routes/crmRoutes";
-import {config} from "./utils";
+import { RegisterRoutes } from "./routes";
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("../swagger.json");
 
 /**
  * Wrapper class around the underlying express application
@@ -19,12 +22,17 @@ class App {
      */
     public routePrv: Routes = new Routes();
     
-    public mongoUrl: string = config.connectionString();
-
     constructor() {
         this.app = express();
         this.config();
-        this.routePrv.routes(this.app);
+        // this.routePrv.routes(this.app);
+        /**
+         * RouteHandler.
+         */
+// server.get("/api", apiRouteHandler.getApi);
+        RegisterRoutes(this.app);
+        // Serve the swagger ui at /api-docs
+        this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
         this.app.use(errorhandler({
             debug: process.env.ENV !== 'prod',
@@ -51,4 +59,5 @@ class App {
     }
 }
 
+// create a new app and make it available
 export default new App().app;

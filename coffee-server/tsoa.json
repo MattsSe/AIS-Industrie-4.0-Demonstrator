@@ -1,0 +1,19 @@
+{
+  "swagger": {
+    "outputDirectory": "./dist/",
+    "entryFile": "./lib/server.ts",
+    "host": "localhost:3000",
+    "basePath": "/v1",
+    "yaml": false
+  },
+  "routes": {
+    "basePath": "/v1",
+    "entryFile": "./lib/server.ts",
+    "routesDir": "./lib/",
+    "middleware": "express",
+    "iocModule": "./lib/inversify/ioc"
+  },
+  "ignore": [
+    "**/node_modules/**"
+  ]
+}
