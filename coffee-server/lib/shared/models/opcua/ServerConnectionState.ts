@@ -1,8 +1,5 @@
-/**
- * Created by Matthias on 23.08.17.
- */
 
-import * as models from './models';
+import * as models from './index';
 
 export interface ServerConnectionState {
   connected: boolean,

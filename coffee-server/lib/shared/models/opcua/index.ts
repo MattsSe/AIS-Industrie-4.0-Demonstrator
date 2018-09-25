@@ -19,3 +19,8 @@ export * from './SubscriptionOptions';
 export * from './UnmonitorItemResult';
 export * from './VariableValue';
 export * from './WriteValueOptions';
+export * from './opcua.util';
+// reexport some necessary interface
+export * from './node.opcua';
+
+

@@ -1,9 +1,9 @@
 import app from './app';
-import {createServer} from 'http';
-import {sequelize} from './sequel';
+import { createServer } from 'http';
+import { sequelize } from './sequel';
 
 // must be imported so tsoa can generate the routes, see: tsoa.json
-import "./controller/user.controller";
+import "./controllers/user.controller";
 
 const port = process.env.PORT || 3000;
 
@@ -19,7 +19,7 @@ const port = process.env.PORT || 3000;
 // waiting after the database is synced
 (async () => {
     // this will delete all tables in the current database
-    await sequelize.sync({force: true});
+    await sequelize.sync({ force: true });
 
     createServer(app)
         .listen(

@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import { ContactController } from "../controller/crmController";
+import { ContactController } from "../controllers/crmController";
 
 /**
  * This class enables the express routes

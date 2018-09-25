@@ -1,5 +1,5 @@
 import {Table, Column, Model, UpdatedAt, CreatedAt} from 'sequelize-typescript';
-import * as model from '../model';
+import * as model from '../shared/models';
 
 @Table
 export class User extends Model<User> implements model.User {

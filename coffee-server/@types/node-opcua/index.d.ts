@@ -847,6 +847,7 @@ export declare interface MonitoringParameters {
     readonly discardOldest: boolean;
 }
 export declare class ClientMonitoredItem {
+    itemToMonitor : ReadValueId;
     terminate(callback: ErrorCallback): void;
     terminate(): Promise<void>;
 
