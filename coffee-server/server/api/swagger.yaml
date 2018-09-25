@@ -1,0 +1,563 @@
+---
+swagger: "2.0"
+info:
+  description: "The API for OPC UA Server"
+  version: "1.0.0"
+  title: "opc ua"
+host: "virtserver.swaggerhub.com"
+basePath: "/api"
+schemes:
+- "https"
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /server:
+    get:
+      tags:
+      - "Connector"
+      summary: "current connection state"
+      description: "Query Status of a specific server"
+      operationId: "getServerConnectionState"
+      parameters:
+      - name: "url"
+        in: "query"
+        description: "check connection against a specific url"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ServerConnectionState"
+      x-swagger-router-controller: "Connector"
+    post:
+      tags:
+      - "Connector"
+      summary: "connect to server"
+      operationId: "connectServer"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "describes the Connection Options for the OPC ClientConnection"
+        required: true
+        schema:
+          $ref: "#/definitions/ServerConnection"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/ServerConnectionResponse"
+      x-swagger-router-controller: "Connector"
+    delete:
+      tags:
+      - "Connector"
+      summary: "close connection to server"
+      description: "Closes the connection to the OPC UA server if present"
+      operationId: "closeServerConnection"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ServerConnectionResponse"
+      x-swagger-router-controller: "Connector"
+  /server/browse/{nodeId}:
+    get:
+      tags:
+      - "Browser"
+      summary: "fetch all attributes for Nodeid"
+      description: "returns all available Attributes for the nodeId"
+      operationId: "getBrowseInfo"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the desired item"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "describes additional info"
+        required: false
+        schema:
+          $ref: "#/definitions/BrowseDescription"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/BrowseResult"
+      x-swagger-router-controller: "Browser"
+  /server/browse/{nodeId}/attributes/:
+    get:
+      tags:
+      - "Browser"
+      summary: "fetch all attributes for Nodeid"
+      description: "returns all available Attributes for the nodeId"
+      operationId: "getAllAttributes"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the desired item"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "describes the Connection Options for the OPC ClientConnection"
+        required: true
+        schema:
+          $ref: "#/definitions/ReadAttributesOptions"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/AttributeDataList"
+      x-swagger-router-controller: "Browser"
+  /server/browse/{nodeId}/children/:
+    get:
+      tags:
+      - "Browser"
+      summary: "fetch direct children for the given nodeId"
+      description: "returns all available Attributes for the nodeId"
+      operationId: "getChildren"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the desired item"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "the options for collecting the child items"
+        required: false
+        schema:
+          $ref: "#/definitions/BrowseDescription"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ReferenceDataList"
+      x-swagger-router-controller: "Browser"
+  /server/monitor/:
+    get:
+      tags:
+      - "Subscription"
+      summary: "fetch all subscriptions"
+      description: "returns all monitored items"
+      operationId: "getAllMonitoredItems"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "max number of items to return"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "All the Monitred items"
+          schema:
+            $ref: "#/definitions/MonitoredItemDataList"
+      x-swagger-router-controller: "Subscription"
+    delete:
+      tags:
+      - "Subscription"
+      summary: "clear all subscriptions"
+      description: "clears all monitred items"
+      operationId: "clearMonitoredItems"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "max number of items to unsubscribe"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Clear all Subscriptions"
+      x-swagger-router-controller: "Subscription"
+  /server/monitor/{nodeId}:
+    get:
+      tags:
+      - "Subscription"
+      summary: "fetch subscriptions for the nodeId"
+      description: "returns all monitored items for a nodeId"
+      operationId: "getMonitoredItemsForNodeId"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the monitored items"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "All the Monitred items"
+          schema:
+            $ref: "#/definitions/MonitoredItemDataList"
+      x-swagger-router-controller: "Subscription"
+    delete:
+      tags:
+      - "Subscription"
+      summary: "clear subscription for item"
+      description: "terminate the monitored item subscriptions for the nodeId"
+      operationId: "clearMonitoredItemsForNodeId"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        description: "nodeId of the monitored items"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Clear all Subscriptions"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UnmonitorItemResult"
+      x-swagger-router-controller: "Subscription"
+  /server/monitor/{nodeId}/{attributeId}:
+    get:
+      tags:
+      - "Subscription"
+      summary: "get specific monitored item"
+      description: "returns exactly matching monitored item"
+      operationId: "getMonitoredItem"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "attributeId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/MonitoredItemDataList"
+      x-swagger-router-controller: "Subscription"
+    post:
+      tags:
+      - "Subscription"
+      summary: "create new subscription for item"
+      description: "adds a new subscription for the item"
+      operationId: "monitorItem"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "attributeId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int32"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/MonitorItemOptions"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/MonitoredItemDataList"
+      x-swagger-router-controller: "Subscription"
+    delete:
+      tags:
+      - "Subscription"
+      summary: "delete specific subscription"
+      description: "deletes any present subscription for the attribute for the nodeId"
+      operationId: "unmonitorItem"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "attributeId"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/UnmonitorItemResult"
+      x-swagger-router-controller: "Subscription"
+  /server/variables/{nodeId}:
+    get:
+      tags:
+      - "Variables"
+      operationId: "readVariableValue"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/VariableValue"
+      x-swagger-router-controller: "Variables"
+  /server/variables/{nodeId}/{attributeId}:
+    get:
+      tags:
+      - "Variables"
+      operationId: "readVariableValueForAttributeId"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "attributeId"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "response"
+          schema:
+            $ref: "#/definitions/VariableValue"
+      x-swagger-router-controller: "Variables"
+    post:
+      tags:
+      - "Variables"
+      description: "Writes the Value for the variable with the nodeId"
+      operationId: "writeVariableValue"
+      parameters:
+      - name: "nodeId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "attributeId"
+        in: "path"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/WriteValueOptions"
+      responses:
+        200:
+          description: "Last Variable Value"
+          schema:
+            $ref: "#/definitions/VariableValue"
+      x-swagger-router-controller: "Variables"
+definitions:
+  WriteValueOptions:
+    type: "object"
+    properties:
+      value:
+        type: "string"
+      datatype:
+        type: "string"
+    description: "used to write a value to node"
+  SubscriptionOptions:
+    type: "object"
+    properties:
+      requestedPublishingInterval:
+        type: "number"
+      requestedLifetimeCount:
+        type: "number"
+      requestedMaxKeepAliveCount:
+        type: "number"
+      maxNotificationsPerPublish:
+        type: "number"
+      publishingEnabled:
+        type: "boolean"
+      priority:
+        type: "number"
+    description: "options for creating a new OPCUACLient subscription"
+  MonitorItemOptions:
+    type: "object"
+    properties:
+      samplingInterval:
+        type: "number"
+      discardOldest:
+        type: "boolean"
+        default: true
+      queueSize:
+        type: "number"
+      publishChangeOnSocket:
+        type: "boolean"
+        description: "If requested, any change of the monitored item will also be\
+          \ publish through a websocket"
+        default: false
+    description: "additional options for monitoring an Item for a subscription"
+  MonitoredItemData:
+    type: "object"
+    properties:
+      nodeId:
+        type: "string"
+      attributeId:
+        type: "integer"
+      subscriptionId:
+        type: "integer"
+        description: "The subscription ID in which this monitored item is monitored"
+      value:
+        type: "string"
+      datatype:
+        type: "string"
+      browseName:
+        type: "string"
+      statusCode:
+        type: "string"
+    description: "The Information of the current monitored item on an OPC UA Server"
+  ServerConnectionState:
+    type: "object"
+    properties:
+      connected:
+        type: "boolean"
+      endPointUrl:
+        type: "string"
+    description: "The Current state of the OPCU Client connection to its server if\
+      \ any present"
+  ServerConnectionResponse:
+    type: "object"
+    required:
+    - "success"
+    properties:
+      success:
+        type: "boolean"
+      msg:
+        type: "string"
+      state:
+        $ref: "#/definitions/ServerConnectionState"
+    description: "Response when reqeuesting a new connection to an OPC UA Server"
+  MonitoredItemDataList:
+    type: "array"
+    description: "All current subscriptions"
+    items:
+      $ref: "#/definitions/MonitoredItemData"
+  ReferenceDataList:
+    type: "array"
+    items:
+      $ref: "#/definitions/ReferenceData"
+  ReferenceData:
+    type: "object"
+    required:
+    - "browseName"
+    - "nodeClass"
+    - "nodeId"
+    - "typeIdEnum"
+    properties:
+      nodeId:
+        type: "string"
+      nodeClass:
+        type: "string"
+      browseName:
+        type: "string"
+      children:
+        $ref: "#/definitions/ReferenceDataList"
+      typeIdEnum:
+        type: "string"
+        enum:
+        - "Organizes"
+        - "Aggregates"
+    description: "Contains Basic Information about an Element in the address space\
+      \ of the Server"
+  ReadAttributesOptions:
+    type: "object"
+  AttributeDataList:
+    type: "array"
+    items:
+      $ref: "#/definitions/AttributeData"
+  AttributeData:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      value:
+        type: "string"
+      datatype:
+        type: "string"
+      ownerNodeId:
+        type: "string"
+        description: "The Node ID of the object owning this attribute"
+      attributeId:
+        type: "integer"
+        description: "The actual ID of this Attribute"
+    description: "Contains the Basic Information about an Attribute Element of a OPC\
+      \ UA Reference Object"
+  ConnectionStrategy:
+    type: "object"
+    properties:
+      maxRetry:
+        type: "number"
+      initialDelay:
+        type: "number"
+      maxDelay:
+        type: "number"
+      randomisationFactor:
+        type: "number"
+  ClientOptions:
+    type: "object"
+    properties:
+      securityMode:
+        type: "string"
+      securityPolicy:
+        type: "string"
+      clientName:
+        type: "string"
+      connectionStrategy:
+        $ref: "#/definitions/ConnectionStrategy"
+    description: "Options for the instantiation of an OPC UA Client"
+  ServerConnection:
+    type: "object"
+    required:
+    - "endpointUrl"
+    properties:
+      endpointUrl:
+        type: "string"
+      forceReconnect:
+        type: "boolean"
+      keepSessionAlive:
+        type: "boolean"
+      clientOptions:
+        $ref: "#/definitions/ClientOptions"
+    description: "Contains the options for creating a new Connection to an OPC UA\
+      \ Server, if only endPointUrl present default values will be used"
+  ApiResponse:
+    type: "object"
+  VariableValue:
+    type: "object"
+    properties:
+      nodeId:
+        type: "string"
+      value:
+        type: "string"
+      valid:
+        type: "boolean"
+  BrowseResult:
+    type: "object"
+  BrowseDescription:
+    type: "object"
+  UnmonitorItemResult:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      wasMonitored:
+        type: "boolean"
+      nodeId:
+        type: "string"
+      attributeId:
+        type: "number"
+  ItemChangeData:
+    type: "object"
+    properties:
+      attributeId:
+        type: "integer"
+      value:
+        type: "string"
+      statusCode:
+        type: "string"
+      itemName:
+        type: "string"
+      datatype:
+        type: "string"
