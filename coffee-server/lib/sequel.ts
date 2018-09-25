@@ -12,5 +12,5 @@ export const sequelize = new Sequelize({
     dialect: 'sqlite',
     username: '',
     password: '',
-    modelPaths: [__dirname + '/models']
+    modelPaths: [__dirname + '/schema']
 });
