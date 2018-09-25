@@ -4,7 +4,7 @@ import "reflect-metadata";
 import {provideSingleton} from "../inversify/ioc";
 
 import {UserService} from "../service/user.service";
-import {User} from "../model";
+import {User} from "../shared/models";
 
 @Route("Users")
 @provideSingleton(UsersController)
