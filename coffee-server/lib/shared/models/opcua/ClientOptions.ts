@@ -1,5 +1,4 @@
-import * as models from './index';
-import {OPCUAClientOptions, MessageSecurityMode, SecurityPolicy} from './index';
+import {ConnectionStrategy, MessageSecurityMode, SecurityPolicy} from './index';
 
 export interface ClientOptions {
     securityMode?: MessageSecurityMode;
@@ -8,6 +7,5 @@ export interface ClientOptions {
 
     clientName?: string;
 
-    connectionStrategy?: OPCUAClientOptions;
-
+    connectionStrategy?: ConnectionStrategy;
 }

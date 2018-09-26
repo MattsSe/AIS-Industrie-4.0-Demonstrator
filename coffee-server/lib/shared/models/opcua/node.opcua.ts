@@ -1,2 +1,2 @@
-export {OPCUAClientOptions, MessageSecurityMode, SecurityPolicy} from 'node-opcua';
+export {ConnectionStrategy, OPCUAClientOptions, MessageSecurityMode, SecurityPolicy} from 'node-opcua';
 

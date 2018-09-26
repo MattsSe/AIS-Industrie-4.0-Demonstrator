@@ -4,7 +4,6 @@ export * from './AttributeDataList';
 export * from './BrowseDescription';
 export * from './BrowseResult';
 export * from './ClientOptions';
-export * from './ConnectionStrategy';
 export * from './ItemChangeData';
 export * from './MonitorItemOptions';
 export * from './MonitoredItemData';
