@@ -20,15 +20,19 @@
       "dom"
     ],
     "plugins": [
-      { "name": "tslint-language-service"}
+      {
+        "name": "tslint-language-service"
+      }
     ]
   },
   "include": [
     "lib/**/*.ts",
+    "server/**/*.ts",
     "index.ts"
   ],
   "exclude": [
     "node_modules",
-    "helpers"
+    "helpers",
+    "@types/**/*.ts"
   ]
 }

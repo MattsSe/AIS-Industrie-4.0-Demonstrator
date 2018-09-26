@@ -7,8 +7,8 @@ const fs = require('fs');
  * delete standard node-opcua type declaration file -> module resolution will then use from @types
  */
 intallUAdefinitions = function () {
-  const uaTypingsTarget = './node_modules/node-opcua/node-opcua.d.ts';
-  const uaTypingsSource = './@types/node-opcua/node-opcua.d.ts';
+  const uaTypingsTarget = './node_modules/node-opcua/index.d.ts';
+  const uaTypingsSource = './@types/node-opcua/index.d.ts';
 
   if (fs.existsSync(uaTypingsSource)) {
     // Delete only if exists

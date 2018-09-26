@@ -28,8 +28,9 @@ export declare enum AttributeIds {
 // Project: https://github.com/node-opcua/node-opcua
 // Definitions by: Etienne Rossignon
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-import { StatusCode, StatusCodes } from "./StatusCode";
-export { StatusCode, StatusCodes } from "./StatusCode";
+import {StatusCode, StatusCodes} from "./StatusCode";
+
+export {StatusCode, StatusCodes} from "./StatusCode";
 
 export type ErrorCallback = (err?: Error) => void;
 export type ResponseCallback<T> = (err?: Error | null, response?: T) => void;
@@ -272,6 +273,8 @@ export declare class OPCUAClientBase {
      * @chainable
      */
     on(event: string, eventHandler: () => void): OPCUAClientBase;
+
+    on(event: string, eventHandler: (...args: any[]) => void): OPCUAClientBase;
 }
 
 export interface BrowseResponse {
@@ -295,7 +298,7 @@ export declare class NodeId {
 
     toJSON(): string;
 
-    toString(options: { addressSpace: AddressSpace }): string;
+    toString(options?: { addressSpace: AddressSpace }): string;
 }
 
 type UInt32 = number;
@@ -317,7 +320,7 @@ export interface BrowseDescription {
      * subtype are returned.If not specified then all ReferenceTypes are
      * returned and includeSubtypes is ignored.
      */
-    referenceTypeId?: NodeId;
+    referenceTypeId?: NodeId | string;
     /** Includes subtypes of the reference type. */
     includeSubtypes?: boolean;
     /**
@@ -360,7 +363,7 @@ export declare class BrowseResult {
     references: ReferenceDescription[];
 }
 
-type CoercibleToBrowseDescription = string | BrowseDescription;
+export type CoercibleToBrowseDescription = string | BrowseDescription;
 
 export interface RelativePathElement {
     /** the type of reference to follow. */
@@ -412,7 +415,7 @@ export declare class ClientSession {
     read(nodesToRead: CoercibleToReadValueId[], maxAge: number, callback: ResponseCallback<DataValue[]>): void;
     read(nodeToRead: CoercibleToReadValueId, callback: ResponseCallback<DataValue>): void;
     read(nodesToRead: CoercibleToReadValueId[], callback: ResponseCallback<DataValue[]>): void;
-    read(nodeToRead: CoercibleToReadValueId,   maxAge?: number): Promise<DataValue>;
+    read(nodeToRead: CoercibleToReadValueId, maxAge?: number): Promise<DataValue>;
     read(nodesToRead: CoercibleToReadValueId[], maxAge?: number): Promise<DataValue[]>;
 
     readVariableValue(nodeId: CoercibleToNodeId, callback: ResponseCallback<DataValue>): void;
@@ -424,7 +427,9 @@ export declare class ClientSession {
 
     close(callback: ErrorCallback): void;
     close(): Promise<void>;
+    close(deleteSubs: boolean, callback: ErrorCallback): void;
 
+    readAllAttributes(nodes: NodeId | NodeId[], callback : ResponseCallback<any>) : void;
     // properties
     /** the session Id */
     public sessionId: NodeId;
@@ -846,8 +851,10 @@ export declare interface MonitoringParameters {
     readonly queueSize: number;
     readonly discardOldest: boolean;
 }
+
 export declare class ClientMonitoredItem {
-    itemToMonitor : ReadValueId;
+    itemToMonitor: ReadValueId;
+
     terminate(callback: ErrorCallback): void;
     terminate(): Promise<void>;
 
@@ -859,9 +866,9 @@ export declare class ClientMonitoredItem {
      * @param {() => void} eventHandler
      * @chainable
      */
-    on(event: "changed", eventHandler: (dataValue: DataValue)  => void): this;
-    on(event: "initialized"| "terminated", eventHandler: ()  => void): this;
-    on(event: "err", eventHandler: (err: Error)  => void): this;
+    on(event: "changed", eventHandler: (dataValue: DataValue) => void): this;
+    on(event: "initialized" | "terminated", eventHandler: () => void): this;
+    on(event: "err", eventHandler: (err: Error) => void): this;
 
 
 }
