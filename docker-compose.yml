@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  uaserver:
+    image: ais/uaserver
+    build: coffee-server
+    environment:
+    - PORT=4200
+    ports:
+    - 4200:4200
+    restart: always
+    networks:
+    - ais-network
+
+networks:
+  ais-network
+    driver: bridge
