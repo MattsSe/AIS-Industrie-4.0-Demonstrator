@@ -2,6 +2,7 @@ import {NextFunction, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
 import * as api from '../../lib/shared/models';
 import * as async from 'async';
+import {MessageSecurityMode, SecurityPolicy} from '../../lib/shared/models';
 
 /**
  *

@@ -68,7 +68,7 @@ export function writeVariableValue(params, res: Response, next: NextFunction) {
                     dataType: body.datatype || dataValues[0].value.dataType,
                     value: body.value
                 };
-                UAClientService.INSTANCE.session.writeSingleNode(nodeId.value, nodeToWrite, (err2, statuscode, diagnosticInfos2) => {
+                UAClientService.INSTANCE.session.writeSingleNode(nodeId.value, dataValues[0].value, (err2, statuscode) => {
                     if (!err2) {
                         result.valid = true;
                         result.value = body.value;

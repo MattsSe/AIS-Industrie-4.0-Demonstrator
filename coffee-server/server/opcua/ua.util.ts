@@ -7,7 +7,7 @@ import * as _ from 'underscore';
 export namespace util {
   export const attributeIdtoString = _.invert(opcua.AttributeIds);
   export const DataTypeIdsToString = _.invert(opcua.DataTypeIds);
-  const nodeMaskKeys = Object.keys(opcua.browse_service.NodeClassMask);
+  const nodeMaskKeys = Object.keys(opcua.NodeClassMask);
   export const NodeClassMaskIdToName = {
     names: nodeMaskKeys.slice((nodeMaskKeys.length / 2) - 1),
     ids: nodeMaskKeys.slice(0, (nodeMaskKeys.length / 2) - 1)
