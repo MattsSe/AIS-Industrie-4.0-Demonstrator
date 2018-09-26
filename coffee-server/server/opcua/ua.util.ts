@@ -7,10 +7,10 @@ import * as _ from 'underscore';
 export namespace util {
   export const attributeIdtoString = _.invert(opcua.AttributeIds);
   export const DataTypeIdsToString = _.invert(opcua.DataTypeIds);
-  const _nodeMaskKeys = Object.keys(opcua.browse_service.NodeClassMask);
+  const nodeMaskKeys = Object.keys(opcua.browse_service.NodeClassMask);
   export const NodeClassMaskIdToName = {
-    names: _nodeMaskKeys.slice((_nodeMaskKeys.length / 2) - 1),
-    ids: _nodeMaskKeys.slice(0, (_nodeMaskKeys.length / 2) - 1)
+    names: nodeMaskKeys.slice((nodeMaskKeys.length / 2) - 1),
+    ids: nodeMaskKeys.slice(0, (nodeMaskKeys.length / 2) - 1)
   };
 
   export function toString(): string {

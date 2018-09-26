@@ -4,7 +4,9 @@ export declare interface StatusCode {
     description: string
 }
 
-export declare interface StatusCodes {
+export declare var StatusCodes: StatusCodes;
+
+declare interface StatusCodes {
     Good: StatusCode
     BadUnexpectedError: StatusCode
     BadInternalError: StatusCode

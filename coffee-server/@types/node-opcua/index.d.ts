@@ -1,3 +1,5 @@
+export declare var browse_service: any;
+
 export declare enum AttributeIds {
     NodeId = 1,
     NodeClass = 2,
@@ -23,6 +25,9 @@ export declare enum AttributeIds {
     UserExecutable = 22,
     INVALID = 999
 }
+
+
+export {DataTypeIds} from "./DataTypeIds"
 
 // Type definitions for node-opua
 // Project: https://github.com/node-opcua/node-opcua
@@ -429,7 +434,8 @@ export declare class ClientSession {
     close(): Promise<void>;
     close(deleteSubs: boolean, callback: ErrorCallback): void;
 
-    readAllAttributes(nodes: NodeId | NodeId[], callback : ResponseCallback<any>) : void;
+    readAllAttributes(nodes: NodeId | NodeId[], callback: ResponseCallback<any>): void;
+
     // properties
     /** the session Id */
     public sessionId: NodeId;
@@ -633,6 +639,17 @@ export declare enum DataType {
     DiagnosticInfo = 25
 }
 
+export enum AccessLevelFlag {
+    CurrentRead,
+    CurrentWrite,
+    HistoryRead,
+    HistoryWrite,
+    SemanticChange,
+    StatusWrite,
+    TimestampWrite,
+    NONE
+}
+
 export declare enum VariantArrayType {
     Scalar = 0x00,
     Array = 0x01,
@@ -651,9 +668,16 @@ export declare class BaseNode {
     browseName: BrowseName;
 
     addReference(options: AddReferenceOpts): UAReference;
+
+    findReference(strReference: string, isForward?: boolean, optionalSymbolicName?: string): UAReference;
+
+    getComponentByName(browseName: string): BaseNode;
+
+    getPropertyByName(browseName: string): BaseNode;
 }
 
 export declare class UAView extends BaseNode {
+
 }
 
 export declare class UAVariable extends BaseNode {
@@ -696,6 +720,8 @@ export declare class DataValue {
     sourcePicoseconds: number;
     serverPicoseconds: number;
     statusCode: StatusCode;
+
+    toString(): string;
 }
 
 type CoercibleToDataValue = DataValue | DataValueOpts;
@@ -854,6 +880,7 @@ export declare interface MonitoringParameters {
 
 export declare class ClientMonitoredItem {
     itemToMonitor: ReadValueId;
+    subscription: ClientSubscription;
 
     terminate(callback: ErrorCallback): void;
     terminate(): Promise<void>;
@@ -868,8 +895,9 @@ export declare class ClientMonitoredItem {
      */
     on(event: "changed", eventHandler: (dataValue: DataValue) => void): this;
     on(event: "initialized" | "terminated", eventHandler: () => void): this;
-    on(event: "err", eventHandler: (err: Error) => void): this;
+    on(event: "err", eventHandler: (err: Error ) => void): this;
 
+    on(event: string, eventhandler: (v: Variant) => void): void;
 
 }
 

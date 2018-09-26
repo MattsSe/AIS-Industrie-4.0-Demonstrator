@@ -1,6 +1,6 @@
 import {UASocket} from './ua.socket';
 import {UAClientService} from './ua.service';
-import {EmitterRoutes} from 'ais-api';
+import * as api from '../../lib/shared/models';
 
 /**
  * Created by Matthias on 18.08.17.
