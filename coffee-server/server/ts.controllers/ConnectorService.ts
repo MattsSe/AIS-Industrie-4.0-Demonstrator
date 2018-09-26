@@ -1,11 +1,7 @@
-/**
- * Created by Matthias on 23.08.17.
- */
 import {NextFunction, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
-import * as api from 'ais-api';
+import * as api from '../../lib/shared/models';
 import * as async from 'async';
-
 
 /**
  *
@@ -13,30 +9,30 @@ import * as async from 'async';
  * @param res
  */
 function doReconnect(options: api.ServerConnection, res: Response) {
-  if (typeof options.forceReconnect === 'boolean' && options.forceReconnect) {
-    UAClientService.INSTANCE.disconnectAll();
-    const r: api.ServerConnectionResponse = {
-      success: false
-    };
-    try {
-      doConnect(options, err => {
-        r.success = err ? false : true;
-        r.msg = err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.';
-        r.state = UAClientService.INSTANCE.getCurrentConnectionState();
-      });
-    } catch (err) {
-      handleConnectionError(err, res);
-    } finally {
-      res.end(JSON.stringify(r));
+    if (typeof options.forceReconnect === 'boolean' && options.forceReconnect) {
+        UAClientService.INSTANCE.disconnectAll();
+        const r: api.ServerConnectionResponse = {
+            success: false
+        };
+        try {
+            doConnect(options, err => {
+                r.success = !err;
+                r.msg = err ? 'Could not establish Reconnection.' : 'Reconnected Successfully.';
+                r.state = UAClientService.INSTANCE.getCurrentConnectionState();
+            });
+        } catch (err) {
+            handleConnectionError(err, res);
+        } finally {
+            res.end(JSON.stringify(r));
+        }
+    } else {
+        const r: api.ServerConnectionResponse = {
+            success: false,
+            msg: 'Client is already connected. A Reconnect must be reqeuested',
+            state: UAClientService.INSTANCE.getCurrentConnectionState()
+        };
+        res.end(JSON.stringify(r));
     }
-  } else {
-    const r: api.ServerConnectionResponse = {
-      success: false,
-      msg: 'Client is already connected. A Reconnect must be reqeuested',
-      state: UAClientService.INSTANCE.getCurrentConnectionState()
-    };
-    res.end(JSON.stringify(r));
-  }
 }
 
 
@@ -47,49 +43,48 @@ function doReconnect(options: api.ServerConnection, res: Response) {
  * @param next
  */
 export function connectServer(params, res: Response, next: NextFunction) {
-  /**
-   * parameters expected in the args:
-   * url (String)
-   **/
+    /**
+     * parameters expected in the args:
+     * url (String)
+     **/
 
-  res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json');
+    if (params.body) {
+        if (api.util.isValidServerConnection(params.body.value)) {
+            const options = params.body.value as api.ServerConnection;
+            if (UAClientService.INSTANCE.isConnected()) {
+                /*Client is already connected -> try to reconnect*/
+                doReconnect(options, res);
+                return;
+            } else { // not yet connected
+                doConnect(options, err => {
+                    const r: api.ServerConnectionResponse = {
+                        success: !err,
+                        msg: err ? 'Could not establish Connection.' + err.message : 'Connected Successfully.',
+                        state: UAClientService.INSTANCE.getCurrentConnectionState()
+                    };
+                    res.end(JSON.stringify(r));
+                });
+                return;
+            }
+        }
+    } // body
 
-  if (params.body) {
-    if (api.util.isValidServerConnection(params.body.value)) {
-      const options = params.body.value as api.ServerConnection;
-      if (UAClientService.INSTANCE.isConnected()) {
-        /*Client is already connected -> try to reconnect*/
-        doReconnect(options, res);
-        return;
-      } else { // not yet connected
-        doConnect(options, err => {
-          const r: api.ServerConnectionResponse = {
-            success: err ? false : true,
-            msg: err ? 'Could not establish Connection.' + err.message : 'Connected Successfully.',
-            state: UAClientService.INSTANCE.getCurrentConnectionState()
-          };
-          res.end(JSON.stringify(r));
-        });
-        return;
-      }
+    /* body is invalid*/
+    const state: api.ServerConnectionResponse = {
+        success: false,
+        msg: 'Connecting to the reqeuested client failed, no valid body content.',
+        state: UAClientService.INSTANCE.getCurrentConnectionState()
     }
-  } // body
-
-  /* body is invalid*/
-  const state: api.ServerConnectionResponse = {
-    success: false,
-    msg: 'Connecting to the reqeuested client failed, no valid body content.',
-    state: UAClientService.INSTANCE.getCurrentConnectionState()
-  }
-  res.end(JSON.stringify(state));
+    res.end(JSON.stringify(state));
 }
 
 function handleConnectionError(err: Error, res: Response) {
-  res.end(JSON.stringify({
-    success: false,
-    msg: err.message || 'Connection failed due Connection Error',
-    state: UAClientService.INSTANCE.getCurrentConnectionState()
-  }));
+    res.end(JSON.stringify({
+        success: false,
+        msg: err.message || 'Connection failed due Connection Error',
+        state: UAClientService.INSTANCE.getCurrentConnectionState()
+    }));
 }
 
 /**
@@ -99,22 +94,22 @@ function handleConnectionError(err: Error, res: Response) {
  * @param next
  */
 export function getServerConnectionState(params, res: Response, next: NextFunction) {
-  /**
-   * parameters expected in the args:
-   * url (String)
-   **/
-  const urlQuery = params.url;
-  let connected = UAClientService.INSTANCE.isConnected();
-  const serverEndpoint = UAClientService.INSTANCE.endPointUrl;
-  if (urlQuery.value) {
-    connected = connected && (serverEndpoint === urlQuery.value);
-  }
-  res.setHeader('Content-Type', 'application/json');
-  const serverState: api.ServerConnectionState = {
-    connected: connected,
-    endPointUrl: serverEndpoint || ''
-  };
-  res.end(JSON.stringify(serverState));
+    /**
+     * parameters expected in the args:
+     * url (String)
+     **/
+    const urlQuery = params.url;
+    let connected = UAClientService.INSTANCE.isConnected();
+    const serverEndpoint = UAClientService.INSTANCE.endPointUrl;
+    if (urlQuery.value) {
+        connected = connected && (serverEndpoint === urlQuery.value);
+    }
+    res.setHeader('Content-Type', 'application/json');
+    const serverState: api.ServerConnectionState = {
+        connected: connected,
+        endPointUrl: serverEndpoint || ''
+    };
+    res.end(JSON.stringify(serverState));
 }
 
 /**
@@ -122,24 +117,25 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
  * @param options
  */
 export function doConnect(options: api.ServerConnection, cllback) {
-  const clientOps = options.clientOptions || {};
-  const client = UAClientService.INSTANCE.createClient({
-    keepSessionAlive: options.keepSessionAlive || true,
-    connectionStrategy: clientOps.connectionStrategy || {},
-    securityMode: clientOps.securityMode,
-    securityPolicy: clientOps.securityPolicy,
-    clientName: clientOps.clientName,
-  });
-  async.series([
-      callback => {
-        UAClientService.INSTANCE.connectClient(options.endpointUrl, callback);
-      },
-      callback => {
-        UAClientService.INSTANCE.createSession(callback);
-      }
-    ],
-    cllback
-  );
+    const clientOps = options.clientOptions || {};
+    const client = UAClientService.INSTANCE.createClient({
+        keepSessionAlive: options.keepSessionAlive || true,
+        connectionStrategy: clientOps.connectionStrategy || {},
+        securityMode: clientOps.securityMode,
+        securityPolicy: clientOps.securityPolicy,
+        clientName: clientOps.clientName,
+    });
+
+    async.series([
+            callback => {
+                UAClientService.INSTANCE.connectClient(options.endpointUrl, callback);
+            },
+            callback => {
+                UAClientService.INSTANCE.createSession(callback);
+            }
+        ],
+        cllback
+    );
 }
 
 
@@ -151,18 +147,18 @@ export function doConnect(options: api.ServerConnection, cllback) {
  * @param next
  */
 export function closeServerConnection(params, res: Response, next: NextFunction) {
-  const connResp: api.ServerConnectionResponse = {
-    success: true
-  };
-  if (UAClientService.INSTANCE.isConnected()) {
-    UAClientService.INSTANCE.disconnectAll(() => {
-      connResp.msg = 'No Client Connection successfully closed.'
-      connResp.state = UAClientService.INSTANCE.getCurrentConnectionState();
-      res.end(JSON.stringify(connResp));
-    });
-  } else {
-    connResp.msg = 'No Client Connection present.'
-    connResp.state = UAClientService.INSTANCE.getCurrentConnectionState();
-    res.end(JSON.stringify(connResp));
-  }
+    const connResp: api.ServerConnectionResponse = {
+        success: true
+    };
+    if (UAClientService.INSTANCE.isConnected()) {
+        UAClientService.INSTANCE.disconnectAll(() => {
+            connResp.msg = 'No Client Connection successfully closed.'
+            connResp.state = UAClientService.INSTANCE.getCurrentConnectionState();
+            res.end(JSON.stringify(connResp));
+        });
+    } else {
+        connResp.msg = 'No Client Connection present.'
+        connResp.state = UAClientService.INSTANCE.getCurrentConnectionState();
+        res.end(JSON.stringify(connResp));
+    }
 }

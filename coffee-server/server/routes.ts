@@ -1,6 +1,4 @@
-/**
- * Created by Matthias on 14.08.17.
- */
+
 import {Application} from 'express';
 import * as swaggerTools from 'swagger-tools';
 import * as fs from 'fs';
@@ -16,7 +14,7 @@ export function RegisterRoutes(app: Application) {
   const options = {
     swaggerUi: '/swagger.json',
     controllers: path.resolve(__dirname, './controllers'),
-    useStubs: process.env.NODE_ENV === 'development' ? true : false // Conditionally turn on stubs (mock mode)
+    useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
   };
 
   // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
@@ -31,7 +29,7 @@ export function RegisterRoutes(app: Application) {
     // Validate Swagger requests
     app.use(middleware.swaggerValidator());
 
-    // Route validated requests to appropriate controller
+    // Route validated requests to appropriate controllers
     app.use(middleware.swaggerRouter(options));
 
     // Serve the Swagger documents and Swagger UI
