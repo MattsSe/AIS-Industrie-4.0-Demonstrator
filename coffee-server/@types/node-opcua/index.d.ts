@@ -1,5 +1,7 @@
 export declare var browse_service: any;
 
+export declare var NodeClassMask: any;
+
 export declare enum AttributeIds {
     NodeId = 1,
     NodeClass = 2,
@@ -71,17 +73,19 @@ export declare enum SecurityPolicy {
     Basic256Sha256
 }
 
+export interface ConnectionStrategy {
+    maxRetry?: number;
+    initialDelay?: number;
+    maxDelay?: number;
+    randomisationFactor?: number;
+}
+
 export interface OPCUAClientOptions {
     /** default secure token lifetime in ms */
     defaultSecureTokenLifetime?: number;
     /** the server certificate. */
     serverCertificate?: Uint8Array | null;
-    connectionStrategy?: {
-        maxRetry?: number;
-        initialDelay?: number;
-        maxDelay?: number;
-        randomisationFactor?: number;
-    };
+    connectionStrategy?: ConnectionStrategy;
     /**
      * the security mode
      * @default MessageSecurityMode.NONE
@@ -307,6 +311,7 @@ export declare class NodeId {
 }
 
 type UInt32 = number;
+type Int32 = number;
 
 export enum BrowseDirection {
     Forward,
@@ -427,7 +432,7 @@ export declare class ClientSession {
     readVariableValue(nodeId: CoercibleToNodeId): Promise<DataValue>;
 
 
-    writeSingleNode(path: string, value: Variant, callback: () => void): void;
+    writeSingleNode(path: string, value: Variant, callback: (err?: Error, statusCode?: StatusCode) => void): void;
 
 
     close(callback: ErrorCallback): void;
@@ -545,24 +550,7 @@ export interface OPCUAServerOptions {
 
     /** the nodeset.xml file(s) to load */
     nodeset_filename?: string[] | string;
-    serverInfo?: {
-        /**
-         * the information used in the end point description
-         * @default "urn:NodeOPCUA-Server"
-         */
-        applicationUri?: string;
-        /**
-         * @default "NodeOPCUA-Server"
-         */
-        productUri?: string;
-        /**
-         * @default "applicationName"
-         */
-        applicationName?: LocalizedText | string;
-        gatewayServerUri?: string;
-        discoveryProfileUri?: string;
-        discoveryUrls?: string[];
-    };
+    serverInfo?: ServerInfo,
     /**
      * @default [SecurityPolicy.None, SecurityPolicy.Basic128Rsa15, SecurityPolicy.Basic256]
      */
@@ -656,16 +644,97 @@ export declare enum VariantArrayType {
     Matrix = 0x02
 }
 
+export declare interface BaseNodeOptions {
+    addressSpace: AddressSpace;
+    browseName: string;
+    displayName?: LocalizedText | string;
+    references?: UAReference[];
+    descritpion?: LocalizedText | string;
+    browseFilter?: () => void;
+}
+
+export declare interface UAVariableOptions extends BaseNodeOptions {
+    value?: any;
+    dataType: NodeId | string;
+    valueRank?: Int32;
+    arrayDimensions?: number[];
+    accessLevel?: AccessLevelFlag;
+    userAcessLevel?: AccessLevelFlag;
+    minimumSamplingInterval: number;
+    historizing?: boolean;
+    parentNodeId?: NodeId;
+}
+
+export declare interface UATypeOptions extends BaseNodeOptions {
+    componentOf?: string | NodeId | BaseNode;
+    notifierOf?: any;
+    eventSourceOf?: any;
+    optionals?: string[];
+    modellingRule?: string;
+}
+
+export declare interface UAVariableTypeOptions extends UATypeOptions {
+    minimumSamplingInterval?: number;
+}
+
+export declare interface UAObjectTypeOptions extends UATypeOptions {
+}
+
+export class UAObjectType extends BaseNode {
+
+    readAttribute(context: SessionContext, attributeId: any): DataValue;
+
+    instantiate(options: UAObjectTypeOptions): UAObject;
+}
+
+export declare class UAVariableType extends BaseNode {
+    isAbstract: boolean;
+    value: any;
+    dataType: DataType | NodeId;
+    valueRank: Int32;
+    arrayDimensions: number[];
+    addressSpace: AddressSpace;
+
+    readAttribute(context: SessionContext, attributeId: any): DataValue;
+
+    instantiate(options: UAVariableTypeOptions): UAVariable;
+}
+
+export declare class NumericRange {
+}
+
+export declare class SessionContext {
+    object: object;
+    server: OPCUAServer;
+    session: ClientSession;
+}
+
+export declare interface WriteValue {
+    nodeId: NodeId;
+    attributeId: any;
+    value: DataValue;
+    // @ts-ignore
+    indexRange: NumericRange;
+}
+
 export declare interface AddReferenceOpts {
     referenceType: string | NodeId;
     nodeId: NodeId | string;
 }
 
 export declare class UAReference {
+    referenceType: string;
+    isForward: boolean;
+    nodeId: NodeId | string;
+
+    constructor(options: ReferenceDescription);
 }
 
 export declare class BaseNode {
     browseName: BrowseName;
+    nodeId: string | NodeId;
+
+    constructor(options: BaseNodeOptions);
 
     addReference(options: AddReferenceOpts): UAReference;
 
@@ -680,8 +749,43 @@ export declare class UAView extends BaseNode {
 
 }
 
-export declare class UAVariable extends BaseNode {
+export declare class UAObject extends BaseNode {
+    readAttribute(context: SessionContext, attributeId: NodeId | string): DataValue;
+
+    clone(options?: UAObjectTypeOptions, optionalfilter?: any, extraInfo?: any): UAObject;
 }
+
+export declare class UAVariable extends BaseNode {
+    dataType: any;
+    valueRank: UInt32;
+    arrayDimensions: number[];
+    accessLevel: AccessLevelFlag;
+    userAccessLevel: AccessLevelFlag;
+    parentNodeId: NodeId | string;
+    historizing: boolean;
+
+    setValueFromSource(variant: Variant, statusCode?: StatusCode, sourceTimestamp?: any);
+
+    isValueInRange(value: Variant): StatusCode;
+
+    readValue(context?: SessionContext, indexRange?: NumericRange, dataEncoding?: string): DataValue;
+
+    writeValue(context: SessionContext, dataValue: DataValue, indexRange?: NumericRange,
+               callback?: (err: Error, statusCode: StatusCode) => void): void;
+
+    readAttribute(context: SessionContext, attributeId: any, indexRange: NumericRange, dataEncoding): DataValue;
+
+    writeAttribute(context: SessionContext, writeValue: WriteValue, callback: (err: Error, statusCode: StatusCode) => void): void;
+
+    bindVariable(options: any, overwrite: boolean): void;
+
+    readValueAsync(context: SessionContext, callback: (err: Error, statusCode: StatusCode) => void): void
+
+    bindExtensionObject(): void;
+
+    clone(options?: UAVariableOptions, optionalfilter?: any, extraInfo?: any): UAObject;
+}
+
 
 export declare class UAAnalogItem extends UAVariable {
 }
@@ -724,13 +828,129 @@ export declare class DataValue {
     toString(): string;
 }
 
+export declare interface AddNodeOpts {
+    browseName: string;
+    organizedBy?: NodeId | BaseNode;
+    nodeId?: string | NodeId;
+}
+
+export declare interface AddVariableOpts extends AddNodeOpts {
+    componentOf: any;
+    dataType: string | DataType;
+    // @ts-ignore
+    value: {
+        get?(): Variant,
+        set?(val: Variant): StatusCode,
+        timestamp_get?(): DataValue,
+        refreshFunc?(err: null | Error, dataValue?: DataValue): void;
+    };
+}
+
+export declare interface AddTypeOpts {
+    browseName: string;
+    subtypeOf?: string | NodeId | BaseNode;
+    nodeId?: string | NodeId;
+    isAbstract?: boolean;
+    eventNotifier?: number;
+}
+
+export declare interface AddObjectTypeOpts extends AddTypeOpts {
+    postInstantiateFunc?: (param?: any) => void;
+}
+
+export declare interface AddVariableTypeOpts extends AddTypeOpts {
+    dataType?: string | NodeId;
+    valueRank?: number;
+    arrayDimensions?: number[];
+}
+
+export declare enum EUEngineeringUnit {
+    degree_celsius,
+    meter,
+    // to be continued
+}
+
+export declare interface AddAnalogDataItemOpts extends AddNodeOpts {
+    definition: string; // exemple  "(tempA -25) + tempB",
+    valuePrecision: number; // 0.5,
+    engineeringUnitsRange: {
+        low: number,
+        high: number
+    };
+    instrumentRange: {
+        low: number,
+        high: number
+    };
+    engineeringUnits: EUEngineeringUnit;
+}
+
+
 type CoercibleToDataValue = DataValue | DataValueOpts;
 
 export declare class WriteValue {
     nodeId: NodeId;
+    // @ts-ignore
     attributeId: AttributeIds;
-    indexRange?: any;
+    // @ts-ignore
+    indexRange?: NumericRange;
     value: DataValue;
+}
+
+export declare interface OPCUAServerEndPointOptions {
+    certificate?: any;
+    certificateChain?: any;
+    privateKey?: string;
+    timeout?: number;
+    maxConnections?: number;
+    defaultSecureTokenLifetime?: number;
+    port?: string | number;
+    serverinfo?: ServerInfo;
+}
+
+export declare interface ServerInfo {
+    applicationUri?: string;         //  (default "urn:NodeOPCUA-Server")
+    productUri?: string;             // = "NodeOPCUA-Server"]{String}
+    applicationName?: LocalizedText | string; // "applicationName"}]{LocalizedText}
+    gatewayServerUri?: string;
+    discoveryProfileUri?: string;
+    discoveryUrls?: string[];
+}
+
+export declare interface EndpointDescriptionOptions {
+    endpointUrl?: string;
+    server?: any;
+    serverCertificate?: any;
+    securityMode?: any;
+    securityPolicyUri?: any;
+    userIdentityTokens?: any;
+    transportProfileUri?: string;
+    securityLevel?: any;
+}
+
+export declare class EndpointDescription {
+
+    endpointUrl: string;
+    server: any;
+    serverCertificate: any;
+    securityPolicyUri: any;
+    userIdentityTokens: any[];
+    transportProfileUri: string;
+    securityLevel: any;
+
+    constructor(options?: EndpointDescriptionOptions);
+}
+
+export declare class OPCUAServerEndPoint {
+
+    options: OPCUAServerEndPointOptions;
+    port: number;
+    maxConnections: number;
+    defaultSecureTokenLifetime: number;
+    timeout: number;
+
+    constructor(options?: OPCUAServerEndPointOptions);
+
+    endpointDescriptions(): EndpointDescription[];
 }
 
 type CoercibleToNodeId = string | NodeId;
@@ -739,7 +959,7 @@ type CoercibleToWriteValue =
     | {
     nodeId: CoercibleToNodeId;
     attributeId: AttributeIds;
-    indexRange?: any;
+    indexRange?: NumericRange;
     value: CoercibleToDataValue;
 }
     | WriteValue;
@@ -766,16 +986,12 @@ export interface AddNodeOptions {
 
 export interface AddVariableOpts extends AddNodeOptions {
     dataType: string | DataType;
+    // @ts-ignore
     value?: {
         get?: () => Variant;
         timestamp_get?: () => DataValue;
         refreshFunc?: (err: null | Error, dataValue?: DataValue) => void;
     };
-}
-
-export enum EUEngineeringUnit {
-    degree_celsius
-    // to be continued
 }
 
 export interface AddAnalogDataItemOpts extends AddNodeOptions {
@@ -795,6 +1011,8 @@ export interface AddAnalogDataItemOpts extends AddNodeOptions {
 }
 
 export declare class AddressSpace {
+    rootFolder: any;
+
     find(node: NodeId | string): BaseNode;
 
     addVariable(options: AddVariableOpts): UAVariable;
@@ -802,6 +1020,12 @@ export declare class AddressSpace {
     addAnalogDataItem(options: AddAnalogDataItemOpts): UAAnalogItem;
 
     addView(options: AddNodeOptions): UAView;
+
+    addObject(options: AddNodeOpts): UAObject;
+
+    addObjectType(options: AddObjectTypeOpts): UAObjectType;
+
+    addVariableType(options: AddVariableTypeOpts): UAVariableType;
 }
 
 export declare class ServerEngine {
@@ -825,6 +1049,7 @@ export declare interface OPCUAServerEndPoint {
     certificateChain: any;
     privateKey: any;
     serverInfo: any;
+    // @ts-ignore
     maxConnections: any;
 
     endpointDescriptions(): EndpointDescription[];
@@ -866,7 +1091,6 @@ export declare class OPCUAServer {
 
     initialize(done: () => void): void;
 
-    // "postinitialize" , "session_closed", "create_session"
     on(event: string, eventHandler: () => void): OPCUAServer;
 }
 
@@ -893,9 +1117,9 @@ export declare class ClientMonitoredItem {
      * @param {() => void} eventHandler
      * @chainable
      */
-    on(event: "changed", eventHandler: (dataValue: DataValue) => void): this;
-    on(event: "initialized" | "terminated", eventHandler: () => void): this;
-    on(event: "err", eventHandler: (err: Error ) => void): this;
+    on(event: 'changed', eventHandler: (dataValue: DataValue) => void): this;
+    on(event: 'initialized' | 'terminated', eventHandler: () => void): this;
+    on(event: 'err', eventHandler: (err: Error) => void): this;
 
     on(event: string, eventhandler: (v: Variant) => void): void;
 
@@ -909,9 +1133,24 @@ export interface TimestampsToReturn {
     Neither: 3;
 }
 
-// export declare class read_service {
-//   static TimestampsToReturn: TimestampsToReturn;
-// }
+export declare class read_service {
+    static TimestampsToReturn: TimestampsToReturn;
+}
+
+
+export declare interface ItemToMonitor {
+    nodeId: NodeId;
+    attributeId: AttributeIds;
+    // TODO: figure out how to represent indexRange (NumericRange) and dataEncoding (unknown)
+}
+
+export declare interface ItemToMonitorRequestedParameters {
+    samplingInterval: number;
+    discardOldest: boolean;
+    queueSize: number;
+    // TODO: add filter parameter (extension object)
+}
+
 
 type NumericRange = string;
 
@@ -985,3 +1224,6 @@ export declare function makeNodeId(nodeId: any, namespaceIndex?: number): NodeId
 export declare function resolveNodeId(id: NodeId | string): NodeId;
 
 export declare function makeBrowsePath(rootNode: NodeId, relativePath: string): BrowsePath;
+
+export declare function generate_address_space(addressSpace: AddressSpace, xmlFiles: string | string[], callback: (err?: any) => void);
+
