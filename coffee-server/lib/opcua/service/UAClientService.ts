@@ -7,14 +7,27 @@ import {UAClient} from './UAClient';
 
 import * as opcua from 'node-opcua';
 import {provideSingleton} from '../../inversify/ioc';
+import {MonitoredItemData} from '../../shared/models/index';
 
 export interface UAClientProvider {
     opcuaService(): UAClientService;
 }
 
-interface MonitoredItemData {
+interface MonitoredNodeData {
     nodeId: string,
     monitoredItem: opcua.ClientMonitoredItem
+}
+
+export function
+toMonitoredItemData(value: MonitoredNodeData): MonitoredItemData {
+    return {
+        browseName: value.monitoredItem.itemToMonitor.nodeId.value,
+        nodeId: value.monitoredItem.itemToMonitor.nodeId.toString(),
+        attributeId: value.monitoredItem.itemToMonitor.attributeId,
+        subscriptionId: value.monitoredItem.subscription.subscriptionId,
+        value: '',
+        datatype: '',
+    };
 }
 
 
@@ -34,9 +47,9 @@ export class UAClientService {
     private _session: opcua.ClientSession;
     private _socket: UASocket;
     private _endPointUrl = new BehaviorSubject<string>('');
-    private latestMonitoredItemData = new BehaviorSubject<MonitoredItemData>(null);
+    private latestMonitoredItemData = new BehaviorSubject<MonitoredNodeData>(null);
     private clientConnectionState = new BehaviorSubject<boolean>(false);
-    private monitoredItemsListData: MonitoredItemData[] = [];
+    private monitoredItemsListData: MonitoredNodeData[] = [];
 
 
     public static get INSTANCE(): UAClientService {
@@ -105,7 +118,7 @@ export class UAClientService {
         this._subscription = value;
     }
 
-    public getLatestMonitoredItemData(): MonitoredItemData {
+    public getLatestMonitoredItemData(): MonitoredNodeData {
         return this.latestMonitoredItemData.getValue();
     }
 
@@ -113,7 +126,7 @@ export class UAClientService {
         return this.latestMonitoredItemData.asObservable();
     }
 
-    public getAllMonitoredItemData(): MonitoredItemData[] {
+    public getAllMonitoredItemData(): MonitoredNodeData[] {
         return this.monitoredItemsListData;
     }
 
@@ -413,10 +426,10 @@ export class UAClientService {
         }
 
         this.emitLogMessage('Created new monitored item for nodeId: ' + nodeId);
-        const latestData: MonitoredItemData = {
+        const latestData = {
             nodeId: nodeId.toString(),
             monitoredItem: monitoredItem
-        }
+        };
         this.latestMonitoredItemData.next(latestData);
         return monitoredItem;
     }

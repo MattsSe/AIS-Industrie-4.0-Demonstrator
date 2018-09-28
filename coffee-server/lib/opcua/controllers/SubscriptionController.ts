@@ -1,5 +1,5 @@
 import * as express from 'express';
-import {UAClientService} from '../service/UAClientService';
+import {toMonitoredItemData, UAClientService} from '../service/UAClientService';
 import * as opcua from 'node-opcua';
 import {util} from '../opcua/ua.util';
 import {provideSingleton} from '../../inversify/ioc';
@@ -102,35 +102,19 @@ export class SubscriptionController {
         });
     }
 
-    @Post('{nodeId}/{attributeId}')
+    @Get('{nodeId}/{attributeId}')
     async getMonitoredItem(@Path('nodeId') nodeId: string, @Path('attributeId') attributeId: number): Promise<MonitoredItemData[]> {
-        return this.clientService.getAllMonitoredItemData()
+        return this.clientService.getAllMonitoredItemData().filter(it => it.nodeId === nodeId && it.monitoredItem.itemToMonitor.attributeId === attributeId).map(it => toMonitoredItemData(it))
     }
 
     @Get()
     async getAllMonitoredItems(): Promise<MonitoredItemData[]> {
-        /**
-         * parameters expected in the args:
-         * limit (Integer)
-         **/
-        const items = [];
-        this.clientService.getAllMonitoredItemData().forEach((value, index, array) => {
-            const item: MonitoredItemData = {
-                browseName: value.monitoredItem.itemToMonitor.nodeId.value,
-                nodeId: value.monitoredItem.itemToMonitor.nodeId.toString(),
-                attributeId: value.monitoredItem.itemToMonitor.attributeId,
-                subscriptionId: value.monitoredItem.subscription.subscriptionId,
-                value: '',
-                datatype: '',
-            };
-            items.push(item);
-        });
-        return items;
+        return this.clientService.getAllMonitoredItemData().map(it => toMonitoredItemData(it));
     }
 
     @Get('{nodeId}')
     async getMonitoredItemsForNodeId(nodeId: string): Promise<MonitoredItemData[]> {
-        return this.clientService.getAllMonitoredItemData().filter(item => item.nodeId === nodeId)
+        return this.clientService.getAllMonitoredItemData().filter(item => item.nodeId === nodeId).map(it => toMonitoredItemData(it))
     }
 
     @Delete()
