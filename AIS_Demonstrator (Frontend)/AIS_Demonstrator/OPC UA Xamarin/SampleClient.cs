@@ -127,16 +127,6 @@ namespace AIS_Demonstrator
                 // Load configuration from file
                 config = await application.LoadApplicationConfiguration(currentFolder + configFilename, false);
             }
-            // in case the client certificate file doesn't exist: create new certificate file in internal storage as a copy of the Asset client certificate
-            /* if (!File.Exists(currentFolder + clientCertFilename))
-            {
-                string content;
-                using (StreamReader sr = new StreamReader(assets.Open(clientCertFilename)))
-                {
-                    content = sr.ReadToEnd();
-                }
-                File.WriteAllText(currentFolder + clientCertFilename, content);
-            } */
             
             // in case the server certificate file doesn't exist: create new certificate file in internal storage as a copy of the Asset server certificate
             if (!File.Exists(ServerCertPath))
@@ -217,9 +207,9 @@ namespace AIS_Demonstrator
                         sessionName = "OPC UA Xamarin Client IOS";
                         break;
                 }
-                #region Copied from github Issues 446
+                #region OPC UA User Authentication handling
                 /*
-                 * Copied from https://github.com/OPCFoundation/UA-.NETStandard/issues/446
+                 * Partially copied from https://github.com/OPCFoundation/UA-.NETStandard/issues/446
                  */
                 UserTokenPolicy utp = new UserTokenPolicy();
                 utp.TokenType = UserTokenType.UserName;
@@ -241,7 +231,7 @@ namespace AIS_Demonstrator
                     #region Subscription + monitoredItems
                     // Code for Monitored Items based on http://opcfoundation.github.io/UA-.NETStandard/help/index.htm#client_development.htm
 
-                    // Create ´Subscription
+                    // Create Subscription
                     Subscription subscription = new Subscription() // new Subscription(OpcClient.session.DefaultSubscription)
                     {
                         PublishingInterval = 1000,
@@ -553,7 +543,7 @@ namespace AIS_Demonstrator
         } */
         #endregion
 
-        #region custom Variable Write Method
+        #region custom VariableWrite Method
         /// <summary>
         /// Returns the ServiceResult from the ResponseHeader of the Variable Write Operation
         /// </summary>

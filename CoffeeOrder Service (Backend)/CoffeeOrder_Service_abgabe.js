@@ -371,7 +371,6 @@ const NodeID_boolSmallCoffee = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.
 const NodeID_boolMediumCoffee = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[3]";       // NodeID of the Switch to produce a medium Coffee    
 const NodeID_boolLargeCoffee = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[4]";        // NodeID of the Switch to produce a large Coffee
 const NodeID_boolCappuccino = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[1]";         // NodeID of the Switch to produce a Cappuccino
-const NodeID_boolPower = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[10]";    		 // NodeID of the Power Switch of the coffee Machine. Used by command "power" to turn the Coffee Machine on/off
 const NodeID_boolCoffeeStrength = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.arrSwitch[11]";    // NodeID of the Switch to cycle through the Coffee Strength
 const NodeID_intPackMLStatus = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Glob_Var.CM_PackML_Status";              // NodeID of the global Codesys Variable "CM_PackML_Status"
 const NodeID_stringPackMLStatus = "ns=4;s=|var|CODESYS Control for Raspberry Pi SL.Application.Main.fbCMOperation.sPackMLStatus";    // NodeID of the PackML Status Variable as a String within FB_CoffeeMachineOperation
@@ -403,10 +402,8 @@ async function ClientConnection () {
         // step 2 : create a new session 
         function createsession(callback) {
 			// see for User Authentication documentation: http://node-opcua.github.io/api_doc/0.2.0/classes/OPCUAClient.html#method_connect
-			// const userIdentityInfo  = { userName: "CoffeeOrder_Service", password:"1337BackEnd!"}; deactivated since it caused Problems on newest RPi CODESYS version (installed on 29.08.2018)
-			// client.createSession(userIdentityInfo, function(err,session) { // deactivated since it caused Problems on newest RPi CODESYS version (installed on 29.08.2018)
-        client.endpoint_must_exist = false; 
-	client.createSession(function(err,session) { // creates a new Session with the "Back-End" Role which has been configured in OPC UA 
+			const userIdentityInfo  = { userName: "CoffeeOrder_Service", password:"1337BackEnd!"};
+            client.createSession(userIdentityInfo, function(err,session) { // creates a new Session with the "Back-End" Role which has been configured in OPC UA
                 if(!err) {
                     client_session = session;
                     console.log(new Date().toLocaleString('de-DE') + " Client: Session created!".cyan);
@@ -593,7 +590,6 @@ function commandHelp() {
 	console.log("               	Note that users are not saved after shutdown!");
 	console.log("      \"users\":".green, " Display all usernames that can currently be used.");
 	console.log("  \"randomize\":".green, " Randomize the values of CoffeeLevel, WaterLevel and Cleanliness.\n               	Since the Coffee Machine can't provide the actual data,\n                this command can be used instead to demonstrate the\n                visualization of the machine data in the HMI Application");
-	console.log("      \"power\":".green, " Toggle the power button of the coffee machine." + "\n               	Use this command to turn on the coffee machine!\n               	Otherwise, CODESYS doesn't recognize that it is turned on!".red);
 	rl.prompt();
 }
 // tied to command "add": function to add another OPC UA User which can be used in the Android HMI-Application
@@ -638,17 +634,6 @@ function CommandRandomizeMachinedata() {
 	console.log("     \"Wasserstand\": ", valueWaterLevel, "/ 100");
 	console.log("     \"Bohnenstand\": ", valueCoffeeLevel, "/ 100");
 	console.log("       \"Reinigung\": ", valueCleanlinessLevel, "/ 100");
-	rl.prompt();
-};
-// tied to command "users": function to print out all currently available users to the console
-function commandTogglePowerButton() {
-	if (!client_session) {		// checks whether the server is connected to CODESYS
-		console.log(new Date().toLocaleString('de-DE') + " Client Error:".red +" not connected to CODESYS, please establish a client connection to CODESYS first.");
-	}
-	else {
-		pressButton(NodeID_boolPower);
-		console.log(new Date().toLocaleString('de-DE') + " Successfully toggled the power button of the coffee machine.");
-	}
 	rl.prompt();
 };
 //#endregion
@@ -809,13 +794,10 @@ server.start(function () {				// start the OPC UA Server
 					commandAddUser();
 					break;
 				case 'users':
-					commandLogAvailableUsers();
+					commandLogAvailableUsers()
 					break;
 				case 'randomize':
-					CommandRandomizeMachinedata();
-					break;
-				case 'power':
-					commandTogglePowerButton();
+					CommandRandomizeMachinedata()
 					break;
 				default:
 				console.log("Unknown command. Type \"help\" to list all available commands.".red);
