@@ -6,6 +6,7 @@ import {sequelize} from './sequel';
 import "./controllers/user.controller";
 import "./opcua/controllers/BrowseController";
 import "./opcua/controllers/ConnectorController";
+import "./opcua/controllers/SubscriptionController";
 import "./opcua/service/UAClientService";
 
 const port = process.env.PORT || 3000;

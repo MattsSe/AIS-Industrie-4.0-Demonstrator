@@ -1145,8 +1145,8 @@ export declare interface ItemToMonitor {
 
 export declare interface ItemToMonitorRequestedParameters {
     samplingInterval: number;
-    discardOldest: boolean;
-    queueSize: number;
+    discardOldest?: boolean;
+    queueSize?: number;
     // TODO: add filter parameter (extension object)
 }
 
@@ -1166,13 +1166,6 @@ type CoercibleToReadValueId =
     attributeId: AttributeIds;
 }
     | ReadValueId;
-
-export interface ItemToMonitorRequestedParameters {
-    samplingInterval: number;
-    discardOldest: boolean;
-    queueSize: number;
-    // TODO: add filter parameter (extension object)
-}
 
 type CoercibleToItemToMonitorRequestedParameters =
     | {
