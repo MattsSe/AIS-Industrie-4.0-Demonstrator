@@ -1,5 +1,5 @@
 import {NextFunction, Response} from 'express';
-import {UAClientService} from '../opcua/ua.service';
+import {UAClientService} from '../service/UAClientService';
 import * as api from '../../shared/models/index';
 import * as async from 'async';
 import {MessageSecurityMode, SecurityPolicy} from '../../shared/models/index';

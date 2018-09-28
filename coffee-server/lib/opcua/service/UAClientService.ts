@@ -1,11 +1,12 @@
-import {UASocket} from './ua.socket';
-import {Messages} from './messages';
-import {defaults, util} from './ua.util';
+import {UASocket} from '../opcua/ua.socket';
+import {Messages} from '../opcua/messages';
+import {defaults, util} from '../opcua/ua.util';
 import {BehaviorSubject} from 'rxjs';
 import * as api from '../../shared/models/index';
-import {UaClient} from './ua.client';
+import {UAClient} from './UAClient';
 
-import * as opcua from '../../../@types/node-opcua/index';
+import * as opcua from 'node-opcua';
+import {provideSingleton} from '../../inversify/ioc';
 
 export interface UAClientProvider {
     opcuaService(): UAClientService;
@@ -21,12 +22,13 @@ interface MonitoredItemData {
  * Created by Matthias on 16.08.17.
  */
 
+@provideSingleton(UAClientService)
 export class UAClientService {
 
     // TODO make this a singleton with ioc
     protected static _instance: UAClientService = null;
 
-    private _client: UaClient;
+    private _client: UAClient;
     private _clientOptions: opcua.OPCUAClientOptions;
     private _subscription: opcua.ClientSubscription;
     private _session: opcua.ClientSession;
@@ -51,11 +53,11 @@ export class UAClientService {
         this.monitoredItemsListData = [];
     }
 
-    get client(): UaClient {
+    get client(): UAClient {
         return this._client;
     }
 
-    set client(value: UaClient) {
+    set client(value: UAClient) {
         this._client = value;
     }
 
@@ -134,12 +136,12 @@ export class UAClientService {
      * creates a new opcua client and sets it as #this.client value
      * @returns {opcua.OPCUAClient} the new created opcua client
      */
-    public createClient(options?: opcua.OPCUAClientOptions): UaClient {
+    public createClient(options?: opcua.OPCUAClientOptions): UAClient {
         const opt = options || this.clientOptions;
         if (opt.keepSessionAlive == null) {
             opt.keepSessionAlive = true;
         }
-        this.client = new UaClient(opt);
+        this.client = new UAClient(opt);
         this.client.initListeners(this.socket);
         this.emitLogMessage('Created new Client');
         return this.client;
@@ -310,9 +312,10 @@ export class UAClientService {
     /**
      * returns all directly nested elements in the element with the opcua.NodeId opcua.NodeId
      * @param opcua.NodeId
+     * @param nodeId
      * @param callback
      */
-    public browseChildren(nodeId: opcua.NodeId, callback: opcua.ResponseCallback<opcua.BrowseResult[]>) {
+    public browseChildren(nodeId: opcua.NodeId | string, callback: opcua.ResponseCallback<opcua.BrowseResult[]>) {
         if (!this.sessionAvailable()) {
             callback(new Error('session not vailable'));
             return;
@@ -338,7 +341,7 @@ export class UAClientService {
         this.session.browse(b, (err, results) => {
             if (err) {
                 callback(new Error('Could not browse children for nodeId: ' + nodeId + err.message));
-                this.emitLogMessage('Could not browse the Session for Item with the node Id: ' + nodeId.value, err.message);
+                this.emitLogMessage('Could not browse the Session for Item with the node Id: ' + nodeId, err.message);
             } else {
                 callback(err, results);
             }
@@ -350,13 +353,13 @@ export class UAClientService {
      * @param nodeId the nodeid to read all attributes of
      * @param callback
      */
-    public readAllAttributes(nodeId: opcua.NodeId,
+    public readAllAttributes(nodeId: string | opcua.NodeId,
                              callback: (err: Error, nodesToRead: opcua.ReadValueId[],
                                         results?: opcua.DataValue[], diagnostic?: opcua.DiagnosticInfo[]) => void) {
         if (!this.sessionAvailable()) {
             return;
         }
-        this.session.readAllAttributes([nodeId], (err, results) => {
+        this.session.readAllAttributes(nodeId, (err, results) => {
             if (!err) {
                 callback(err, results);
             } else {

@@ -1,5 +1,5 @@
-import * as opcua from '../../../@types/node-opcua/index';
-import {UASocket} from './ua.socket';
+import * as opcua from 'node-opcua';
+import {UASocket} from '../opcua/ua.socket';
 
 /**
  * Created by Matthias on 25.08.17.
@@ -16,7 +16,10 @@ export interface UAClientData {
     transactionCount: 0
 }
 
-export class UaClient extends opcua.OPCUAClient {
+/**
+ * simple wrapper around the actual node-opcua client
+ */
+export class UAClient extends opcua.OPCUAClient {
 
     private data: UAClientData;
     private socket: UASocket;
@@ -25,7 +28,7 @@ export class UaClient extends opcua.OPCUAClient {
         super(options);
         this.resetData();
     }
-
+    
     public resetData() {
         this.data = {
             reconnectionCount: 0,

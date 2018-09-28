@@ -1,6 +1,5 @@
 import {Get, Route} from "tsoa";
 // IMPORTANT: reflect-metadata needs to be imported otherwise the dependency injection won't work
-import "reflect-metadata";
 import {provideSingleton} from "../inversify/ioc";
 
 import {UserService} from "../service/user.service";

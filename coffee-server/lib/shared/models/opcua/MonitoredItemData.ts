@@ -1,26 +1,26 @@
-
 import * as models from './index';
 
 /**
  * The Information of the current monitored item on an OPC UA Server
  */
-/**  * @tsoaModel  */ export interface MonitoredItemData {
-  nodeId?: string;
+/**  * @tsoaModel  */
+export interface MonitoredItemData {
+    nodeId?: string;
 
-  attributeId?: number;
+    attributeId?: number;
 
-  /**
-   * The subscription ID in which this monitored item is monitored
-   */
-  subscriptionId?: number;
+    /**
+     * The subscription ID in which this monitored item is monitored
+     */
+    subscriptionId?: number;
 
-  /**
-   * The ID of the actual monitored object
-   */
-  value?: string;
+    /**
+     * The ID of the actual monitored object
+     */
+    value?: string;
 
-  datatype?: string;
-  browseName?: string;
-  statusCode?: string;
+    datatype?: string;
+    browseName?: string;
+    statusCode?: string;
 
 }

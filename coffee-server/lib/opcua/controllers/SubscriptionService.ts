@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
-import {UAClientService} from '../opcua/ua.service';
+import {UAClientService} from '../service/UAClientService';
 import * as api from '../../shared/models/index';
-import * as opcua from '../../../@types/node-opcua/index';
+import * as opcua from 'node-opcua';
 import {util} from '../opcua/ua.util';
 
 

@@ -1,5 +1,5 @@
 import {UASocket} from './ua.socket';
-import {UAClientService} from './ua.service';
+import {UAClientService} from '../service/UAClientService';
 import * as api from '../../shared/models/index';
 
 /**

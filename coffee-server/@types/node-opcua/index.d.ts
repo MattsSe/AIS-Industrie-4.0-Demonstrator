@@ -321,7 +321,7 @@ export enum BrowseDirection {
 
 export interface BrowseDescription {
     /** The id of the node to browse. */
-    nodeId?: NodeId;
+    nodeId?: NodeId | string;
     /** The direction of the references to return. */
     browseDirection?: BrowseDirection;
     /**
@@ -439,7 +439,7 @@ export declare class ClientSession {
     close(): Promise<void>;
     close(deleteSubs: boolean, callback: ErrorCallback): void;
 
-    readAllAttributes(nodes: NodeId | NodeId[], callback: ResponseCallback<any>): void;
+    readAllAttributes(nodes: string | string[] | NodeId | NodeId[], callback: ResponseCallback<any>): void;
 
     // properties
     /** the session Id */

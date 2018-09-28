@@ -6,7 +6,7 @@ import * as errorHandler from 'errorhandler';
 import * as methodOverride from 'method-override';
 import * as api from './routes';
 import * as http from 'http';
-import {UAClientService, UAClientProvider} from './opcua/ua.service';
+import {UAClientService, UAClientProvider} from './service/UAClientService';
 import {UASocket} from './opcua/ua.socket';
 import * as debugg from 'debug';
 
