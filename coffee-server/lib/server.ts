@@ -5,6 +5,7 @@ import {sequelize} from './sequel';
 // must be imported so tsoa can generate the routes, see: tsoa.json
 import "./controllers/user.controller";
 import "./opcua/controllers/BrowseController";
+import "./opcua/controllers/ConnectorController";
 import "./opcua/service/UAClientService";
 
 const port = process.env.PORT || 3000;

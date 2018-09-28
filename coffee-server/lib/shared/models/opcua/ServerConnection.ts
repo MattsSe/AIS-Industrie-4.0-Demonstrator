@@ -1,5 +1,5 @@
 
-import * as models from './index';
+import {ClientOptions} from './index';
 
 /**  * @tsoaModel  */ export interface ServerConnection {
     endpointUrl: string;
@@ -8,6 +8,6 @@ import * as models from './index';
 
     keepSessionAlive?: boolean;
 
-    clientOptions?: models.ClientOptions;
+    clientOptions?: ClientOptions;
 
 }
