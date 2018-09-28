@@ -9,7 +9,7 @@ import {MonitoredItemData, MonitorItemOptions, UnmonitorItemResult} from '../../
 
 
 @provideSingleton(SubscriptionController)
-@Route('/server/monitor')
+@Route('server/monitor')
 export class SubscriptionController {
 
     constructor(@inject(UAClientService) private clientService: UAClientService) {

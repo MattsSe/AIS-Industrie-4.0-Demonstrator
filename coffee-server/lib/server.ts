@@ -7,6 +7,7 @@ import "./controllers/user.controller";
 import "./opcua/controllers/BrowseController";
 import "./opcua/controllers/ConnectorController";
 import "./opcua/controllers/SubscriptionController";
+import "./opcua/controllers/VariableController";
 import "./opcua/service/UAClientService";
 
 const port = process.env.PORT || 3000;
