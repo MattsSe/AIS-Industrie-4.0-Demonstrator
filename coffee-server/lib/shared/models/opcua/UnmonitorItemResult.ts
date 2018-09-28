@@ -1,7 +1,7 @@
 
 import * as models from './index';
 
-export interface UnmonitorItemResult {
+/**  * @tsoaModel  */ export interface UnmonitorItemResult {
     success?: boolean;
 
     wasMonitored?: boolean;

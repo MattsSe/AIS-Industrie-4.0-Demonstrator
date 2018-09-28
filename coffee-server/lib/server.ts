@@ -4,6 +4,7 @@ import { sequelize } from './sequel';
 
 // must be imported so tsoa can generate the routes, see: tsoa.json
 import "./controllers/user.controller";
+import "./opcua/controllers/BrowserService";
 
 const port = process.env.PORT || 3000;
 
@@ -13,7 +14,7 @@ const port = process.env.PORT || 3000;
 // // }
 // //
 // // https.createServer(httpsOptions, app).listen(port, () => {
-// //     console.log('Express server listening on port ' + port);
+// //     console.log('Express opcua listening on port ' + port);
 // // })
 
 // waiting after the database is synced

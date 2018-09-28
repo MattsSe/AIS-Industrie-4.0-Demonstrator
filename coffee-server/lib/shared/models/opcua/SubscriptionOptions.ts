@@ -4,7 +4,7 @@ import * as models from './index';
 /**
  * options for creating a new OPCUACLient subscription
  */
-export interface SubscriptionOptions {
+/**  * @tsoaModel  */ export interface SubscriptionOptions {
     requestedPublishingInterval?: number;
 
     requestedLifetimeCount?: number;

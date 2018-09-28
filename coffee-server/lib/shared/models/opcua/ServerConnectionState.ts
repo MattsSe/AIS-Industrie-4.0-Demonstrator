@@ -1,7 +1,7 @@
 
 import * as models from './index';
 
-export interface ServerConnectionState {
+/**  * @tsoaModel  */ export interface ServerConnectionState {
   connected: boolean,
   endPointUrl: string;
 }

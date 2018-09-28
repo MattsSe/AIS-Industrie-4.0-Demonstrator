@@ -1,7 +1,7 @@
 
 import * as models from './index';
 
-export interface ReferenceData {
+/**  * @tsoaModel  */ export interface ReferenceData {
     nodeId: string;
 
     nodeClass: string;
@@ -15,7 +15,7 @@ export interface ReferenceData {
 }
 export namespace ReferenceData {
     export enum TypeIdEnumEnum {
-        Organizes = <any> 'Organizes',
-        Aggregates = <any> 'Aggregates'
+        Organizes = <any>'Organizes',
+        Aggregates = <any>'Aggregates'
     }
 }

@@ -1,5 +1,5 @@
 
 import * as models from './index';
 
-export interface BrowseDescription {
+/**  * @tsoaModel  */ export interface BrowseDescription {
 }

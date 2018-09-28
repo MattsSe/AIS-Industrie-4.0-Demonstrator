@@ -2,7 +2,7 @@ import * as io from 'socket.io';
 import {UASocketEmitter} from './ua.emitter';
 import {Server} from '../server';
 import Namespace = SocketIO.Namespace;
-import * as api from '../../lib/shared/models';
+import * as api from '../../shared/models/index';
 import * as SocketIO from 'socket.io';
 
 export class UASocket {
@@ -43,7 +43,7 @@ export class UASocket {
             // Socket event for gist created
             socket.on('gistSaved', function (gistSaved) {
                 _io.emit('gistSaved', gistSaved);
-                console.log('gistsave called on server');
+                console.log('gistsave called on opcua');
             });
             // Socket event for gist updated
             socket.on('gistUpdated', function (gistUpdated) {

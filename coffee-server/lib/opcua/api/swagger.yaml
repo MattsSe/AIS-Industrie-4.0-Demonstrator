@@ -19,7 +19,7 @@ paths:
       tags:
       - "Connector"
       summary: "current connection state"
-      description: "Query Status of a specific server"
+      description: "Query Status of a specific opcua"
       operationId: "getServerConnectionState"
       parameters:
       - name: "url"
@@ -36,7 +36,7 @@ paths:
     post:
       tags:
       - "Connector"
-      summary: "connect to server"
+      summary: "connect to opcua"
       operationId: "connectServer"
       parameters:
       - in: "body"
@@ -54,8 +54,8 @@ paths:
     delete:
       tags:
       - "Connector"
-      summary: "close connection to server"
-      description: "Closes the connection to the OPC UA server if present"
+      summary: "close connection to opcua"
+      description: "Closes the connection to the OPC UA opcua if present"
       operationId: "closeServerConnection"
       parameters: []
       responses:
@@ -415,7 +415,7 @@ definitions:
         type: "boolean"
       endPointUrl:
         type: "string"
-    description: "The Current state of the OPCU Client connection to its server if\
+    description: "The Current state of the OPCU Client connection to its opcua if\
       \ any present"
   ServerConnectionResponse:
     type: "object"

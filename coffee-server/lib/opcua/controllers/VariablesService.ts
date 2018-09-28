@@ -1,8 +1,8 @@
 import {NextFunction, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
-import * as api from '../../lib/shared/models';
+import * as api from '../../shared/models/index';
 import {util} from '../opcua/ua.util';
-import * as opcua from 'node-opcua';
+import * as opcua from '../../../@types/node-opcua/index';
 
 const ATTRIBUTE_VALUE_ID = 13;
 

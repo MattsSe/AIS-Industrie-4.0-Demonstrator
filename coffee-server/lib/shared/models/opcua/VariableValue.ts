@@ -1,7 +1,7 @@
 
 import * as models from './index';
 
-export interface VariableValue {
+/**  * @tsoaModel  */ export interface VariableValue {
   nodeId?: string;
 
   value?: string;

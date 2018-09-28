@@ -1,7 +1,7 @@
 /**
  * Created by Matthias on 18.08.17.
  */
-import * as opcua from 'node-opcua';
+import * as opcua from '../../../@types/node-opcua/index';
 import * as _ from 'underscore';
 
 export namespace util {

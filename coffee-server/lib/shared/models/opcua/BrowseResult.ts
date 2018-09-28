@@ -1,5 +1,5 @@
 
 import * as models from './index';
 
-export interface BrowseResult {
+/**  * @tsoaModel  */ export interface BrowseResult {
 }

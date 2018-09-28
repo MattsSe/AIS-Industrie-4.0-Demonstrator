@@ -1,7 +1,7 @@
 /**
  * Created by Matthias on 31.08.17.
  */
-import * as schema from '../../mappings/UaNodeset';
+import * as schema from '../../../mappings/UaNodeset';
 import Jsonix = require('jsonix');
 
 export interface UANodeSet extends NameSpaces {

@@ -1,7 +1,7 @@
 
 import * as models from './index';
 
-export interface AttributeData {
+/**  * @tsoaModel  */ export interface AttributeData {
   name?: string;
 
   value?: string;

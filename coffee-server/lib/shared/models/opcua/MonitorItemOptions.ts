@@ -4,7 +4,7 @@ import * as models from './index';
 /**
  * additional options for monitoring an Item for a subscription
  */
-export interface MonitorItemOptions {
+/**  * @tsoaModel  */ export interface MonitorItemOptions {
     samplingInterval?: number;
 
     discardOldest?: boolean;

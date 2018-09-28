@@ -2,10 +2,10 @@ import {UASocket} from './ua.socket';
 import {Messages} from './messages';
 import {defaults, util} from './ua.util';
 import {BehaviorSubject} from 'rxjs';
-import * as api from '../../lib/shared/models';
+import * as api from '../../shared/models/index';
 import {UaClient} from './ua.client';
 
-import * as opcua from 'node-opcua';
+import * as opcua from '../../../@types/node-opcua/index';
 
 export interface UAClientProvider {
     opcuaService(): UAClientService;

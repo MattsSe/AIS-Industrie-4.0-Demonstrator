@@ -1,8 +1,8 @@
 import {NextFunction, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
-import * as api from '../../lib/shared/models';
+import * as api from '../../shared/models/index';
 import * as async from 'async';
-import {MessageSecurityMode, SecurityPolicy} from '../../lib/shared/models';
+import {MessageSecurityMode, SecurityPolicy} from '../../shared/models/index';
 
 /**
  *
@@ -114,7 +114,7 @@ export function getServerConnectionState(params, res: Response, next: NextFuncti
 }
 
 /**
- * connects a new opc client to an opc server -> needs valid endpointurl
+ * connects a new opc client to an opc opcua -> needs valid endpointurl
  * @param options
  */
 export function doConnect(options: api.ServerConnection, cllback) {

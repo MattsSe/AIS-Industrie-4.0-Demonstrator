@@ -1,5 +1,5 @@
 
 import * as models from './index';
 
-export interface ReferenceDataList extends Array<models.ReferenceData> {
+/**  * @tsoaModel  */ export interface ReferenceDataList extends Array<models.ReferenceData> {
 }

@@ -4,7 +4,7 @@ import * as models from './index';
 /**
  * The Information of the current monitored item on an OPC UA Server
  */
-export interface MonitoredItemData {
+/**  * @tsoaModel  */ export interface MonitoredItemData {
   nodeId?: string;
 
   attributeId?: number;

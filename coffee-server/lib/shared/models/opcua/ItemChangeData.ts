@@ -1,7 +1,7 @@
 
 import * as models from './index';
 
-export interface ItemChangeData {
+/**  * @tsoaModel  */ export interface ItemChangeData {
   value?: string;
 
   statusCode?: string;

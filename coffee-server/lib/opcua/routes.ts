@@ -13,7 +13,7 @@ export function RegisterRoutes(app: Application) {
   // const serverController = new ServerController();
   const options = {
     swaggerUi: '/swagger.json',
-    controllers: path.resolve(__dirname, './controllers'),
+    controllers: path.resolve(__dirname, './js.controllers'),
     useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
   };
 
@@ -29,7 +29,7 @@ export function RegisterRoutes(app: Application) {
     // Validate Swagger requests
     app.use(middleware.swaggerValidator());
 
-    // Route validated requests to appropriate controllers
+    // Route validated requests to appropriate js.controllers
     app.use(middleware.swaggerRouter(options));
 
     // Serve the Swagger documents and Swagger UI

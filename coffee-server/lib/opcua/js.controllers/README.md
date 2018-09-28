@@ -1,6 +1,6 @@
 #### SWAGGER Hub Generated routes
 
-##### Replace default service with custom ServerService in [ServerService.ts](../ts.controllers/ServerService.ts)
+##### Replace default service with custom ServerService in [ServerService.ts](../controllers/ServerService.ts)
 
 Replace:
 ```javascript

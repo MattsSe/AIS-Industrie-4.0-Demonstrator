@@ -83,7 +83,7 @@ export interface ConnectionStrategy {
 export interface OPCUAClientOptions {
     /** default secure token lifetime in ms */
     defaultSecureTokenLifetime?: number;
-    /** the server certificate. */
+    /** the opcua certificate. */
     serverCertificate?: Uint8Array | null;
     connectionStrategy?: ConnectionStrategy;
     /**
@@ -107,7 +107,7 @@ export interface OPCUAClientOptions {
      */
     applicationName?: string;
     /**
-     * set to false if the client should accept server endpoint mismatch
+     * set to false if the client should accept opcua endpoint mismatch
      * @default true
      */
     endpoint_must_exist?: boolean;
@@ -152,8 +152,8 @@ export interface FindServerOnNetworkOptions {
     maxRecordsToReturn?: number;
 
     /**
-     * List of Server capability filters. The set of allowed server capabilities are defined in Part 12.
-     * Only records with all of the specified server capabilities are returned.
+     * List of Server capability filters. The set of allowed opcua capabilities are defined in Part 12.
+     * Only records with all of the specified opcua capabilities are returned.
      * The comparison is case insensitive. If this list is empty then no filtering is performed.
      * @property serverCapabilityFilter
      * @type {String[]}
@@ -243,7 +243,7 @@ export declare class OPCUAClientBase {
 
     /**
      * @method connect
-     * connect the OPC-UA client to a server end point.
+     * connect the OPC-UA client to a opcua end point.
      *
      * @param {string} endpointUrl
      * @param {ErrorCallback} callback
@@ -560,7 +560,7 @@ export interface OPCUAServerOptions {
      */
     securityModes?: MessageSecurityMode[];
     /**
-     * tells if the server default endpoints should allow anonymous connection.
+     * tells if the opcua default endpoints should allow anonymous connection.
      * @default true
      */
     allowAnonymous?: boolean;
@@ -576,7 +576,7 @@ export interface OPCUAServerOptions {
     /** alternate hostname to use */
     alternateHostname?: string;
     /**
-     * if server shall raise AuditingEvent
+     * if opcua shall raise AuditingEvent
      * @default true
      */
     isAuditing?: boolean;

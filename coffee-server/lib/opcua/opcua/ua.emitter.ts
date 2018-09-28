@@ -1,6 +1,6 @@
 import {UASocket} from './ua.socket';
 import {UAClientService} from './ua.service';
-import * as api from '../../lib/shared/models';
+import * as api from '../../shared/models/index';
 
 /**
  * Created by Matthias on 18.08.17.
@@ -31,14 +31,14 @@ export class UASocketEmitter {
   public initEmitterEvents() {
     const self = this;
     self.io.on('connection', function (socket) {
-      console.log('Socket connected on server');
+      console.log('Socket connected on opcua');
 
       // socket.on(EmitterRoutes.referenceChildren, args => self.onReferenceChildren(args));
 
       // Socket event for gist created
       socket.on('uaLogging', function (gistSaved) {
         // self.io.emit('gistSaved', gistSaved);
-        console.log('uaLogging called on server');
+        console.log('uaLogging called on opcua');
       });
       // Socket event for gist updated
       socket.on('gistUpdated', function (gistUpdated) {

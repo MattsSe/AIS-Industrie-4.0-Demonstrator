@@ -3,10 +3,27 @@
  */
 import {NextFunction, Response} from 'express';
 import {UAClientService} from '../opcua/ua.service';
-import * as api from '../../lib/shared/models';
+import * as api from '../../shared/models/index';
 import {util} from '../opcua/ua.util';
 
-import * as opcua from 'node-opcua';
+import * as opcua from '../../../@types/node-opcua/index';
+import {Get, Path, Route} from 'tsoa';
+import {provideSingleton} from 'lib/inversify/ioc';
+
+@provideSingleton(BrowserController)
+@Route('server/browse')
+export class BrowserController {
+
+    @Get('{nodeId}')
+    async getBrowseInfo(@Path('nodeId') nodeId: string): Promise<any> {
+        /**
+         * parameters expected in the args:
+         * qualifiedName (String)
+         **/
+        return {};
+    }
+
+}
 
 
 export function getBrowseInfo(params, res: Response, next: NextFunction) {

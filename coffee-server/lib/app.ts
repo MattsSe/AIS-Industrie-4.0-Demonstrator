@@ -29,7 +29,7 @@ class App {
         /**
          * RouteHandler.
          */
-// server.get("/api", apiRouteHandler.getApi);
+// opcua.get("/api", apiRouteHandler.getApi);
         RegisterRoutes(this.app);
         // Serve the swagger ui at /api-docs
         this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

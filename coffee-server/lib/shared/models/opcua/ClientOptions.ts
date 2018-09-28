@@ -1,6 +1,6 @@
-import {ConnectionStrategy, MessageSecurityMode, SecurityPolicy} from './index';
+import { ConnectionStrategy, MessageSecurityMode, SecurityPolicy } from './index';
 
-export interface ClientOptions {
+/**  * @tsoaModel  */ export interface ClientOptions {
     securityMode?: MessageSecurityMode;
 
     securityPolicy?: SecurityPolicy;

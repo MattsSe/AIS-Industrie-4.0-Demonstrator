@@ -12,7 +12,7 @@ import * as debugg from 'debug';
 
 const debug = debugg('plant-ais:serve');
 /**
- * The server.
+ * The opcua.
  *
  * @class Server
  */
@@ -73,7 +73,7 @@ export class Server implements UAClientProvider {
     // set the HttpServer
     this.setHttpServer(http.createServer(this.app));
 
-    // create the websocket listening on the server's port
+    // create the websocket listening on the opcua's port
     this.setUASocket(UASocket.create(this));
 
     // configure application
@@ -89,7 +89,7 @@ export class Server implements UAClientProvider {
   }
 
   /**
-   * initializes the listening actions of the http server
+   * initializes the listening actions of the http opcua
    */
   protected listening() {
     // listen on provided ports
@@ -171,7 +171,7 @@ export class Server implements UAClientProvider {
   }
 
   /**
-   * Event listener for HTTP server "error" event.
+   * Event listener for HTTP opcua "error" event.
    */
   protected onError(error) {
     if (error.syscall !== 'listen') {
@@ -197,7 +197,7 @@ export class Server implements UAClientProvider {
   }
 
   /**
-   * Event listener for HTTP server "listening" event.
+   * Event listener for HTTP opcua "listening" event.
    */
   protected onListening() {
     const bind = 'port ' + Server.SERVING_PORT;

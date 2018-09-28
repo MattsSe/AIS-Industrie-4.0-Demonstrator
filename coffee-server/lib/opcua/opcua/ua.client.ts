@@ -1,4 +1,4 @@
-import * as opcua from 'node-opcua';
+import * as opcua from '../../../@types/node-opcua/index';
 import {UASocket} from './ua.socket';
 
 /**
